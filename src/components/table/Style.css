@@ -1,0 +1,4 @@
+.table-height {
+    height: calc(99vh - 159px);
+    overflow: hidden;
+}

@@ -1,0 +1,51 @@
+{
+  "name": "camels-logistics-admin-portal",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.0.1",
+    "@mantine/core": "^1.0.6",
+    "@mantine/hooks": "^1.0.6",
+    "@mantine/notifications": "^1.0.6",
+    "@mantine/tag-picker": "^1.0.6",
+    "@modulz/radix-icons": "^4.0.0",
+    "axios": "^0.21.1",
+    "bootstrap": "4.6.0",
+    "react-calendar": "^3.4.0",
+    "react-dropzone": "^11.3.2",
+    "react-jss": "^10.6.0",
+    "react-router-dom": "^5.2.0",
+    "use-http": "^1.0.20",
+    "jquery": "^3.6.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
