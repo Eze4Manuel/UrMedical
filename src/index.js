@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
-import './assets/vendors/1.3.0/css/line-awesome.min.css'
+import './assets/vendors/1.3.0/css/line-awesome.min.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';

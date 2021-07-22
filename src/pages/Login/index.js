@@ -1,113 +1,90 @@
 import React, { useState } from 'react';
-import { useForm } from '@mantine/hooks';
-import { EnvelopeClosedIcon, LockClosedIcon } from '@modulz/radix-icons';
-import {
-  TextInput,
-  PasswordInput,
-  ElementsGroup,
-  Button,
-  Paper,
-  Text,
-  LoadingOverlay,
-  Title,
-  useMantineTheme
-} from '@mantine/core';
+import './login.css';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { Password } from 'primereact/password';
 import { dispatcher } from '../../core/context/Store';
 import Action from '../../core/context/ReducerAction';
 import { useAuth } from '../../core/hooks/useAuth';
-import Helpers from '../../core/func/Helpers';
-import Styles from '../../assets/styles/Global';
+// import Helpers from '../../core/func/Helpers';
 
-const Login = ({ noPadding, noShadow, noSubmit }) => {
+// TODO: Temp Data
+import __userData from '../../assets/data/user';
+
+const Login = (props) => {
     const { set } = useAuth();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const theme = useMantineTheme();
-    const form = useForm({
-        initialValues: {
-        username: '',
+    const [data, setData] = useState({
+        username: '', 
         password: '',
-        },
-
-        validationRules: {
-        username: (value) => value.trim().length >= 2,
-        password: (value) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value),
-        },
+        loading: false,
+        error: ''
     });
 
-    // handle request
-    const handleSubmit = async () => {
-        setLoading(true);
-        setError(null);
+    const handleSubmit = async (e) => {
+        // setLoading(true);
+        data.error = "";
+        data.loading = true;
+        setData({...data});
+
+        // setError(null);
         try {
-        let res = await Helpers.signin(form.values);
-        dispatcher({type: Action.user.set, payload: {user: res}});
-        set(res); // save to localstorage
-        setLoading(false);
-        } catch (error) {
-        let err = error?.response?.data?.err;
-        setError(err)
-        setLoading(false);
+            // let res = await Helpers.signin({
+            //     username: data.usename,
+            //     password: data.password
+            // });
+            // simulate
+            let res = __userData[0]; // superadmin
+            console.log('res')
+            console.log(res)
+            dispatcher({type: Action.user.set, payload: {user: res}});
+            await set(res); // save to localstorage
+            data.loading = false;
+            setData({...data});
+        } catch (e) {
+            let err = e?.response?.data?.msg 
+            || e?.response?.data?.err
+            || e?.message;
+            data.error = err;
+            data.loading = false;
+            setData({...data});
         }
     };
 
     return (
-        <div style={{...Styles.center, marginTop: '15%'}}>
-            <Paper
-                padding={noPadding ? 0 : 'lg'}
-                shadow={noShadow ? null : 'sm'}
-                style={{ position: 'relative', overflow: 'hidden', height: 350, width: 300 }}
-            >
-                <Title style={{ textAlign: 'center', marginBottom: theme.spacing.lg }}>
-                    Sign in
-                </Title>
-                <form onSubmit={form.onSubmit(handleSubmit)}>
-                    <LoadingOverlay visible={loading} />
-                    <TextInput
-                    required
-                    placeholder="Your username"
-                    label="Username"
-                    icon={<EnvelopeClosedIcon />}
-                    value={form.values.username}
-                    onChange={(event) => form.setFieldValue('username', event.currentTarget.value)}
-                    onFocus={() => form.setFieldError('username', false)}
-                    error={form.errors.username && 'Field should contain a username'}
-                    />
-
-                    <PasswordInput
-                    style={{ marginTop: 15 }}
-                    required
-                    placeholder="Password"
-                    label="Password"
-                    showPasswordLabel="Show password"
-                    hidePasswordLabel="Hide password"
-                    icon={<LockClosedIcon />}
-                    value={form.values.password}
-                    onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-                    onFocus={() => form.setFieldError('password', false)}
-                    error={
-                        form.errors.password &&
-                        'Password should contain 1 number, 1 letter and at least 6 characters'
-                    }
-                    />
-
-                    {error && (
-                    <Text color="red" size="sm" style={{ marginTop: 10 }}>
-                        {error}
-                    </Text>
-                    )}
-
-                    {!noSubmit && (
-                    <ElementsGroup position="center" style={{ marginTop: 25 }}>
-                        <Button size="lg" color="blue" type="submit" fullWidth>
-                            Login
-                        </Button>
-                    </ElementsGroup>
-                    )}
-                </form>
-                </Paper>
+        <div className="app_auth">
+           <div className="app_auth_left">
+               <h3 className="auth_header">Wedidfund Portal</h3>
+               {data.error ? <p className="auth_error">{data.error}</p> : null}
+               <div className="p-fluid p-formgrid p-grid p-mx-5">
+                   {/* USERNAME */}
+                    <div className="p-field p-col-12">
+                        <span className="p-mt-1">
+                            <label htmlFor="title">Username</label>
+                            <InputText autoFocus value={data.username} 
+                            onChange={e => setData(d => ({...d, username: e.target.value}))} 
+                            id="username" name="username" type="text" />
+                        </span>
+                    </div>
+                    {/* PASSWORD */}
+                    <div className="p-field p-col-12">
+                        <span className="p-mt-1">
+                            <label htmlFor="title">Password</label>
+                            <Password toggleMask value={data.password} 
+                            onChange={e => setData(d => ({...d,password: e.target.value}))} 
+                            id="password" name="password" type="text" />
+                        </span>
+                    </div>
+                </div>
+               <div className="p-d-flex p-flex-sm-row p-jc-end">
+                   <Button onClick={handleSubmit} style={{width: 180}} type="submit" label="Login" 
+                   loading={data.loading} className="p-mt-2 p-button-primary" />
+               </div>
+            </div> 
+            {/* Background Image */}
+           <div className="app_auth_right">
+            </div> 
         </div>
-    );
+    )
 }
 
-export default Login;
+export default Login

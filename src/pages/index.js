@@ -8,7 +8,8 @@ import {
 import Uri from '../assets/utils/uri';
 import Context from '../core/context/Store';
 import Dashboard from './dashboard';
-import TraffleSystem from './traffle/TraffleSystem';
+// import TraffleSystem from './traffle/TraffleSystem';
+import Customer from './user/customer/Customer';
 import Sidebar from '../components/navigation/Sidebar';
 import { routes } from './config';
 import Navbar from '../components/navigation/Navbar';
@@ -40,11 +41,11 @@ const App = (props) => {
         <Sidebar msgs={msgs} user={user} />
         <Switch>
           <Route exact path='/'>
-            {fullAccess ? <Dashboard {...props}/> : <TraffleSystem NavigationBar={Navbar} {...props}/>}
+            {fullAccess ? <Dashboard {...props}/> : <Customer NavigationBar={Navbar} {...props}/>}
           </Route>
           {renderedRoutes}
           <Route>
-            <Redirect exact from='*' path={Uri.SystemTraffles} />
+            <Redirect exact from='*' path={Uri.Customer} />
           </Route>
         </Switch>
       </Fragment>

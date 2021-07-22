@@ -1,6 +1,6 @@
 import React from 'react';
 import useLocalStorage from './useLocal';
-import lstorage from '../../assets/utils/local-storage';
+import config from '../../assets/utils/config';
 
 const AuthContext = React.createContext();
 
@@ -15,8 +15,8 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useLocalStorage(lstorage.user);
-    const [token, setToken] = useLocalStorage(lstorage.token);
+    const [user, setUser] = useLocalStorage(config.key.user);
+    const [token, setToken] = useLocalStorage(config.key.token);
 
     const set = async (data) => {
         setToken(data?.token);

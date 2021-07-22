@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import PrimeReact from 'primereact/api';
 import { useAuth } from './core/hooks/useAuth';
 import Helpers from './core/func/Helpers';
 import UnAuthenticated from './pages/Login';
 import Authenticated from './pages/index';
 import Loading from './components/Loading';
+
+PrimeReact.ripple = true;
+PrimeReact.autoZIndex = true;
 
 const App = () => {
   const { user } = useAuth(); 

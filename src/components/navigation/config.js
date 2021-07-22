@@ -11,7 +11,7 @@ const config = {
             sub: [
                 {name: 'support', icon: 'las la-users', link: URI.Support},
                 {name: 'dispatchers', icon: 'las la-users', link: URI.Dispatcher},
-                {name: 'users', icon: 'las la-users', link: URI.Patient},
+                {name: 'customers', icon: 'las la-users', link: URI.Patient},
             ]
         },
         {

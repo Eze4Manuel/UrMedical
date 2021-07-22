@@ -12,7 +12,7 @@ URI.CreateSupport = '/user/create-support';
 URI.CreatePharmacy = '/user/create-pharmacy';
 URI.Support = '/users/support';
 URI.Dispatcher = '/users/dispatcher';
-URI.Patient = '/users/patient';
+URI.Customer = '/users/customer';
 
 // Pharmacy
 URI.Pharmacy = '/pharmacies/shop';

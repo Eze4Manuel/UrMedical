@@ -11,7 +11,7 @@ const GoBack = (props) => {
     const history = useHistory();
     return (
         <div onClick={() => history.goBack()} className="white p-2">
-           <span class="las la-arrow-left go-back-arrow"></span> 
+           <span style={{fontSize: 25}} class="las la-arrow-left go-back-arrow"></span> 
         </div>
     )
 }
