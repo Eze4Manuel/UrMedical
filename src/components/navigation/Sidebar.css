@@ -4,6 +4,7 @@ body {
 }
 
 .sidebar {
+    display: block;
     width: 240px;
     position: fixed;
     left: 0;
@@ -12,6 +13,13 @@ body {
     padding: 1rem 1.5rem;
     background: var(--color-main);
     color: #fff;
+}
+
+.hide_sidebar {
+    left: -240px;
+    width: 0px;
+    display: none;
+    transition: margin-left .5s;
 }
 
 .sidebar-brand {

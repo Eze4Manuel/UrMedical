@@ -29,6 +29,7 @@ main {
   padding-bottom: 1.5rem;
   background: #fbfbfb;
   min-height: calc(100vh - 70px);
+  width: 100%;
 }
 
 /* Utilities */

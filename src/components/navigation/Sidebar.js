@@ -6,8 +6,8 @@ import config from './config';
 const Sidebar = (props) => {
     const sidebarLinks = config.sidebar.map(cfg => {
         if (cfg.divider === 'dashboard'
-        && !props?.user?.is_admin
-        && props?.user?.user_type === 'support') {
+        && !props?.user?.user_type !== 'superadmin'
+        && props?.user?.user_type === 'admin') {
             return null;
         } else {
             return (
@@ -16,14 +16,12 @@ const Sidebar = (props) => {
                         <span className="text-capitalize">{cfg.divider}</span>
                         </div>
                         <ul>
-                            {
-                                cfg.sub.map(sub => (
-                                    <li>
-                                        <Link to={sub.link}>
-                                            <span className={sub.icon}></span>
-                                            {sub.name}
-                                        </Link>
-                                    </li>
+                            {cfg.sub.map(sub => (
+                                <li key={sub.name}>
+                                    <Link to={sub.link}>
+                                        <span className={sub.icon}></span>{sub.name}
+                                    </Link>
+                                </li>
                                 ))
                             }
                         </ul>
@@ -33,24 +31,24 @@ const Sidebar = (props) => {
     });
 
     return (
-        <div className="sidebar">
-        <div className="sidebar-brand">
-            <div className="brand-flex">
-                <div className="brand-icons">
-                    <span>Camels Logistics</span>
+        <div className="sidebar sidebar_wp">
+            <div className="sidebar-brand">
+                <div className="brand-flex">
+                    <div className="brand-icons">
+                        <span>Camels Logistics</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <hr style={{background: '#fff'}} />
-        <div className="sidebar-main">
-            <div className="sidebar-user">
-                <div>
-                    <h3>
-                        {props?.user?.username}<br />
-                        <span style={{color: '#91A0AF'}} className="user-id small text-uppercase">
-                            {props?.user?._id ?? props?.user?.id}
-                        </span>
-                    </h3>
+            <hr style={{background: '#fff'}} />
+            <div className="sidebar-main">
+                <div className="sidebar-user">
+                    <div>
+                        <h3>
+                            {props?.user?.username}<br />
+                            <span style={{color: '#91A0AF'}} className="user-id small text-uppercase">
+                                {props?.user?._id ?? props?.user?.id}
+                            </span>
+                        </h3>
                 </div>
             </div>
             <div className="sidebar-menu">
