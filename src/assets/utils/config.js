@@ -54,6 +54,8 @@ const config = {
         last_name: '',
         gender: '',
         age: '',
+        license_id: '',
+        vehicle_id: '',
         occupation: '',
         address: {
             street: '',

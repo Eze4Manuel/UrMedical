@@ -81,7 +81,7 @@ const Support = (props) => {
                     showButton
                     filterName="support"
                     filterList={['name', 'location','phone']}
-                    searchPlaceholder="Search for user..."
+                    searchPlaceholder="Search for support..."
                     ariaLabel="support"
                     ariaDescription="support"
                     onSearch={() => onSearch()}
