@@ -73,19 +73,19 @@ const UserSupport = (props) => {
                     option={option}
                     onAddItem={() => history.push(URI.CreateSupportUser)}
                 />
-                <Table
-                    prev={() => fetchMore(page, 'prev', setPage)}
-                    next={() => fetchMore(page, 'next', setPage)}
-                    goTo={(id) => goTo(id, setActivePages)}
-                    activePage={activePage}
-                    pages={paginate}
-                    data={viewData}
-                    perPage={perPage}
-                    route={URI.User}
-                    tableTitle="Support" 
-                    tableHeader={['#','ID','Username','Email','Salary']}
-                    dataFields={['id','username','email','salary']}
-                />
+                    <Table
+                        prev={() => fetchMore(page, 'prev', setPage)}
+                        next={() => fetchMore(page, 'next', setPage)}
+                        goTo={(id) => goTo(id, setActivePages)}
+                        activePage={activePage}
+                        pages={paginate}
+                        data={viewData}
+                        perPage={perPage}
+                        route={URI.User}
+                        tableTitle="Support" 
+                        tableHeader={['#','ID','Username','Email','Salary']}
+                        dataFields={['id','username','email','salary']}
+                    />
             </main>
         </div>
     );

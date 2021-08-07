@@ -1,20 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Support.css';
 import NoData from '../../../components/widgets/NoData';
 import SubNavbar from '../../../components/subnavbar/index';
 import NewSupportForm from './NewSupportForm';
-import lib from './lib'
+import lib from './lib';
+import Table from '../../../components/table';
+import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/utility';
+import userData from '../../../assets/data/user';
+import SupportUserData from './SupportUserData';
+
+const noDataTitle = "You haven't created any support user yet.";
+const noDataParagraph = "You can create a support yourself by clicking on the button Add support.";
 
 const Support = (props) => {
     const NavigationBar = props.NavigationBar;
     const [searchInput, setSearchInput] = useState('');
     const [openForm, setOpenForm] = useState(false);
+    const [openData, setOpenData] = useState(false);
+    const [data, setData] = useState([]);
+    const [selected, setSelected] = useState(null);
     const [option, setOption] = useState('name');
+    const [page, setPage] = useState(1);
+    const [activePage, setActivePages] = useState(1);
+
+    // data 
+    useEffect(() => {
+        setData(userData)
+    }, [])
+
+    // setup table data
+    const perPage = getPageCount(10);
+    const paginate = getPages(data.length, perPage); 
+    const start = (activePage === 1) ? 0 : (activePage*perPage)  - perPage;
+    const stop = start+perPage;
+    const viewData = data.slice(start, stop);
+
 
     const onSearch = () => {}
 
     const onCreate = (values, setLoading, setError, setValues) => {
         lib.create()
+    }
+
+    const fetchMore = (page, key, set) => {
+       onSetPage(page, key, set)
+        // fetch the next page from the service and update the state
+    }
+
+    const onSelected = (value) => {
+        setSelected(value)
+        setOpenData(true)
     }
 
     return (
@@ -34,16 +69,32 @@ const Support = (props) => {
                     onSearch={() => onSearch()}
                     searchInput={searchInput}
                     onChangeInput={setSearchInput}
-                    searchID="search_pharmacy"
+                    searchID="support"
                     buttonTitle="Add support"
                     onSelectChange={setOption}
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                <NoData 
-                    title="You haven't created any support user yet."
-                    paragraph="You can create a support yourself by clicking on the button Add support."
-                />
+                { data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
+                    <div className="support-table__container">
+                        <div className="conatainer overflow-hidden">
+                            <SupportUserData data={selected} show={openData} onHide={() => setOpenData(false)} />
+                            <Table
+                                onSelectData={onSelected}
+                                prev={() => fetchMore(page, 'prev', setPage)}
+                                next={() => fetchMore(page, 'next', setPage)}
+                                goTo={(id) => goTo(id, setActivePages)}
+                                activePage={activePage}
+                                pages={paginate}
+                                data={viewData}
+                                perPage={perPage}
+                                route="" // {config.pages.user}
+                                tableTitle="Support" 
+                                tableHeader={['#','username', 'First Name','Last Name','Gender']}
+                                dataFields={['id','email', 'first_name','last_name', 'gender']}
+                            />
+                        </div>
+                    </div>
             </main>
         </div>
     );

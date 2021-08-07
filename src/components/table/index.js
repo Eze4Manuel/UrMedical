@@ -9,13 +9,26 @@ const navigateTo = (route, id, history) => {
     }
 }
 
-const Table = (props) => {
+const Table = (props = {
+    tableHeader: null,
+    data: [],
+    dataFields: [],
+    tableTitle: '',
+    onSelectData: null,
+    route: null,
+    pages: 0,
+    goTo: null,
+    next: null,
+    prev: null,
+    activePage: 0,
+}) => {
     const history = useHistory();
     const tableHeader = props.tableHeader.map(_th => (<th scope="col">{_th}</th>))
     const tableRow = props.data.map((_tr, _idx) => {
     const keys = Object.keys(_tr);
         return (
             <tr 
+                className="table-effect" 
                 onClick={() => typeof props.onSelectData === 'function' 
                         ? props.onSelectData(_tr) 
                         : navigateTo(props.route, _tr?.id, history)
@@ -34,11 +47,11 @@ const Table = (props) => {
     })
 
     return (
-        <div className="white px-5 pt-5 table-responsive table-height">
+        <div className="px-5 pt-5 table-responsive table-height card mt-4 overflow-scroll">
             <h1>{props.tableTitle}</h1>
             <table class="table table-hover table-sm">
                 <thead>
-                    <tr>{tableHeader}</tr>
+                    <tr className="app-table__header">{tableHeader}</tr>
                 </thead>
                 <tbody>
                     {tableRow}

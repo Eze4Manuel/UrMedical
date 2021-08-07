@@ -1,4 +1,8 @@
-.table-height {
-    height: calc(99vh - 159px);
-    overflow: hidden;
+.app-table__header {
+    background: #343a40;
+    color: #fff;
+}
+
+.table-effect:hover {
+    cursor: pointer !important;
 }

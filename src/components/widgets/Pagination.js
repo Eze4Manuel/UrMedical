@@ -31,13 +31,15 @@ const Paginate = (props) => (
  *  goTo: Function;
  *  next: Function;
  *  prev: Function;
+ *  activePage: number;
+ *  data: Array
  * }} props 
  * @returns 
  */
 const Pagination = (props) => {
     const pageItems = getPageItems(props.pages, props.goTo);
     return (
-        <div className="mt-5">
+        <div className="mt-5" style={{ display: 'flex', flexDirection: 'row-reverse' }}>
             <nav aria-label="Page navigation">
                 <ul className="pagination">
                     <Paginate 
