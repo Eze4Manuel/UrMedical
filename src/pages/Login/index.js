@@ -8,6 +8,7 @@ import Action from '../../core/context/ReducerAction';
 import { useAuth } from '../../core/hooks/useAuth';
 import request from '../../assets/utils/http-request';
 import ErrorMessage from '../../components/error/ErrorMessage'
+import config from '../../assets/utils/config';
 
 const Login = (props) => {
     const { set } = useAuth();
@@ -36,7 +37,7 @@ const Login = (props) => {
         setError('')
         setLoading(true) 
         try {
-            let reqData = (await request.post('/auth/login',userData)).data;
+            let reqData = (await request.post(config.api.login,userData)).data;
             setLoading(false) 
             // check error
             if (reqData?.status === 'error') {

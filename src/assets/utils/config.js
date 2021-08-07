@@ -26,8 +26,8 @@ pages.CancelledDispatch = '/dispatch/cancelled';
 
 const config = {
     api: {
-        login: '/v1/login',
-        logout: '/v1/logout'
+        login: '/auth/login',
+        logout: '/auth/logout'
     },
     pages: {
         login: '/',
