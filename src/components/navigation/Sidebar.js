@@ -46,7 +46,7 @@ const Sidebar = (props) => {
                         <h3>
                             {props?.user?.username}<br />
                             <span style={{color: '#91A0AF'}} className="user-id small text-uppercase">
-                                {props?.user?._id ?? props?.user?.id}
+                                {props?.user?._id ?? props?.user?.auth_id}
                             </span>
                         </h3>
                 </div>

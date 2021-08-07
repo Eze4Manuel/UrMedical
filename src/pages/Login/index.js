@@ -6,82 +6,86 @@ import { Password } from 'primereact/password';
 import { dispatcher } from '../../core/context/Store';
 import Action from '../../core/context/ReducerAction';
 import { useAuth } from '../../core/hooks/useAuth';
-// import Helpers from '../../core/func/Helpers';
-
-// TODO: Temp Data
-import __userData from '../../assets/data/user';
+import request from '../../assets/utils/http-request';
+import ErrorMessage from '../../components/error/ErrorMessage'
 
 const Login = (props) => {
     const { set } = useAuth();
-    const [data, setData] = useState({
-        username: '', 
-        password: '',
-        loading: false,
-        error: ''
-    });
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const [values, setValues] = useState({ username: '', password: ''})
 
-    const handleSubmit = async (e) => {
-        // setLoading(true);
-        data.error = "";
-        data.loading = true;
-        setData({...data});
+    const onSubmit = async (e) => {
+        // check username
+        if (!values.username) {
+            setError('username is required')
+            return
+        }
+        // check password
+        if (!values.password) {
+            setError('password is required')
+            return
+        }
 
-        // setError(null);
+        let userData = {
+            email: values.username,
+            password: values.password,
+            user_type: 'admin'
+        }
+
+        setError('')
+        setLoading(true) 
         try {
-            // let res = await Helpers.signin({
-            //     username: data.usename,
-            //     password: data.password
-            // });
-            // simulate
-            let res = __userData[0]; // superadmin
-            console.log('res')
-            console.log(res)
-            dispatcher({type: Action.user.set, payload: {user: res}});
-            await set(res); // save to localstorage
-            data.loading = false;
-            setData({...data});
-        } catch (e) {
-            let err = e?.response?.data?.msg 
-            || e?.response?.data?.err
-            || e?.message;
-            data.error = err;
-            data.loading = false;
-            setData({...data});
+            let reqData = (await request.post('/auth/login',userData)).data;
+            setLoading(false) 
+            // check error
+            if (reqData?.status === 'error') {
+                setError(reqData?.msg)
+                return
+            }
+            // check success
+            if (reqData?.status === 'ok') {
+                dispatcher({type: Action.user.set, payload: {user: reqData.data}});
+                await set(reqData.data); // save to localstorage
+            }
+        } catch(err) {
+            setLoading(false)
+            setError(err?.response?.data?.msg || err?.message)
         }
     };
 
     return (
-        <div className="app_auth">
-           <div className="app_auth_left">
-               <h3 className="auth_header">Wedidfund Portal</h3>
-               {data.error ? <p className="auth_error">{data.error}</p> : null}
-               <div className="p-fluid p-formgrid p-grid p-mx-5">
-                   {/* USERNAME */}
-                    <div className="p-field p-col-12">
-                        <span className="p-mt-1">
-                            <label htmlFor="title">Username</label>
-                            <InputText autoFocus value={data.username} 
-                            onChange={e => setData(d => ({...d, username: e.target.value}))} 
-                            id="username" name="username" type="text" />
-                        </span>
+        <div className="app-login">
+            <div className="app-login__container">
+                <div className="app-login__content">
+                    <h3 className="text-center">Login</h3>
+                    <div className="app-login__error">
+                        {error ? <ErrorMessage message={error} /> : null}
                     </div>
-                    {/* PASSWORD */}
-                    <div className="p-field p-col-12">
-                        <span className="p-mt-1">
-                            <label htmlFor="title">Password</label>
-                            <Password toggleMask value={data.password} 
-                            onChange={e => setData(d => ({...d,password: e.target.value}))} 
-                            id="password" name="password" type="text" />
-                        </span>
+                    <div className="p-fluid p-formgrid p-grid p-mx-5">
+                            <div style={{width: '350px'}} className="container">
+                            <div className="row">
+                                    <div className="col-lg-12">
+                                        <div className="p-field mb-2">
+                                            <label htmlFor="username">Username</label><br />
+                                            <InputText style={{width: '100%'}} id="username" name="username" onChange={e => setValues(d => ({...d, username: e.target.value}))} autoFocus value={values.username} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="johndoe@cls.com" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12">
+                                        <div className="p-field mb-2">
+                                            <label htmlFor="password">Password</label><br />
+                                            <Password style={{ width: '100%' }} id="password" name="password" type="text" toggleMask value={values.password} onChange={e => setValues(d => ({...d, password: e.target.value}))} placeholder="**********" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12">
+                                        <div className="mt-2">
+                                            <Button onClick={() => onSubmit()} style={{width: '100%'}} loading={loading} color="#fff" label="Login"/>
+                                        </div>
+                                    </div>
+                            </div> 
+                            </div>
                     </div>
                 </div>
-               <div className="p-d-flex p-flex-sm-row p-jc-end">
-                   <Button onClick={handleSubmit} style={{width: 180}} type="submit" label="Login" 
-                   loading={data.loading} className="p-mt-2 p-button-primary" />
-               </div>
-            </div> 
-            {/* Background Image */}
-           <div className="app_auth_right">
             </div> 
         </div>
     )

@@ -5,22 +5,24 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
-import Uri from '../assets/utils/uri';
 import Context from '../core/context/Store';
 import Dashboard from './dashboard';
-// import TraffleSystem from './traffle/TraffleSystem';
 import Customer from './user/customer/Customer';
 import Sidebar from '../components/navigation/Sidebar';
 import { routes } from './config';
 import Navbar from '../components/navigation/Navbar';
+import config from '../assets/utils/config';
 
 export const getInitialRoutePage = (user) => {
-  return user?.is_admin && user?.username === 'AppAdmin001'
-  ? Uri.dashboard : Uri.SystemTraffles;
+  return user?.user_type === 'superadmin' 
+    && user?.privilege === 4
+    ? config.pages.dashboard 
+    : config.pages.customer;
 }
 
 export const isSuperAdmin = (user) => {
-  return user?.is_admin && user?.username === 'AppAdmin001';
+  return user?.user_type === 'superadmin' 
+    && user?.privilege === 4;
 }
 
 
@@ -45,7 +47,7 @@ const App = (props) => {
           </Route>
           {renderedRoutes}
           <Route>
-            <Redirect exact from='*' path={Uri.Customer} />
+            <Redirect exact from='*' path={config.pages.customer} />
           </Route>
         </Switch>
       </Fragment>

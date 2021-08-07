@@ -1,3 +1,29 @@
+// 
+const pages = {}
+
+pages.login = '/';
+pages.dashboard = '/dashboard';
+pages.user = '/user';
+
+pages.CreateSupport = '/user/create-support';
+pages.CreatePharmacy = '/user/create-pharmacy';
+pages.Support = '/users/support';
+pages.Dispatcher = '/users/dispatcher';
+pages.Customer = '/users/customer';
+
+// Pharmacy
+pages.Pharmacy = '/pharmacies/shop';
+pages.Pharmacist = '/pharmacies/pharmacist';
+pages.Drug = '/pharmacies/drug';
+
+// Transactions
+pages.Payments = '/transactions/payment';
+pages.Disputes = '/transactions/dispute';
+
+// Dispatches
+pages.CompletedDispatch = '/dispatch/completed';
+pages.CancelledDispatch = '/dispatch/cancelled';
+
 const config = {
     api: {
         login: '/v1/login',
@@ -6,7 +32,9 @@ const config = {
     pages: {
         login: '/',
         dashboard: '/dashboard',
-        user: '/user',
+        support: '/support',
+        customer: '/customer',
+        dispatcher: '/dispatcher',
         product: '/product',
         pharmacy: '/pharmacy',
         settings: '/settings',

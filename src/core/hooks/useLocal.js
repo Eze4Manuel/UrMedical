@@ -1,13 +1,10 @@
 import React from 'react';
 
-const PRIFIX = 'wedidit-app-ls-001-';
-
 export default function useLocalStorage(key, initialValue) {
-    const pKey = PRIFIX + key;
 
     // Get value from local storage
     const [value, setValue] = React.useState(() => {
-        const json = localStorage.getItem(pKey);
+        const json = localStorage.getItem(key);
 
         try {
             if (json && json !== null) {
@@ -27,9 +24,9 @@ export default function useLocalStorage(key, initialValue) {
     // Add value to local storage
     React.useEffect(() => {
         const result = JSON.stringify(value);
-        localStorage.setItem(pKey, result);
+        localStorage.setItem(key, result);
 
-    }, [pKey, value]);
+    }, [key, value]);
 
     return [value, setValue];
 }

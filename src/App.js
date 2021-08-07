@@ -4,7 +4,7 @@ import { useAuth } from './core/hooks/useAuth';
 import Helpers from './core/func/Helpers';
 import UnAuthenticated from './pages/Login';
 import Authenticated from './pages/index';
-import Loading from './components/Loading';
+import Loading from './components/loading/Loading'
 
 PrimeReact.ripple = true;
 PrimeReact.autoZIndex = true;
@@ -14,6 +14,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   Helpers.loadUserInStore(user);
   
+  // TODO: verify token authenticity
   // wait for resource
   setTimeout(() => {
     setLoading(false)

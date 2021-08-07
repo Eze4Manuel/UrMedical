@@ -1,47 +1,23 @@
-.app_auth {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.app-login {
+    position: absolute;
+    background-color: lightblue;
+    width: 100%;
+    height: 100%;
 }
 
-.auth_header {
-    font-size: 15px;
-    font-weight: 500;
-    text-transform: uppercase;
-    text-align: left !important;
-    margin-bottom: 3rem;
+.app-login__container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.auth_error {
-    font-size: 9px;
-    font-weight: 400;
-    text-align: center;
-    color: red;
+.app-login__content {
+    background: #fff;
+    padding: 1.5rem;
 }
 
-.app_auth_left {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.app_auth_right {
-    flex: 3;
-    background-image: url("https://i.picsum.photos/id/1029/4887/2759.jpg?hmac=uMSExsgG8_PWwP9he9Y0LQ4bFDLlij7voa9lU9KMXDE");
-    height: 100vh;
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    /* Needed to position the navbar */
-    position: relative;
-}
-
-.auth_btn_container {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: flex-end;
+.app-login__error {
+   margin-left: 3rem;
+   margin-right: 3rem;
 }
