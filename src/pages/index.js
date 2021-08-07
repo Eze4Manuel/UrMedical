@@ -22,13 +22,12 @@ export const getInitialRoutePage = (user) => {
 
 export const isSuperAdmin = (user) => {
   return user?.user_type === 'superadmin' 
-    && user?.privilege === 4;
+    && user?.access_level === 4;
 }
 
 
 const App = (props) => {
   const { msgs, user } = useContext(Context).state;
-  // const defaultRoute = getInitialRoutePage(user);  
   const fullAccess = isSuperAdmin(user);
   
   const renderedRoutes = routes.map( AppRoute => AppRoute.access === 2 || (AppRoute.access === 1 && fullAccess) ? (
@@ -43,7 +42,7 @@ const App = (props) => {
         <Sidebar msgs={msgs} user={user} />
         <Switch>
           <Route exact path='/'>
-            {fullAccess ? <Dashboard {...props}/> : <Customer NavigationBar={Navbar} {...props}/>}
+            {fullAccess ? <Dashboard NavigationBar={Navbar} {...props}/> : <Customer NavigationBar={Navbar} {...props}/>}
           </Route>
           {renderedRoutes}
           <Route>

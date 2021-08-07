@@ -2,33 +2,49 @@ import React, { Fragment } from 'react';
 import './Sidebar.css';
 import { Link } from 'react-router-dom';
 import config from './config';
+import { useAuth } from '../../core/hooks/useAuth';
+import helpers from '../../core/func/Helpers';
 
 const Sidebar = (props) => {
+    const {set} = useAuth();
+    
     const sidebarLinks = config.sidebar.map(cfg => {
         if (cfg.divider === 'dashboard'
         && !props?.user?.user_type !== 'superadmin'
         && props?.user?.user_type === 'admin') {
             return null;
-        } else {
-            return (
-                <Fragment>
-                    <div className="menu-head">
-                        <span className="text-capitalize">{cfg.divider}</span>
-                        </div>
-                        <ul>
-                            {cfg.sub.map(sub => (
-                                <li key={sub.name}>
+        }
+       
+        const onLogout = (name) => {
+            if (name === 'logout') {
+                helpers.logout(set);
+            }
+        }
+        
+        return (
+            <Fragment>
+                <div className="menu-head">
+                    <span className="text-capitalize">{cfg.divider}</span>
+                    </div>
+                    <ul>
+                        {cfg.sub.map(sub => {
+                             if (sub.name === 'settings' && props?.user?.user_type === 'superadmin') {
+                                return null
+                            } 
+                            return (
+                                <li onClick={() => onLogout(sub.name)} key={sub.name}>
                                     <Link to={sub.link}>
                                         <span className={sub.icon}></span>{sub.name}
                                     </Link>
                                 </li>
-                                ))
-                            }
-                        </ul>
-                </Fragment>
-            )
+                                )
+                        })
+                        }
+                    </ul>
+            </Fragment>
+        )
         }
-    });
+    );
 
     return (
         <div className="sidebar sidebar_wp">

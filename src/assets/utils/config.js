@@ -32,11 +32,13 @@ const config = {
     pages: {
         login: '/',
         dashboard: '/dashboard',
-        support: '/support',
-        customer: '/customer',
-        dispatcher: '/dispatcher',
-        product: '/product',
-        pharmacy: '/pharmacy',
+        supports: '/supports',
+        customers: '/customers',
+        dispatchers: '/dispatcher',
+        partners: '/partners',
+        pharmacies: '/pharmacies',
+        transactions: '/transactions',
+        trips: 'trips',
         settings: '/settings',
         messages: '/messages'
     },
