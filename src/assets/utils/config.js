@@ -52,23 +52,24 @@ const config = {
         username: '',
         first_name: '',
         last_name: '',
-        sex: '',
+        gender: '',
         age: '',
         occupation: '',
         address: {
             street: '',
             city: '',
         },
-        coods: {
-            long: '',
-            lat: ''
+        cords: {
+            longitude: '',
+            latatitude: ''
         },
         user_type: '', // superadmin, admin, pharmacy, customer, dispatcher, pharmacist, assistant
-        privilege: 2, // 1 = admin, 2 = non_admin
+        privilege: 1, // 1 = admin, 2 = non_admin
         billing: {},
         pin: '',
         password: '',
         otp: '',
+        auth_id: ''
     },
     product_category: [
         ''

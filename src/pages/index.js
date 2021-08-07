@@ -46,7 +46,7 @@ const App = (props) => {
           </Route>
           {renderedRoutes}
           <Route>
-            <Redirect exact from='*' path={config.pages.customer} />
+            <Redirect exact from='*' path={config.pages.customers} />
           </Route>
         </Switch>
       </Fragment>
