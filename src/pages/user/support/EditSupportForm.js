@@ -94,25 +94,25 @@ export const EditPassword = ({ data, show, onHide }) => {
             <div className="col-lg-12">
                 <div className="p-field mb-1">
                     <label htmlFor="new_password">New Password</label><br />
-                    <Password footer={footer} minLength={6} maxLength={24} id="new_password" name="new_password" type="text" onChange={e => setValues(d => ({...d, new_password: e.target.value}))} value={values.new_password} className="p-inputtext-sm" placeholder="********" toggleMask />
+                    <Password footer={footer} minLength={6} maxLength={24} id="new_password" name="new_password" type="text" onChange={e => setValues(d => ({...d, new_password: e.target.value}))} value={values?.new_password} className="p-inputtext-sm" placeholder="********" toggleMask />
                 </div>
             </div>
             <div className="col-lg-12">
                 <div className="p-field mb-1">
                     <label htmlFor="confirm_password">Comfirm Password</label><br />
-                    <Password footer={footer} minLength={6} maxLength={24} id="password" name="password" type="text" onChange={e => setValues(d => ({...d, confirm_password: e.target.value}))} value={values.confirm_password} className="p-inputtext-sm" placeholder="********" toggleMask />
+                    <Password footer={footer} minLength={6} maxLength={24} id="password" name="password" type="text" onChange={e => setValues(d => ({...d, confirm_password: e.target.value}))} value={values?.confirm_password} className="p-inputtext-sm" placeholder="********" toggleMask />
                 </div>
             </div>
         </div> 
         <div className="password-update__btn-ctn">
-                <button onClick={() => onCancel()} style={{width: 100, height: 30}} class="p-button p-component p-button-outlined"><span class="p-button-label p-c">Cancel</span></button>
-                <Button onClick={() => onSubmit()} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Save"/>
+            <button onClick={() => onCancel()} style={{width: 100, height: 30}} class="p-button p-component p-button-outlined"><span class="p-button-label p-c">Cancel</span></button>
+            <Button onClick={() => onSubmit()} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Save"/>
         </div> 
     </div>
     ) : null
 }
 
-const EditSupportForm = ({ data, show }) => {
+const EditSupportForm = ({ data, show, onHide }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
@@ -123,6 +123,7 @@ const EditSupportForm = ({ data, show }) => {
 
     const onSubmit = () => {
         // update
+        onHide()
     }
   
     return show ? (
@@ -166,7 +167,7 @@ const EditSupportForm = ({ data, show }) => {
                 <div className="col-sm-12">
                     <div className="p-field mb-2">
                         <label htmlFor="home_area">Home Area</label><br />
-                        <InputText style={{width: '100%'}} id="home_area" name="home_area" onChange={e => setValues(d => ({...d, home_area: e.target.value}))} value={values?.home_area} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="home_area" />
+                        <InputText style={{width: '100%'}} id="home_area" name="home_area" onChange={e => setValues(d => ({...d, home_area: e.target.value}))} value={values?.home_area} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="home area" />
                     </div>
                 </div>
                 </div> 

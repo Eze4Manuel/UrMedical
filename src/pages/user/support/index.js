@@ -8,6 +8,8 @@ import Table from '../../../components/table';
 import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/utility';
 import userData from '../../../assets/data/user';
 import SupportUserData from './SupportUserData';
+import { ContainerLoader } from '../../../components/loading/Loading';
+
 
 const noDataTitle = "You haven't created any support user yet.";
 const noDataParagraph = "You can create a support yourself by clicking on the button Add support.";
@@ -22,6 +24,7 @@ const Support = (props) => {
     const [option, setOption] = useState('name');
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
+    const [loader, setLoader] = useState(false);
 
     // data 
     useEffect(() => {
@@ -48,14 +51,29 @@ const Support = (props) => {
     }
 
     const onSelected = (value) => {
-        setSelected(value)
-        setOpenData(true)
+        setLoader(true)
+        setTimeout(() => {
+            setSelected(value)
+            setOpenData(true)
+            setLoader(false)
+        }, 3000)
+    }
+
+    const onDeleted = (id) => {
+        // remove from selected
+        setSelected(null)
+        // close modal
+        setOpenData(false)
+        // remove from data list
+        let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
+        setData(s => (d))
     }
 
     return (
         <div className='main-content'>
             <NavigationBar {...props} />
             <main>
+                {loader ? <ContainerLoader /> : null}
                 <NewSupportForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
                 <SubNavbar  
                     showFilter
@@ -78,7 +96,7 @@ const Support = (props) => {
                 { data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
                     <div className="support-table__container">
                         <div className="conatainer overflow-hidden">
-                            <SupportUserData data={selected} show={openData} onHide={() => setOpenData(false)} />
+                            <SupportUserData onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                             <Table
                                 onSelectData={onSelected}
                                 prev={() => fetchMore(page, 'prev', setPage)}
