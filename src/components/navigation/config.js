@@ -9,16 +9,16 @@ const config = {
         {
             divider: 'users',
             sub: [
-                {name: 'support', icon: 'las la-users', link: conf.pages.supports},
-                {name: 'dispatchers', icon: 'las la-users', link: conf.pages.dispatchers},
+                {name: 'support', icon: 'las la-user-lock', link: conf.pages.supports},
+                {name: 'dispatchers', icon: 'las la-truck', link: conf.pages.dispatchers},
                 {name: 'customers', icon: 'las la-users', link: conf.pages.customers},
-                {name: 'partners', icon: 'las la-users', link: conf.pages.partners},
+                {name: 'partners', icon: 'las la-store-alt', link: conf.pages.partners},
             ]
         },
         {
             divider: 'services',
             sub: [
-                {name: 'pharmacies', icon: 'las la-store-alt', link: conf.pages.pharmacies},
+                {name: 'products', icon: 'las la-store-alt', link: conf.pages.pharmacies},
                 {name: 'transactions', icon: 'las la-book', link: conf.pages.transactions},
                 {name: 'trips', icon: 'las la-map-signs', link: conf.pages.trips},
             ]

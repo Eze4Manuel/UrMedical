@@ -108,7 +108,7 @@ const Dispatcher = (props) => {
                         route="" // {config.pages.user}
                         tableTitle="Dispatcher" 
                         tableHeader={['#','username', 'First Name','Last Name','Gender']}
-                        dataFields={['id','email', 'first_name','last_name', 'gender']}
+                        dataFields={['email', 'first_name','last_name', 'gender']}
                     />
                 </div>
             </main>

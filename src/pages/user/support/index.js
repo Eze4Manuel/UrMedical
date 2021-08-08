@@ -109,7 +109,7 @@ const Support = (props) => {
                                 route="" // {config.pages.user}
                                 tableTitle="Support" 
                                 tableHeader={['#','username', 'First Name','Last Name','Gender']}
-                                dataFields={['id','email', 'first_name','last_name', 'gender']}
+                                dataFields={['email', 'first_name','last_name', 'gender']}
                             />
                         </div>
                     </div>

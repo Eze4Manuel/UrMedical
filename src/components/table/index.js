@@ -25,7 +25,6 @@ const Table = (props = {
     const history = useHistory();
     const tableHeader = props.tableHeader.map(_th => (<th scope="col">{_th}</th>))
     const tableRow = props.data.map((_tr, _idx) => {
-    const keys = Object.keys(_tr);
         return (
             <tr 
                 className="table-effect" 
@@ -37,11 +36,15 @@ const Table = (props = {
                 <th scope="row">
                     {_idx+1}
                 </th>
-                {keys.map( key => (
-                    props.dataFields.includes(key) 
-                    ? <td>{_tr[key]}</td> 
-                    : null
-                ))}
+                {
+                    props.dataFields.map((key) => {
+                        let dk = key
+                        if (key === 'username')  {
+                            dk = 'email'
+                        }
+                        return (<td>{_tr[dk]}</td> )
+                    })
+                }
             </tr>
         )
     })
