@@ -17,7 +17,7 @@ export const getInitialRoutePage = (user) => {
   return user?.user_type === 'superadmin' 
     && user?.privilege === 4
     ? config.pages.dashboard 
-    : config.pages.customer;
+    : config.pages.customers;
 }
 
 export const isSuperAdmin = (user) => {

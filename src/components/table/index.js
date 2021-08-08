@@ -52,7 +52,7 @@ const Table = (props = {
     return (
         <div className="px-5 pt-5 table-responsive table-height card mt-4 overflow-scroll">
             <h1>{props.tableTitle}</h1>
-            <table class="table table-hover table-sm">
+            <table className="table table-hover table-sm">
                 <thead>
                     <tr className="app-table__header">{tableHeader}</tr>
                 </thead>

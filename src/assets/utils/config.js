@@ -37,6 +37,7 @@ const config = {
         dispatchers: '/dispatcher',
         partners: '/partners',
         pharmacies: '/pharmacies',
+        products: '/products',
         transactions: '/transactions',
         trips: 'trips',
         settings: '/settings',
