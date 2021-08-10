@@ -1,13 +1,113 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Trip.css';
+import NoData from '../../components/widgets/NoData';
+import SubNavbar from '../../components/subnavbar/index';
+import lib from './lib';
+import Table from '../../components/table';
+import { getPageCount, getPages, goTo, onSetPage } from '../../core/func/utility';
+// import { pharmacyData } from '../../assets/data/product';
+// import NewCustomerForm from './NewCustomerForm';
+import { ContainerLoader } from '../../components/loading/Loading';
+// import ProductSummary from './ProductSummary'
+
+const noDataTitle = "No trips yet.";
+const noDataParagraph = "All dispatch trips will appear here.";
 
 const Trip = (props) => {
     const NavigationBar = props.NavigationBar;
+    const [searchInput, setSearchInput] = useState('');
+    const [openForm, setOpenForm] = useState(false);
+    const [openData, setOpenData] = useState(false);
+    const [data, setData] = useState([]);
+    const [selected, setSelected] = useState(null);
+    const [option, setOption] = useState('name');
+    const [page, setPage] = useState(1);
+    const [activePage, setActivePages] = useState(1);
+    const [loader, setLoader] = useState(false);
+
+    // data 
+    useEffect(() => {
+        setData([])
+    }, [])
+
+    // setup table data
+    const perPage = getPageCount(10);
+    const paginate = getPages(data.length, perPage); 
+    const start = (activePage === 1) ? 0 : (activePage*perPage)  - perPage;
+    const stop = start+perPage;
+    const viewData = data.slice(start, stop);
+
+    const onSearch = () => {}
+
+    const onCreate = (values, setLoading, setError, setValues) => {
+        lib.create()
+    }
+
+    const fetchMore = (page, key, set) => {
+       onSetPage(page, key, set)
+        // fetch the next page from the service and update the state
+    }
+
+    const onSelected = (value) => {
+        setLoader(true)
+        setTimeout(() => {
+            setSelected(value)
+            setOpenData(true)
+            setLoader(false)
+        }, 3000)
+    }
+
+    const onDeleted = (id) => {
+        // remove from selected
+        setSelected(null)
+        // close modal
+        setOpenData(false)
+        // remove from data list
+        let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
+        setData(s => (d))
+    }
+
     return (
         <div className='main-content'>
             <NavigationBar {...props} />
             <main>
-                <h3 className="mt-3 mb-5">Trip Details</h3>
+                {loader ? <ContainerLoader /> : null}
+                {/* <NewCustomerForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} /> */}
+                <SubNavbar  
+                    showFilter
+                    showSearch
+                    showButton={false}
+                    filterName="trips"
+                    filterList={['name', 'location','phone']}
+                    searchPlaceholder="Search for trips..."
+                    ariaLabel="trips"
+                    ariaDescription="trips"
+                    onSearch={() => onSearch()}
+                    searchInput={searchInput}
+                    onChangeInput={setSearchInput}
+                    searchID="trips"
+                    onSelectChange={setOption}
+                    option={option}
+                    onAddItem={() => setOpenForm(true)}
+                />
+                {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
+                {/* <ProductSummary onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} /> */}
+                <div className="trip-table__container">
+                    {/* <Table
+                        onSelectData={onSelected}
+                        prev={() => fetchMore(page, 'prev', setPage)}
+                        next={() => fetchMore(page, 'next', setPage)}
+                        goTo={(id) => goTo(id, setActivePages)}
+                        activePage={activePage}
+                        pages={paginate}
+                        data={viewData}
+                        perPage={perPage}
+                        route="" // {config.pages.user}
+                        tableTitle="Transactions summary" 
+                        tableHeader={['#','Pharmacy', 'Products', 'Categories', 'Ratings']}
+                        dataFields={['name', 'products', 'categories', 'ratings']}
+                    /> */}
+                </div>
             </main>
         </div>
     );

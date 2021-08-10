@@ -11,6 +11,16 @@ Helpers.getHeaderConfig = (token) => {
     return {headers: {'Authorization': `Bearer ${token}`}}
 };
 
+//for generating random token
+const randomToken = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-'
+Helpers.generateToken = (len) => {
+    let token = ''
+    let xLen = randomToken.length - 1;
+    for (let i = 0; i < len; i++) {
+       token += randomToken.charAt(Math.random() * xLen)
+    }
+    return token
+ }
 
 // Add use to the store state
 Helpers.loadUserInStore = (user) => {

@@ -39,7 +39,7 @@ const config = {
         pharmacies: '/pharmacies',
         products: '/products',
         transactions: '/transactions',
-        trips: 'trips',
+        trips: '/trips',
         settings: '/settings',
         messages: '/messages'
     },

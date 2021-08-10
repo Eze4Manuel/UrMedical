@@ -4,12 +4,12 @@ import Dashboard from "./dashboard";
 import Support from '../pages/user/support/index';
 import config from '../assets/utils/config';
 import Navbar from "../components/navigation/Navbar";
-import Trip from "../pages/trips/Trip";
 import Setting from "../pages/settings/Setting";
 import Transaction from "../pages/transaction/Transaction";
 import Message from "../pages/message/Message";
 import Partner from "../pages/user/partner/Partner";
 import Product from "./product/Product";
+import Trip from "./trips/Trip";
 
 // Access 1 - super admin, 2 - admin staff
 const pages = config.pages;
