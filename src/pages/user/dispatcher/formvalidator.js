@@ -129,14 +129,14 @@ formValidator.validateNewDispatcher = (form, builder, setError) => {
             return setError("Middle name is too long")
         }
         //if middle name is not alphabets
-        if (!/^[a-z\-]+$/i.test(form.middle_name)) {
+        if (!/^[a-z-]+$/i.test(form.middle_name)) {
             return setError("Middle name should be alphabets only")
         }
         builder.middle_name = form.middle_name
     }
 
      //if last name is not alphabets
-     if (!/^[a-z\-]+$/i.test(form.last_name)) {
+     if (!/^[a-z-]+$/i.test(form.last_name)) {
         return setError("Last name should be alphabets only")
      }
 
@@ -216,7 +216,7 @@ formValidator.validateNewDispatcher = (form, builder, setError) => {
      }
      //check if home area
      if (form.home_area) {
-        if (!/^[\w\s\-\'\,]+$/i.test(form.home_area)) {
+        if (!/^[\w\s\-',]+$/i.test(form.home_area)) {
            return setError("No special character allowed for home area")
         }
         builder.home_area = form.home_area
