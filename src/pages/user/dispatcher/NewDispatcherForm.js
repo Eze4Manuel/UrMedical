@@ -8,6 +8,7 @@ import { Password } from 'primereact/password';
 import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
+import formValidator from './formvalidator';
 
 const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
     const [values, setValues] = React.useState(config.userData);
@@ -26,6 +27,16 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
             </ul>
         </React.Fragment>
     );
+
+    const handleSubmit = () => {
+        // validation
+        let builder = formValidator.validateNewDispatcher(values, {}, setError)
+        if (!builder) {
+            return
+        }
+        // submit
+        props.onSubmit(builder, setLoading, setError, setValues, config.userData)
+    }
 
     return (
         <Dialog header="New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{width: "40vw"}}>
@@ -56,7 +67,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
                         </div>
                     </div>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="vehicle_id">Vehicle ID</label><br />
@@ -69,7 +80,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
                             <InputText style={{width: '100%'}} id="license_id" name="license_id" type="text" onChange={e => setValues(d => ({...d, license_id: e.target.value}))} value={values.license_id} className="p-inputtext-sm p-d-block p-mb-2" placeholder="AKW06968AA2" />
                         </div>
                     </div>
-                </div>  
+                </div>   */}
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-1">
@@ -86,7 +97,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
                 </div> 
 
                 <div className="partner-form__button-wp">
-                    <Button onClick={() => props.onSubmit(values, setLoading, setError, setValues, config.userData)} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
+                    <Button onClick={() => handleSubmit()} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
                 </div>  
             </div>
         </Dialog>

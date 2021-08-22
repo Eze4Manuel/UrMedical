@@ -19,6 +19,6 @@ export const onSetPage  = async (page, key, set) => {
     if (key === 'next') {
         p = p + 1;
     }
-    set(ps => p)
+    set(p)
     return p;
 }

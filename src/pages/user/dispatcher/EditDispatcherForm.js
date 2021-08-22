@@ -8,9 +8,16 @@ import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import { Password } from 'primereact/password';
 import './EditDispatcherForm.css';
+import { useAuth } from '../../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import lib from './lib';
+import helpers from '../../../core/func/Helpers';
+import formValidator from './formvalidator';
 
-export const EditLicense = ({ data, show, onHide }) => {
-    const [values, setValues] = React.useState({new_password: '', confirm_password: ''});
+export const EditLicense = ({ data, show, onHide, onUpdate }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
+    const [values, setValues] = React.useState({vehicle_id: '', license_id: ''});
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
 
@@ -24,9 +31,56 @@ export const EditLicense = ({ data, show, onHide }) => {
         onHide()
     }
 
-    const onSubmit = () => {
-        // submit
-        onHide()
+    const onSubmit = async () => {
+        // let builder = formValidator.validateLicenseUpdate(values, data, {}, setError)
+        let builder = {}
+
+        // if (!builder) {
+        //     return
+        // }
+        setError("")
+        // check vehicle ID
+        if (values.vehicle_id !== data.vehicle_id) {
+            if (values.vehicle_id.length === 0) {
+                return setError("Vehicle ID is required")
+            }
+            if (values.vehicle_id.length < 6) {
+                return setError("Vehicle ID is too short")
+            }
+            if (values.vehicle_id.length > 15) {
+                return setError("Vehicle ID is too long")
+            }
+            builder.vehicle_id = values.vehicle_id
+        }
+        // check dispatcher license ID
+        if (values.license_id !== data.license_id) {
+            if (values.license_id.length === 0) {
+                return setError("License ID is required")
+            }
+            if (values.license_id.length < 4) {
+                return setError("Licence ID is too short")
+            }
+            if (values.license_id.length > 15) {
+                return setError("Vehicle ID is too long")
+            }
+            builder.license_id = values.license_id
+            console.log(builder)
+        }
+        
+        if (Object.keys(builder).length === 0) {
+            return setError("No data changed")
+        }
+        let reqData = await lib.updateLicense(data?.auth_id, builder, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'update successful'})
+            setValues(reqData.data)
+            onUpdate(reqData.data)
+        }
     }
 
     return show ? (
@@ -59,6 +113,8 @@ export const EditLicense = ({ data, show, onHide }) => {
 }
 
 export const EditPassword = ({ data, show, onHide }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [values, setValues] = React.useState({new_password: '', confirm_password: ''});
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
@@ -67,7 +123,8 @@ export const EditPassword = ({ data, show, onHide }) => {
         setValues(data);
     }, [data])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
+        let builder = {}
         // validate password
         setError('')
         //check if its above minimum number
@@ -108,9 +165,18 @@ export const EditPassword = ({ data, show, onHide }) => {
             setError('Passwords do not match')
             return
         }
-        // submit the password
-        setLoading(true)
-        // update
+        builder.password = values.new_password;
+        builder.auth_id = data?.auth_id
+
+        let reqData = await lib.updatePassword(builder, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'password updated'})
+        }
     }
 
     const onCancel = () => {
@@ -161,7 +227,9 @@ export const EditPassword = ({ data, show, onHide }) => {
     ) : null
 }
 
-const EditDispatcherForm = ({ data, show, onHide }) => {
+const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
@@ -170,9 +238,27 @@ const EditDispatcherForm = ({ data, show, onHide }) => {
         setValues(data);
     }, [data])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         // update
-        onHide()
+        let builder = formValidator.validateDataUpdate(values, data, {}, setError)
+        if (!builder) {
+            return
+        }
+
+        // update
+        setLoading(true)
+        let reqData = await lib.update(data?.auth_id, builder, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'update successful'})
+            setValues(reqData.data)
+            onUpdate(reqData.data)
+            // onHide()
+        }
     }
   
     return show ? (

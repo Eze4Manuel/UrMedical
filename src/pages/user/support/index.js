@@ -35,13 +35,13 @@ const Support = (props) => {
     useEffect(() => {
         (async () => {
             setLoader(true)
-            let reqData = await lib.get(1, null, user?.token)
+            let reqData = await lib.get(page, null, user?.token)
             if (reqData.status === 'ok') {
                 setData(reqData.data)
             }
             setLoader(false)
         })()
-    }, [user?.token])
+    }, [user?.token, page])
 
     // setup table data
     const perPage = getPageCount(10);
@@ -90,7 +90,6 @@ const Support = (props) => {
 
     const fetchMore = (page, key, set) => {
        onSetPage(page, key, set)
-        // fetch the next page from the service and update the state
     }
 
     const onSelected = async (value) => {
