@@ -4,6 +4,9 @@ formValidator.validateLicenseUpdate = (values, data, builder, setError) => {
     setError("")
     // check vehicle ID
     if (values.vehicle_id !== data.vehicle_id) {
+        if (values.vehicle_id.length === 0) {
+            return setError("Vehicle ID is required")
+        }
         if (values.vehicle_id.length < 6) {
             return setError("Vehicle ID is too short")
         }
@@ -12,8 +15,11 @@ formValidator.validateLicenseUpdate = (values, data, builder, setError) => {
         }
         builder.vehicle_id = values.vehicle_id
     }
-     // check dispatcher license ID
-     if (values.license_id !== data.license_id) {
+    // check dispatcher license ID
+    if (values.license_id !== data.license_id) {
+        if (values.license_id.length === 0) {
+            return setError("License ID is required")
+        }
         if (values.license_id.length < 4) {
             return setError("Licence ID is too short")
         }

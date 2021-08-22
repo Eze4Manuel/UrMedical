@@ -67,7 +67,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
                         </div>
                     </div>
                 </div>
-                {/* <div className="row">
+                <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="vehicle_id">Vehicle ID</label><br />
@@ -80,7 +80,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
                             <InputText style={{width: '100%'}} id="license_id" name="license_id" type="text" onChange={e => setValues(d => ({...d, license_id: e.target.value}))} value={values.license_id} className="p-inputtext-sm p-d-block p-mb-2" placeholder="AKW06968AA2" />
                         </div>
                     </div>
-                </div>   */}
+                </div>  
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-1">

@@ -22,7 +22,7 @@ export const EditLicense = ({ data, show, onHide, onUpdate }) => {
     const [error, setError] = React.useState(false);
 
     useEffect(() => {
-        setValues(data);
+        setValues(data?.dispatcher_data);
     }, [data])
 
     const onCancel = () => {
@@ -32,44 +32,12 @@ export const EditLicense = ({ data, show, onHide, onUpdate }) => {
     }
 
     const onSubmit = async () => {
-        // let builder = formValidator.validateLicenseUpdate(values, data, {}, setError)
-        let builder = {}
+        let builder = formValidator.validateLicenseUpdate(values, data, {}, setError)
 
-        // if (!builder) {
-        //     return
-        // }
-        setError("")
-        // check vehicle ID
-        if (values.vehicle_id !== data.vehicle_id) {
-            if (values.vehicle_id.length === 0) {
-                return setError("Vehicle ID is required")
-            }
-            if (values.vehicle_id.length < 6) {
-                return setError("Vehicle ID is too short")
-            }
-            if (values.vehicle_id.length > 15) {
-                return setError("Vehicle ID is too long")
-            }
-            builder.vehicle_id = values.vehicle_id
+        if (!builder) {
+            return
         }
-        // check dispatcher license ID
-        if (values.license_id !== data.license_id) {
-            if (values.license_id.length === 0) {
-                return setError("License ID is required")
-            }
-            if (values.license_id.length < 4) {
-                return setError("Licence ID is too short")
-            }
-            if (values.license_id.length > 15) {
-                return setError("Vehicle ID is too long")
-            }
-            builder.license_id = values.license_id
-            console.log(builder)
-        }
-        
-        if (Object.keys(builder).length === 0) {
-            return setError("No data changed")
-        }
+        // update
         let reqData = await lib.updateLicense(data?.auth_id, builder, user?.token)
         setLoading(false)
         // error
