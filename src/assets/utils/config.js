@@ -32,6 +32,7 @@ const config = {
     pages: {
         login: '/',
         dashboard: '/dashboard',
+        pharmacyDashboard: '/pharmacy-dashboard',
         supports: '/supports',
         customers: '/customers',
         dispatchers: '/dispatcher',

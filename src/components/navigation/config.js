@@ -4,7 +4,10 @@ const config = {
     sidebar: [
         {
             divider: 'dashboard',
-            sub: [{name: 'Analytics', icon: 'las la-tachometer-alt', link: conf.pages.dashboard}]
+            sub: [
+                {name: 'Analytics', icon: 'las la-tachometer-alt', link: conf.pages.dashboard},
+                // {name: 'Pharmacies', icon: 'las la-tachometer-alt', link: conf.pages.pharmacyDashboard},
+            ]
         },
         {
             divider: 'users',

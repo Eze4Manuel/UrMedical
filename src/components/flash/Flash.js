@@ -16,7 +16,7 @@ import { Dialog } from 'primereact/dialog';
  */
 const Flash = ({ title, message, show, onCancel, onProceed, variant='warning'}) => (
     <Dialog visible={show} onHide={() => onCancel()}>
-        <div>
+        <div style={{ minWidth: '350px'}}>
             <h3>{ title || 'Notification!'}</h3>
             <p style={{ fontSize: '0.8rem',color: variant === 'warning' ? 'red' : 'black'}}>{message}</p>
             <div className="password-update__btn-ctn">

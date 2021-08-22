@@ -4,6 +4,10 @@
 
 const lib = {}
 
+lib.getMany = (page) => {
+
+}
+
 lib.create = async (values, setLoading, setError, setValues, valuesInitialState) => {
     // check the form data
 

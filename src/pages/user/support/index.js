@@ -6,19 +6,24 @@ import NewSupportForm from './NewSupportForm';
 import lib from './lib';
 import Table from '../../../components/table';
 import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/utility';
-import userData from '../../../assets/data/user';
 import SupportUserData from './SupportUserData';
 import { ContainerLoader } from '../../../components/loading/Loading';
+import { useAuth } from '../../../core/hooks/useAuth';
+import helpers from '../../../core/func/Helpers';
+import { useNotifications } from '@mantine/notifications';
+import Alert from '../../../components/flash/Alert';
 
 
 const noDataTitle = "You haven't created any support user yet.";
 const noDataParagraph = "You can create a support yourself by clicking on the button Add support.";
 
 const Support = (props) => {
-    const NavigationBar = props.NavigationBar;
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [searchInput, setSearchInput] = useState('');
     const [openForm, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
+    const [notFound, setNotFound] = useState(false);
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
     const [option, setOption] = useState('name');
@@ -28,8 +33,15 @@ const Support = (props) => {
 
     // data 
     useEffect(() => {
-        setData(userData)
-    }, [])
+        (async () => {
+            setLoader(true)
+            let reqData = await lib.get(1, null, user?.token)
+            if (reqData.status === 'ok') {
+                setData(reqData.data)
+            }
+            setLoader(false)
+        })()
+    }, [user?.token])
 
     // setup table data
     const perPage = getPageCount(10);
@@ -38,11 +50,42 @@ const Support = (props) => {
     const stop = start+perPage;
     const viewData = data.slice(start, stop);
 
+    const reload = async() => {
+        setLoader(true)
+        let reqData = await lib.get(1, null, user?.token)
+        setLoader(false)
+        if (reqData.status === 'ok' && reqData?.data?.length > 0) {
+            setData(reqData.data)
+        } 
+    } 
 
-    const onSearch = () => {}
+    const onSearch = async () => {
+        setLoader(true)
+        let reqData = await lib.get(1, searchInput, user?.token)
+        setLoader(false)
+        if (reqData.status === 'ok' && reqData?.data?.length > 0) {
+            setData(reqData.data)
+        } else {
+            setNotFound(true)
+            setTimeout(() => {
+                setNotFound(false)
+            }, 3000)
+        }
+    }
 
-    const onCreate = (values, setLoading, setError, setValues) => {
-        lib.create()
+    const onCreate = async (values, setLoading, setError, setValues, resetData) => {
+        setLoading(true)
+        let reqData = await lib.create(values, user?.token)
+        setLoading(false)
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg, setError)
+        }
+        if (reqData.status === "ok") {
+            setValues(resetData)
+            setOpenForm(false)
+            setData([reqData.data, ...data])
+            helpers.alert({notifications: notify, icon: 'success', color: 'green', message: 'Support created'})
+        }
     }
 
     const fetchMore = (page, key, set) => {
@@ -50,30 +93,32 @@ const Support = (props) => {
         // fetch the next page from the service and update the state
     }
 
-    const onSelected = (value) => {
+    const onSelected = async (value) => {
         setLoader(true)
-        setTimeout(() => {
-            setSelected(value)
-            setOpenData(true)
-            setLoader(false)
-        }, 3000)
+        let reqData = await lib.getOne(value?.auth_id, user?.token)
+        if (reqData.status === 'ok' && reqData?.data) {
+            setSelected(reqData.data)
+        }  
+        setLoader(false)
+        setOpenData(true)
     }
 
-    const onDeleted = (id) => {
+    const onDeleted = async (id) => {
         // remove from selected
         setSelected(null)
         // close modal
         setOpenData(false)
         // remove from data list
-        let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
-        setData(s => (d))
+        let d = data.filter(val => (String(val?.auth_id) !== String(id)))
+        setData(d)
+        await reload()
     }
 
     return (
         <div className='main-content'>
-            <NavigationBar {...props} />
             <main>
                 {loader ? <ContainerLoader /> : null}
+                <Alert onCancel={() => setNotFound(false)} show={notFound} title="Notification" message="No match found" />
                 <NewSupportForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
                 <SubNavbar  
                     showFilter
@@ -93,24 +138,30 @@ const Support = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                { data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
+                { viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
                     <div className="support-table__container">
                         <div className="conatainer overflow-hidden">
                             <SupportUserData onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
-                            <Table
-                                onSelectData={onSelected}
-                                prev={() => fetchMore(page, 'prev', setPage)}
-                                next={() => fetchMore(page, 'next', setPage)}
-                                goTo={(id) => goTo(id, setActivePages)}
-                                activePage={activePage}
-                                pages={paginate}
-                                data={viewData}
-                                perPage={perPage}
-                                route="" // {config.pages.user}
-                                tableTitle="Support" 
-                                tableHeader={['#','username', 'First Name','Last Name','Gender']}
-                                dataFields={['email', 'first_name','last_name', 'gender']}
-                            />
+                            {
+                                data.length > 0 
+                                ? (
+                                    <Table
+                                        onSelectData={onSelected}
+                                        prev={() => fetchMore(page, 'prev', setPage)}
+                                        next={() => fetchMore(page, 'next', setPage)}
+                                        goTo={(id) => goTo(id, setActivePages)}
+                                        activePage={activePage}
+                                        pages={paginate}
+                                        data={viewData}
+                                        perPage={perPage}
+                                        route="" // {config.pages.user}
+                                        tableTitle="Support" 
+                                        tableHeader={['#','username', 'First Name','Last Name','Phone']}
+                                        dataFields={['email', 'first_name','last_name', 'phone_number']}
+                                    />
+                                )
+                                : null
+                            }
                         </div>
                     </div>
             </main>

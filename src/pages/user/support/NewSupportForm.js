@@ -72,7 +72,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
                 </div> 
 
                 <div className="user-form__button-wp">
-                    <Button onClick={() => props.onSubmit(values, setLoading, setError, setValues, config.userData)} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
+                    <Button onClick={() => props.onSubmit({...values, user_type: 'admin'}, setLoading, setError, setValues, config.userData)} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
                 </div>  
             </div>
         </Dialog>

@@ -68,7 +68,7 @@ Helpers.signin = async (data) => {
  * clear session if token has expired 
  */
 Helpers.sessionHasExpired = (set, msg, setError) => {
-    if (msg.toUpperCase() === 'INVALID TOKEN') {
+    if (msg?.toUpperCase() === 'UNAUTHENTICATED') {
         Helpers.logout(set);
     } else {
         if (typeof setError === 'function') {
@@ -87,7 +87,7 @@ Helpers.GetHttpRequestErrorMsg = (e) => {
 // Handles http request error message
 Helpers.errorHandler = (set, e, notifications) => {
     const msg = Helpers.GetHttpRequestErrorMsg(e);
-    if (msg?.toUpperCase() === "INVALID TOKEN" || msg?.toUpperCase() === "TOKEN IS INVALID") {
+    if (msg?.toUpperCase() === "UNAUTHENTICATED") {
         Helpers.logout(set)
         return;
     }
@@ -96,6 +96,11 @@ Helpers.errorHandler = (set, e, notifications) => {
     }
 }
 
+/**
+ * icon - success | error
+ * color - green | red
+ * message - message
+ */
 Helpers.alert = ({notifications, icon, color, message }) => {
     notifications.showNotification({
         title: 'Notification',

@@ -8,17 +8,23 @@ import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import { Password } from 'primereact/password';
 import './EditSupportForm.css';
+import { useAuth } from '../../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import lib from './lib';
+import helpers from '../../../core/func/Helpers';
 
 export const EditPassword = ({ data, show, onHide }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [values, setValues] = React.useState({new_password: '', confirm_password: ''});
     const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState(false);
+    const [error, setError] = React.useState('');
 
     useEffect(() => {
         setValues(data);
     }, [data])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         // validate password
         setError('')
         //check if its above minimum number
@@ -61,7 +67,19 @@ export const EditPassword = ({ data, show, onHide }) => {
         }
         // submit the password
         setLoading(true)
-        // update
+        let payload = {
+            password: values.new_password,
+            auth_id: data?.auth_id
+        }
+        let reqData = await lib.updatePassword(payload, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'password updated'})
+        }
     }
 
     const onCancel = () => {
@@ -112,7 +130,9 @@ export const EditPassword = ({ data, show, onHide }) => {
     ) : null
 }
 
-const EditSupportForm = ({ data, show, onHide }) => {
+const EditSupportForm = ({ data, show, onHide, onUpdate }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
@@ -121,9 +141,89 @@ const EditSupportForm = ({ data, show, onHide }) => {
         setValues(data);
     }, [data])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
+        setError("")
+        let builder = {}
+        // check first name
+        if (values.first_name !== data.first_name) {
+            if (values.first_name.length < 2) {
+                return setError("First name is too short")
+            }
+            if (values.first_name.length > 45) {
+                return setError("First name is too long")
+            }
+            builder.first_name = values.first_name
+        }
+        // check last name
+        if (values.last_name !== data.last_name) {
+            if (values.last_name.length < 2) {
+                return setError("Last name is too short")
+            }
+            if (values.last_name.length > 45) {
+                return setError("Last name is too long")
+            }
+            builder.last_name = values.last_name
+        }
+        // check phone
+        if (values.phone_number !== data.phone_number) {
+            if (!values.phone_number) {
+                return setError("Phone number empty")
+            }
+            if (!/^[0-9]+$/.test(values.phone_number)) {
+                setError("Phone number should be digits only")
+            }
+            if (!/^0/.test(values.phone_number)) {
+                setError("Phone number must start with zero. e.g (070........)")
+            }
+            if (values.phone_number.length !== 11) {
+                setError("Invalid phone number. Phone number expects 11 digits")
+            }
+            builder.phone_number = values.phone_number
+        }
+        // check email
+        if (values.email !== data.email) {
+            if (!values.email) {
+                return setError("Email is empty")
+            }
+            builder.email = values.email
+        }
+        // check home address
+        if (values.home_address !== data.home_address) {
+            if (values.home_address) {
+                if (!/^[\w\s\-',]+$/i.test(values.home_address)) {
+                    return setError("No special character allowed for home address")
+                }
+                builder.home_address = values.home_address
+            }
+        }
+        // check home area
+        if (values.home_area !== data.home_area) {
+            if (values.home_address) {
+                if (!/^[\w\s\-',]+$/i.test(values.home_area)) {
+                    return setError("No special character allowed for home area")
+                }
+                builder.home_area = values.home_area
+            }
+        }
+
+        if (Object.keys(builder).length === 0) {
+            return setError("No changes to update")
+        }
+
         // update
-        onHide()
+        setLoading(true)
+        let reqData = await lib.update(data?.auth_id, builder, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'update successful'})
+            setValues(reqData.data)
+            onUpdate(reqData.data)
+            onHide()
+        }
     }
   
     return show ? (

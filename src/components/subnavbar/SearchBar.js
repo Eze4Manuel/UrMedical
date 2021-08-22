@@ -7,7 +7,7 @@ export const SearchBar = (props) => {
                 <input 
                     value={props.searchInput}
                     onChange={e => props.onChangeInput(e.target.value)}
-                    type="text" 
+                    type="search" 
                     className="form-control search-input" 
                     placeholder={props.searchPlaceholder} 
                     aria-label={props.ariaLabel} 

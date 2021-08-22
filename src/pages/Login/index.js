@@ -15,25 +15,23 @@ const Login = (props) => {
     const [values, setValues] = useState({ username: '', password: ''})
 
     const onSubmit = async (e) => {
+        let userData = {}
         // check username
         if (!values.username) {
             setError('username is required')
             return
         }
+        userData.email = values.username
+        
         // check password
         if (!values.password) {
             setError('password is required')
             return
         }
-
+        userData.password = values.password
         // set user type
         let userType = values.username.toLowerCase() === 'superadmin@camelogserve.com' ? 'superadmin' : 'admin'
-
-        let userData = {
-            email: values.username,
-            password: values.password,
-            user_type: userType
-        }
+        userData.user_type = userType
 
         setError('')
         setLoading(true) 
@@ -44,9 +42,8 @@ const Login = (props) => {
                 setError(reqData?.msg)
             }
             if (reqData.status === 'ok') {
-                set(reqData?.data)
-                set(reqData?.data?.token)
                 Helpers.loadUserInStore(reqData?.data)
+                set(reqData?.data)
             } 
         } catch(err) {
             setLoading(false)

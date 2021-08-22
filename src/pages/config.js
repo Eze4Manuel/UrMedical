@@ -1,6 +1,7 @@
 import Customer from "./user/customer/Customer";
 import Dispatcher from "./user/dispatcher/index";
 import Dashboard from "./dashboard";
+import PharamcyDashboard from "./dashboard/PharmacyDashboard";
 import Support from '../pages/user/support/index';
 import config from '../assets/utils/config';
 import Navbar from "../components/navigation/Navbar";
@@ -15,6 +16,7 @@ import Trip from "./trips/Trip";
 const pages = config.pages;
 export const routes = [
     {link: pages.dashboard, Component: Dashboard, access: 1, NavigationBar: Navbar},
+    {link: pages.pharmacyDashboard, Component: PharamcyDashboard, access: 1, NavigationBar: Navbar},
     {link: pages.supports, Component: Support, access: 1, NavigationBar: Navbar},
     {link: pages.dispatchers, Component: Dispatcher, access: 2, NavigationBar: Navbar},
     {link: pages.customers, Component: Customer, access: 2, NavigationBar: Navbar},
