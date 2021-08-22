@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const local = 'http://localhost:9005/v1'
-// const staging = 'https://camelogserve.appbuildtest.com/v1'
-// const live = 'https://api2.appbuiltest.com/api/v1'
-const Axios = axios.create({baseURL: local});
+// const uri = 'http://localhost:9005/v1' // local
+const uri = 'https://camelogserve.appbuildtest.com/v1' // staging
+// const uri = 'https://api2.appbuiltest.com/api/v1' // live
+const Axios = axios.create({baseURL: uri});
 export default Axios;

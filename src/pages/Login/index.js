@@ -3,13 +3,10 @@ import './login.css';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
-import { dispatcher } from '../../core/context/Store';
-import Action from '../../core/context/ReducerAction';
 import { useAuth } from '../../core/hooks/useAuth';
 import request from '../../assets/utils/http-request';
 import ErrorMessage from '../../components/error/ErrorMessage'
-import config from '../../assets/utils/config';
-import userData from '../../assets/data/user';
+import Helpers from '../../core/func/Helpers';
 
 const Login = (props) => {
     const { set } = useAuth();
@@ -29,42 +26,28 @@ const Login = (props) => {
             return
         }
 
-        // let userData = {
-        //     email: values.username,
-        //     password: values.password,
-        //     user_type: 'admin'
-        // }
+        // set user type
+        let userType = values.username.toLowerCase() === 'superadmin@camelogserve.com' ? 'superadmin' : 'admin'
+
+        let userData = {
+            email: values.username,
+            password: values.password,
+            user_type: userType
+        }
 
         setError('')
         setLoading(true) 
         try {
-            // TODO: ENBLED IN PRODUCTION
-            const delayPromise = ms => new Promise(res => setTimeout(res, ms))
-            await delayPromise(4000)
-            let _data = userData[0]
-            _data.access_level = 4
-            _data.user_type = 'superadmin'
-            _data.first_name = "Camelsback";
-            _data.last_name = "Logistics";
-            _data.name = "Camelsback Logistics";
-            _data.email = "superadmin@camelogserve.com";
-            _data.phone_number = "08111111111";
-            dispatcher({type: Action.user.set, payload: {user: _data}});
-            await set(_data); // save to localstorage
-            setLoading(false) 
-             // TODO: ENBLED IN PRODUCTION
-            // let reqData = (await request.post(config.api.login,userData)).data;
-            setLoading(false) 
-            // // check error
-            // if (reqData?.status === 'error') {
-            //     setError(reqData?.msg)
-            //     return
-            // }
-            // // check success
-            // if (reqData?.status === 'ok') {
-            //     dispatcher({type: Action.user.set, payload: {user: reqData.data}});
-            //     await set(reqData.data); // save to localstorage
-            // }
+            let reqData = await (await request.post('/auth/login', userData)).data
+            setLoading(false)
+            if (reqData.status === 'error') {
+                setError(reqData?.msg)
+            }
+            if (reqData.status === 'ok') {
+                set(reqData?.data)
+                set(reqData?.data?.token)
+                Helpers.loadUserInStore(reqData?.data)
+            } 
         } catch(err) {
             setLoading(false)
             setError(err?.response?.data?.msg || err?.message)

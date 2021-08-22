@@ -29,42 +29,6 @@ const DashbaordTable = ({
                     </thead>
                     <tbody>
                         {tableData}
-                    {/* <tr className="small">
-                        <td>Maitama</td>
-                        <td>76</td>
-                        <td>600</td>
-                        <td>₦120,000</td>
-                    </tr>
-                    <tr className="small">
-                        <td>Maitama</td>
-                        <td>76</td>
-                        <td>600</td>
-                        <td>₦120,000</td>
-                    </tr>
-                    <tr className="small">
-                        <td>Maitama</td>
-                        <td>76</td>
-                        <td>600</td>
-                        <td>₦120,000</td>
-                    </tr>
-                    <tr className="small">
-                        <td>Maitama</td>
-                        <td>76</td>
-                        <td>600</td>
-                        <td>₦120,000</td>
-                    </tr>
-                    <tr className="small">
-                        <td>Maitama</td>
-                        <td>76</td>
-                        <td>600</td>
-                        <td>₦120,000</td>
-                    </tr>
-                    <tr className="small">
-                        <td>Maitama</td>
-                        <td>76</td>
-                        <td>600</td>
-                        <td>₦120,000</td>
-                    </tr> */}
                     </tbody>
                 </table>
             </div>
