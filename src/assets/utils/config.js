@@ -74,9 +74,11 @@ const config = {
         otp: '',
         auth_id: '',
         pharmacy_name: '',
-        reg_id: '',
+        registration_id: '',
         pharmacy_phone_number: '',
-        pharmacy_email: ''
+        pharmacy_email: '',
+        pharmacy_area: '',
+        pharmacy_address: ''
     },
     product_category: [
         ''

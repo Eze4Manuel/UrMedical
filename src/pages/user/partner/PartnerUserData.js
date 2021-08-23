@@ -2,15 +2,22 @@ import React, { useEffect } from 'react';
 import './PartnerUserData.css';
 import { Dialog } from 'primereact/dialog';
 import config from '../../../assets/utils/config';
-import EditPartnerForm, { EditPassword, EditContactPersonForm } from './EditPartnerForm';
+import { EditPassword, EditContactPersonForm } from './EditPartnerForm';
 import PartnerUserDetail from './PartnerUserDetail';
+import EditPharmacy from './EditPharmacy';
 import Flash from '../../../components/flash/Flash';
 import lib from './lib';
-
+import helpers from '../../../core/func/Helpers';
+import ErrorMessage from '../../../components/error/ErrorMessage';
+import Spinner from 'react-loader-spinner';
+import { useAuth } from '../../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
 
 const deleteWarning = "Are you sure you want to delete this account. This action is not reversible."
 
-const SupportUserData = ({ data, show, onHide, onDeleted}) => {
+const PartnerUserData = ({ data, show, onHide, onDeleted}) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [showPartner, setShowPartner] = React.useState(true);
@@ -48,6 +55,25 @@ const SupportUserData = ({ data, show, onHide, onDeleted}) => {
         setShowPartner(true)
     }
 
+    const deleteAccount = async () => {
+        setError('')
+        setDelWarning(false)
+        setLoading(true)
+        let reqData = await lib.delete(values?._id, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            onDeleted(data?.auth_id)
+            onHide()
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'user deleted'})
+        }
+        
+    }
+
+    let contactPerson = data?.users_data?.filter(d => d?.user_type === 'pharmacy')[0] || {}
     return (
         <Dialog closeOnEscape header="Partner - (Pharmacy) Profile" visible={show} modal onHide={() => onHide()} style={{width: "70vw"}}>
             <div className="user-info__ctn">
@@ -60,15 +86,17 @@ const SupportUserData = ({ data, show, onHide, onDeleted}) => {
                 </div>
                 <div className="row">
                     <div className="col-7 mt-5">
-                        <Flash title="Warning!" show={delWarning} message={deleteWarning} onCancel={() => setDelWarning(false)} onProceed={() => {
-                            lib.delete(data?.id, setLoading, setError, onHide, onDeleted)}
-                        } />
+                        <Flash title="Warning!" show={delWarning} message={deleteWarning} onCancel={() => setDelWarning(false)} onProceed={() => deleteAccount()} />
+                        {error ? <ErrorMessage message={error} /> : null}
+                        <div className="user-form__button-wp">
+                            {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
+                        </div>
                         <PartnerUserDetail data={values} />
                     </div>
                     <div className="col-5">
                         {/* EDIT PROFILE */}
-                        <EditContactPersonForm onHide={() => onCancelProfileEdit()} data={values} show={showProfile} />
-                        <EditPartnerForm onHide={() => onCancelProfileEdit()} data={values} show={showPartner} />
+                        <EditContactPersonForm onHide={() => onCancelProfileEdit()} data={contactPerson} show={showProfile} />
+                        <EditPharmacy onUpdated={(data) => setValues(data)} onHide={() => onCancelProfileEdit()} data={values} show={showPartner} />
                         {/* EDIT PASSWORD */}
                         <EditPassword onHide={() => onCancelPasswordEdit()} data={values} show={showPassword} />
                     </div> 
@@ -78,4 +106,4 @@ const SupportUserData = ({ data, show, onHide, onDeleted}) => {
     )
 }
 
-export default SupportUserData
+export default PartnerUserData

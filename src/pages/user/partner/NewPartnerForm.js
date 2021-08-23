@@ -9,6 +9,7 @@ import { Password } from 'primereact/password';
 import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
+import formValidator from './formvalidation';
 
 const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) => {
     const [values, setValues] = React.useState(config.userData);
@@ -27,6 +28,15 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
             </ul>
         </React.Fragment>
     );
+
+    const handleSubmit = () => {
+        let builder = formValidator.validateNewPartner(values, {}, setError)
+        if (!builder) {
+            return
+        }
+        // submit
+        props.onSubmit(builder, setLoading, setError, setValues, config.userData)
+    }
 
     return (
         <Dialog header="Partner New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{width: "45vw"}}>
@@ -86,15 +96,15 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
                     {/* FIRST NAME */}
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="reg_id">CAC Registration No</label><br />
-                            <InputText style={{width: '100%'}} id="reg_id" name="reg_id" onChange={e => setValues(d => ({...d, reg_id: e.target.value}))} value={values?.reg_id} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="RC-1002424" />
+                            <label htmlFor="registration_id">CAC Registration No</label><br />
+                            <InputText style={{width: '100%'}} id="registration_id" name="registration_id" onChange={e => setValues(d => ({...d, registration_id: e.target.value}))} value={values?.registration_id} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="RC-1002424" />
                         </div>
                     </div>
                     {/* LAST NAME */}
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="pharmacy_phone_number">Phone*</label><br />
-                            <InputText style={{width: '100%'}} id="pharmacy_phone_number" name="pharmacy_phone_number" type="text" onChange={e => setValues(d => ({...d, pharmacy_phone_number: e.target.value}))} value={values?.pharmacy_phone_number} className="p-inputtext-sm p-d-block p-mb-2" placeholder="080********90" />
+                            <label htmlFor="pharmacy_phone">Phone*</label><br />
+                            <InputText style={{width: '100%'}} id="pharmacy_phone" name="pharmacy_phone" type="text" onChange={e => setValues(d => ({...d, pharmacy_phone: e.target.value}))} value={values?.pharmacy_phone} className="p-inputtext-sm p-d-block p-mb-2" placeholder="080********90" />
                         </div>
                     </div>
                 </div> 
@@ -118,21 +128,21 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
                     {/* AREA */}
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="home_area">Area*</label><br />
-                            <InputText style={{width: '100%'}} id="home_area" name="home_area" type="text" onChange={e => setValues(d => ({...d, home_area: e.target.value}))} value={values?.home_area} className="p-inputtext-sm p-d-block p-mb-2" placeholder="area" />
+                            <label htmlFor="pharmacy_area">Area*</label><br />
+                            <InputText style={{width: '100%'}} id="pharmacy_area" name="pharmacy_area" type="text" onChange={e => setValues(d => ({...d, pharmacy_area: e.target.value}))} value={values?.pharmacy_area} className="p-inputtext-sm p-d-block p-mb-2" placeholder="area" />
                         </div>
                     </div>
                 </div> 
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="home_address">Address*</label><br />
-                            <InputTextarea  style={{width: '100%', height: '80px'}} id="home_address" name="home_address" onChange={e => setValues(d => ({...d, home_address: e.target.value}))} value={values?.home_address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="address" />
+                            <label htmlFor="pharmacy_address">Address*</label><br />
+                            <InputTextarea  style={{width: '100%', height: '80px'}} id="pharmacy_address" name="pharmacy_address" onChange={e => setValues(d => ({...d, pharmacy_address: e.target.value}))} value={values?.pharmacy_address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="address" />
                         </div>
                     </div>
                 </div>
                 <div className="partner-form__button-wp">
-                    <Button onClick={() => props.onSubmit(values, setLoading, setError, setValues, config.userData)} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
+                    <Button onClick={() => handleSubmit()} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
                 </div>  
             </div>
         </Dialog>
