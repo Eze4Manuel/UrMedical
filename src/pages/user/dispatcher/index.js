@@ -36,12 +36,15 @@ const Dispatcher = (props) => {
         (async () => {
             setLoader(true)
             let reqData = await lib.get(page, null, user?.token)
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
             if (reqData.status === 'ok') {
                 setData(reqData.data)
             }
             setLoader(false)
         })()
-    }, [user?.token, page])
+    }, [user?.token, page, set])
 
     // setup table data
     const perPage = getPageCount(10);

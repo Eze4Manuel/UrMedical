@@ -5,7 +5,6 @@ import NoData from '../../../components/widgets/NoData';
 import lib from './lib';
 import Table from '../../../components/table';
 import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/utility';
-import partnerData from '../../../assets/data/pharmacy';
 import NewPartnerForm from './NewPartnerForm';
 import { ContainerLoader } from '../../../components/loading/Loading';
 import PartnerUserData from './PartnerUserData'
@@ -37,12 +36,15 @@ const Partner = (props) => {
         (async () => {
             setLoader(true)
             let reqData = await lib.get(page, null, user?.token)
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
             if (reqData.status === 'ok') {
                 setData(reqData.data)
             }
             setLoader(false)
         })()
-    }, [user?.token, page])
+    }, [user?.token, page, set])
 
     // setup table data
     const perPage = getPageCount(10);
@@ -50,6 +52,18 @@ const Partner = (props) => {
     const start = (activePage === 1) ? 0 : (activePage*perPage)  - perPage;
     const stop = start+perPage;
     const viewData = data.slice(start, stop);
+
+    const reload = async () => {
+        setLoader(true)
+        let reqData = await lib.get(1, null, user?.token)
+        setLoader(false)
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg)
+        }
+        if (reqData.status === 'ok' && reqData?.data?.length > 0) {
+            setData(reqData.data)
+        } 
+    } 
 
     const onSearch = async () => {
         setLoader(true)
@@ -65,8 +79,19 @@ const Partner = (props) => {
         }
     }
 
-    const onCreate = (values, setLoading, setError, setValues) => {
-        lib.create()
+    const onCreate = async (values, setLoading, setError, setValues, resetData) => {
+        setLoading(true)
+        let reqData = await lib.create(values, user?.token)
+        setLoading(false)
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg, setError)
+        }
+        if (reqData.status === "ok") {
+            setValues(resetData)
+            setOpenForm(false)
+            helpers.alert({notifications: notify, icon: 'success', color: 'green', message: 'Pharmacy account created'})
+            reload()
+        }
     }
 
     const fetchMore = (page, key, set) => {
@@ -83,14 +108,15 @@ const Partner = (props) => {
         }, 3000)
     }
 
-    const onDeleted = (id) => {
-        // remove from selected
-        setSelected(null)
-        // close modal
-        setOpenData(false)
-        // remove from data list
-        let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
-        setData(s => (d))
+    const onDeleted = async (id) => {
+         // remove from selected
+         setSelected(null)
+         // close modal
+         setOpenData(false)
+         // remove from data list
+         let d = data.filter(val => (String(val?.auth_id) !== String(id)))
+         setData(d)
+         await reload()
     }
 
     return (
@@ -134,8 +160,8 @@ const Partner = (props) => {
                                 perPage={perPage}
                                 route="" // {config.pages.user}
                                 tableTitle="Partners - Pharmacy" 
-                                tableHeader={['#','Name', 'phone', 'Email']}
-                                dataFields={['name', 'phone_number', 'email']}
+                                tableHeader={['#','Name', 'phone', 'Email', 'Area']}
+                                dataFields={['name', 'phone_number', 'email', 'area']}
                             />
                         </div>
                     )

@@ -1,7 +1,105 @@
 const formValidator = {}
 
-// validate user form
+// validate pharmacy form
+formValidator.validatePharmacyUpdate = (form, values, builder, setError) => {
+    setError("")
+    
+    //check pharmacy name
+     if (form.name !== values.name) {
+        if (!form.name) {
+            return setError("Pharmacy name is required")
+         }
+         if (form.name.length < 5) {
+            return setError("Pharmacy name is too short")
+         }
+         if (form.name.length > 100) {
+            return setError("Pharmacy name is too long")
+         }
+         builder.name = form.name
+     }
+     
+     // CAC REG
+     if (form.registration_id !== values.registration_id) {
+        if (form.registration_id) {
+            if (form.registration_id.length < 6) {
+                return setError("CAC registration number is too short")
+            }
+            if (form.registration_id.length > 15) {
+                return setError("CAC registration number is too long")
+            }
+            builder.registration_id = form.registration_id
+        }   
+    }
+
+    //validate the phone
+     if (form.phone !== values.phone) {
+        if (!form.phone) {
+            return setError("Pharmacy phone number is required")
+         }
+         if (!/^[0-9]+$/.test(form.phone)) {
+            return setError("Pharmacy Phone number should be digits only")
+         }
+         if (!/^0/.test(form.phone)) {
+            return setError("Pharmacy Phone number must start with zero. e.g (070........)")
+         }
+         if (form.phone.length !== 11) {
+            return setError("Invalid pharmacy phone number. Pharmacy phone number expects 11 digits")
+         }
+         builder.phone = form.phone
+     }
+
+     //validate the email
+     if (form.email !== values.email) {
+        if (!form.pharmacy_email) {
+            return setError("Pharmacy email is required")
+         }
+         builder.email = form.email    
+    }
+    
+    // if city
+    if (form.city !== values.city) {
+        if (!form.city) {
+            return setError("City name is required")
+        }
+        if (form.city.length > 20) {
+            return setError("City name to long")
+        }
+        builder.city = form.city
+    }
+
+    //check if home area
+    if (form.area !== values.area) {
+        if (!form.area) {
+            return setError("Pharmacy area is required")
+        }
+        if (!/^[\w\s\-',]+$/i.test(form.area)) {
+            return setError("No special character allowed for home area")
+        }
+        builder.area = form.area
+    }
+    
+    // check if home address
+    if (form.address !== values.address) {
+        if (!form.address) {
+            return setError("Pharmacy address is required")
+        }
+        if (!/^[\w\s\-\\]+$/i.test(form.address)) {
+            return setError("No special character allowed for pharmacy address")
+        }
+        builder.address = form.address
+    }
+
+    if (Object.keys(builder).length === 0) {
+        return setError("No changes to update") 
+    }
+    
+    // return payload
+    return builder
+}
+
+// validate pharmacy form
 formValidator.validateNewPartner = (form, builder, setError) => {
+    setError("")
     // validate first name
     if (!form.first_name) {
         return setError("First name is required")
@@ -89,37 +187,69 @@ formValidator.validateNewPartner = (form, builder, setError) => {
      }
      builder.pharmacy_name = form.pharmacy_name
      
-     
-     // check if home address
-     if (form.home_address) {
-        if (!/^[\w\s\-\\]+$/i.test(form.home_address)) {
-           return setError("No special character allowed for home address")
+     // CAC REG
+    if (form.registration_id) {
+        if (form.registration_id.length < 6) {
+            return setError("CAC registration number is too short")
         }
-        builder.home_address = form.home_address
-     }
-     //check if home area
-     if (form.home_area) {
-        if (!/^[\w\s\-',]+$/i.test(form.home_area)) {
-           return setError("No special character allowed for home area")
+        if (form.registration_id.length > 15) {
+            return setError("CAC registration number is too long")
         }
-        builder.home_area = form.home_area
-     }
+        builder.registration_id = form.registration_id
+    }
 
-     // if city
-     if (form.city) {
-        if (form.city.length > 20) {
-           return setError("City name to long")
-        }
-        builder.city = form.city
+    //validate the phone
+     if (!form.pharmacy_phone) {
+        return setError("Pharmacy phone number is required")
      }
-     // if state
-     if (form.state) {
-        builder.state = form.state
+     if (!/^[0-9]+$/.test(form.pharmacy_phone)) {
+        return setError("Pharmacy Phone number should be digits only")
      }
+     if (!/^0/.test(form.pharmacy_phone)) {
+        return setError("Pharmacy Phone number must start with zero. e.g (070........)")
+     }
+     if (form.pharmacy_phone.length !== 11) {
+        return setError("Invalid pharmacy phone number. Pharmacy phone number expects 11 digits")
+     }
+     builder.pharmacy_phone_number = form.pharmacy_phone
 
+     //validate the email
+     if (!form.pharmacy_email) {
+        return setError("Pharmacy email is required")
+     }
+     builder.pharmacy_email = form.pharmacy_email
+
+    // if city
+    if (!form.city) {
+        return setError("City name is required")
+    }
+    if (form.city.length > 20) {
+        return setError("City name to long")
+    }
+    builder.city = form.city
+
+    //check if home area
+    if (!form.pharmacy_area) {
+        return setError("Pharmacy area is required")
+    }
+    if (!/^[\w\s\-',]+$/i.test(form.pharmacy_area)) {
+        return setError("No special character allowed for home area")
+    }
+    builder.pharmacy_area = form.pharmacy_area
+    
+    // check if home address
+    if (!form.pharmacy_address) {
+        return setError("Pharmacy address is required")
+    }
+    if (!/^[\w\s\-\\]+$/i.test(form.pharmacy_address)) {
+        return setError("No special character allowed for pharmacy address")
+    }
+    builder.pharmacy_address = form.pharmacy_address
+    
     // set user type
-     builder.user_type = "dispatcher"
-     // return payload
+    builder.user_type = "pharmacy"
+    
+    // return payload
     return builder
 }
 

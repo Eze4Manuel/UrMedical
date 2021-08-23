@@ -8,9 +8,9 @@ lib.get = async (page, search, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         if (search) {
-            uri = `/auth/admin?user_type=pharmacy&page=${page}&q=${search}`;
+            uri = `/auth/pharmacy?page=${page}&q=${search}`;
         } else {
-            uri = `/auth/admin?user_type=pharmacy&page=${page}`;
+            uri = `/auth/pharmacy?page=${page}`;
         }
         return await (await request.get(uri, cfg)).data 
     } catch (e) {
@@ -19,7 +19,7 @@ lib.get = async (page, search, token) => {
 }
 
 lib.getOne = async (id, token) => {
-    let uri = `/auth/admin/${id}`;
+    let uri = `/auth/pharmacy/${id}`;
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         return await (await request.get(uri, cfg)).data 
@@ -55,10 +55,19 @@ lib.update = async (id, data, token) => {
     }
 }
 
+lib.updatePharmacy = async (id, data, token) => {
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        return await (await request.put(`/auth/update-pharmacy/${id}`, data, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
+
 lib.delete = async (id, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        return await (await request.delete(`/auth/admin/${id}`, cfg)).data 
+        return await (await request.delete(`/auth/pharmacy/${id}`, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
