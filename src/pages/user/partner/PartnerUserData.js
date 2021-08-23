@@ -10,7 +10,7 @@ import lib from './lib';
 
 const deleteWarning = "Are you sure you want to delete this account. This action is not reversible."
 
-const SupportUserData = ({ data, show, onHide, onDeleted}) => {
+const PartnerUserData = ({ data, show, onHide, onDeleted}) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [showPartner, setShowPartner] = React.useState(true);
@@ -78,4 +78,4 @@ const SupportUserData = ({ data, show, onHide, onDeleted}) => {
     )
 }
 
-export default SupportUserData
+export default PartnerUserData

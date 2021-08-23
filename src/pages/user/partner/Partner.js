@@ -9,20 +9,22 @@ import partnerData from '../../../assets/data/pharmacy';
 import NewPartnerForm from './NewPartnerForm';
 import { ContainerLoader } from '../../../components/loading/Loading';
 import PartnerUserData from './PartnerUserData'
-
+import { useAuth } from '../../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import Alert from '../../../components/flash/Alert';
+import helpers from '../../../core/func/Helpers';
 
 const noDataTitle = "You haven't created any partner account yet.";
 const noDataParagraph = "You can create a partner yourself by clicking on the button Add partner.";
 
 
-const handleDataSearch = () => {}
-
-
 const Partner = (props) => {
-    const NavigationBar = props.NavigationBar;
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [searchInput, setSearchInput] = useState('');
     const [openForm, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
+    const [notFound, setNotFound] = useState(false);
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
     const [option, setOption] = useState('name');
@@ -32,8 +34,15 @@ const Partner = (props) => {
 
     // data 
     useEffect(() => {
-        setData(partnerData)
-    }, [])
+        (async () => {
+            setLoader(true)
+            let reqData = await lib.get(page, null, user?.token)
+            if (reqData.status === 'ok') {
+                setData(reqData.data)
+            }
+            setLoader(false)
+        })()
+    }, [user?.token, page])
 
     // setup table data
     const perPage = getPageCount(10);
@@ -42,7 +51,19 @@ const Partner = (props) => {
     const stop = start+perPage;
     const viewData = data.slice(start, stop);
 
-    const onSearch = () => {}
+    const onSearch = async () => {
+        setLoader(true)
+        let reqData = await lib.get(1, searchInput, user?.token)
+        setLoader(false)
+        if (reqData.status === 'ok' && reqData?.data?.length > 0) {
+            setData(reqData.data)
+        } else {
+            setNotFound(true)
+            setTimeout(() => {
+                setNotFound(false)
+            }, 3000)
+        }
+    }
 
     const onCreate = (values, setLoading, setError, setValues) => {
         lib.create()
@@ -74,11 +95,10 @@ const Partner = (props) => {
 
     return (
         <div className="main-content">
-            <NavigationBar {...props} />
             <main>
                 {loader ? <ContainerLoader /> : null}
+                <Alert onCancel={() => setNotFound(false)} show={notFound} title="Notification" message="No match found" />
                 <NewPartnerForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
-
                 <SubNavbar  
                     showFilter
                     showSearch
@@ -88,7 +108,7 @@ const Partner = (props) => {
                     searchPlaceholder="Search for partner..."
                     ariaLabel="partner"
                     ariaDescription="partner"
-                    onSearch={() => handleDataSearch(searchInput)}
+                    onSearch={() => onSearch()}
                     searchInput={searchInput}
                     onChangeInput={setSearchInput}
                     searchID="search_partner"
@@ -97,24 +117,30 @@ const Partner = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
+                {viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
                 <PartnerUserData onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
-                <div className="customer-table__container">
-                    <Table
-                        onSelectData={onSelected}
-                        prev={() => fetchMore(page, 'prev', setPage)}
-                        next={() => fetchMore(page, 'next', setPage)}
-                        goTo={(id) => goTo(id, setActivePages)}
-                        activePage={activePage}
-                        pages={paginate}
-                        data={viewData}
-                        perPage={perPage}
-                        route="" // {config.pages.user}
-                        tableTitle="Partners - Pharmacy" 
-                        tableHeader={['#','Name', 'phone', 'City', 'Area']}
-                        dataFields={['name', 'phone_number', 'city', 'home_area']}
-                    />
-                </div>
+                {
+                    viewData.length > 0
+                    ? (
+                        <div className="customer-table__container">
+                            <Table
+                                onSelectData={onSelected}
+                                prev={() => fetchMore(page, 'prev', setPage)}
+                                next={() => fetchMore(page, 'next', setPage)}
+                                goTo={(id) => goTo(id, setActivePages)}
+                                activePage={activePage}
+                                pages={paginate}
+                                data={viewData}
+                                perPage={perPage}
+                                route="" // {config.pages.user}
+                                tableTitle="Partners - Pharmacy" 
+                                tableHeader={['#','Name', 'phone', 'Email']}
+                                dataFields={['name', 'phone_number', 'email']}
+                            />
+                        </div>
+                    )
+                    : null
+                }
             </main>
         </div>
     )

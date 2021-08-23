@@ -9,6 +9,7 @@ import { Password } from 'primereact/password';
 import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
+import formValidator from './formvalidation';
 
 const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) => {
     const [values, setValues] = React.useState(config.userData);
@@ -27,6 +28,17 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
             </ul>
         </React.Fragment>
     );
+
+    const handleSubmit = () => {
+        let builder = formValidator.validateNewPartner(values, {}, setError)
+        if (!builder) {
+            return
+        }
+        // submit
+        props.onSubmit(builder, setLoading, setError, setValues, config.userData)
+        // validation
+        props.onSubmit(values, setLoading, setError, setValues, config.userData)
+    }
 
     return (
         <Dialog header="Partner New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{width: "45vw"}}>
@@ -132,7 +144,7 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
                     </div>
                 </div>
                 <div className="partner-form__button-wp">
-                    <Button onClick={() => props.onSubmit(values, setLoading, setError, setValues, config.userData)} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
+                    <Button onClick={() => handleSubmit()} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
                 </div>  
             </div>
         </Dialog>
