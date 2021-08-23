@@ -8,8 +8,15 @@ import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import { Password } from 'primereact/password';
 import './EditCustomerForm.css';
+import formValidation from './formvalidation';
+import { useAuth } from '../../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import lib from './lib';
+import helpers from '../../../core/func/Helpers';
 
 export const EditPassword = ({ data, show, onHide }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [values, setValues] = React.useState({new_password: '', confirm_password: ''});
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
@@ -18,50 +25,23 @@ export const EditPassword = ({ data, show, onHide }) => {
         setValues(data);
     }, [data])
 
-    const onSubmit = () => {
-        // validate password
-        setError('')
-        //check if its above minimum number
-        if (!values.new_password) {
-            setError("New password is required")
-            return
-        }
-        if (values.new_password.length < 6) {
-            setError("New password must be 6 characters or more")
-            return
-        }
-        //check if its above minimum number
-        if (values.new_password.length > 15) {
-            setError("New assword must be less than 15 characters")
-            return
-        }
-        //check if there's capital letter
-        if (!/[A-Z]/.test(values.new_password)) {
-            setError("New assword must have atleast one capital letter")
-            return
-        }
-        //check if there's small letter
-        if (!/[a-z]/.test(values.new_password)) {
-            setError("New assword must have atleast one small letter")
-            return
-        }
-        //check if there's number
-        if (!/[0-9]/.test(values.new_password)) {
-            setError("New assword must have atleast one number")
-            return
-        }
-
-        if (!values.confirm_password) {
-            setError('Confirm password is required')
-            return
-        }
-        if (values.new_password !== values.confirm_password) {
-            setError('Passwords do not match')
+    const onSubmit = async () => {
+        let builder = formValidation.validatePassword(values, {}, setError)
+        if (!builder) {
             return
         }
         // submit the password
         setLoading(true)
-        // update
+        builder.auth_id = data.auth_id
+        let reqData = await lib.updatePassword(builder, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'password updated'})
+        }
     }
 
     const onCancel = () => {
@@ -112,7 +92,9 @@ export const EditPassword = ({ data, show, onHide }) => {
     ) : null
 }
 
-const EditDispatcherForm = ({ data, show, onHide }) => {
+const EditCustomerForm = ({ data, show, onHide, onUpdate }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
@@ -121,9 +103,25 @@ const EditDispatcherForm = ({ data, show, onHide }) => {
         setValues(data);
     }, [data])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         // update
-        onHide()
+        let builder = formValidation.validatCustomerEditForm(values, data, {}, setError)
+        if (!builder) {
+            return
+        }
+        // update
+        setLoading(true)
+        let reqData = await lib.update(data?.auth_id, builder, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'update successful'})
+            setValues(reqData.data)
+            onUpdate(reqData.data)
+        }
     }
   
     return show ? (
@@ -186,4 +184,4 @@ const EditDispatcherForm = ({ data, show, onHide }) => {
     ): null
 }
 
-export default EditDispatcherForm
+export default EditCustomerForm

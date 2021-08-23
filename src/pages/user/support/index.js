@@ -142,7 +142,7 @@ const Support = (props) => {
                         <div className="conatainer overflow-hidden">
                             <SupportUserData onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                             {
-                                data.length > 0 
+                                viewData.length > 0 
                                 ? (
                                     <Table
                                         onSelectData={onSelected}

@@ -9,6 +9,7 @@ import { Password } from 'primereact/password';
 import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
+import formValidation from './formvalidation';
 
 const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false}) => {
     const [values, setValues] = React.useState(config.userData);
@@ -27,6 +28,16 @@ const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false}) =
             </ul>
         </React.Fragment>
     );
+
+    const submitForm = () => {
+        let builder = formValidation.validatCustomerForm(values, {}, setError)
+        // check
+        if (!builder) {
+            return
+        }
+        builder.user_type = "customer"
+        props.onSubmit(builder, setLoading, setError, setValues, config.userData)
+    }
 
     return (
         <Dialog header="New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{width: "40vw"}}>
@@ -58,21 +69,37 @@ const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false}) =
                     </div>
                 </div>
                 <div className="row">
+                    <div className="col-sm-12">
+                        <div className="p-field mb-2">
+                            <label htmlFor="home_area">Home Area</label><br />
+                            <InputText style={{width: '100%'}} id="home_area" name="home_area" onChange={e => setValues(d => ({...d, home_area: e.target.value}))} value={values?.home_area} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="home area" />
+                        </div>
+                    </div>
+                    </div> 
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="p-field mb-1">
+                            <label htmlFor="home_address">Home Address</label><br />
+                            <InputTextarea style={{width: '100%', height: '100px'}} id="home_address" name="home_address" onChange={e => setValues(d => ({...d, home_address: e.target.value}))} value={values?.home_address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="Home address" />
+                        </div>
+                    </div>
+                </div> 
+                <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-1">
                             <label htmlFor="phone_number">Phone number</label><br />
-                            <InputText style={{width: '100%'}} id="phone_number" name="phone_number" onChange={e => setValues(d => ({...d, phone_number: e.target.value}))} value={values.phone_number} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="080*********" />
+                            <InputText style={{width: '100%'}} id="phone_number" name="phone_number" onChange={e => setValues(d => ({...d, phone_number: e.target.value}))} value={values?.phone_number} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="080*********" />
                         </div>
                     </div>
                     <div className="col-lg-6">
                     <div className="p-field mb-1">
                         <label htmlFor="last_name">New Password</label><br />
-                        <Password footer={footer} minLength={6} maxLength={24} id="password" name="password" type="text" onChange={e => setValues(d => ({...d, password: e.target.value}))} value={values.password} className="p-inputtext-sm" placeholder="new password" toggleMask />
+                        <Password footer={footer} minLength={6} maxLength={24} id="password" name="password" type="text" onChange={e => setValues(d => ({...d, password: e.target.value}))} value={values?.password} className="p-inputtext-sm" placeholder="new password" toggleMask />
                     </div>
                     </div>
                 </div> 
                 <div className="partner-form__button-wp">
-                    <Button onClick={() => props.onSubmit(values, setLoading, setError, setValues, config.userData)} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
+                    <Button onClick={() => submitForm()} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Create"/>
                 </div>  
             </div>
         </Dialog>
