@@ -157,7 +157,7 @@ const Partner = (props) => {
                     onAddItem={() => setOpenForm(true)}
                 />
                 {viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
-                <PartnerUserData onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                <PartnerUserData onUpdated={(data) => setSelected(data)} onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                 {
                     viewData.length > 0
                     ? (

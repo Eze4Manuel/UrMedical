@@ -8,6 +8,11 @@ import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import { Password } from 'primereact/password';
 import './EditPartnerForm.css';
+import formValidator from './formvalidation';
+import lib from './lib';
+import { useAuth } from '../../../core/hooks/useAuth';
+import { useNotifications } from '@mantine/notifications';
+import helpers from '../../../core/func/Helpers';
 
 export const EditPassword = ({ data, show, onHide }) => {
     const [values, setValues] = React.useState({new_password: '', confirm_password: ''});
@@ -112,18 +117,43 @@ export const EditPassword = ({ data, show, onHide }) => {
     ) : null
 }
 
-export const EditContactPersonForm = ({ data, show, onHide }) => {
+export const EditContactPersonForm = ({ data, show, onHide, onUpdated }) => {
+    const { set, user } = useAuth();
+    const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
 
+    const getFormData = (data) => {   
+        return {
+            contact_email: data.contact_email || '',
+            contact_phone_number: data?.contact_phone_number || ''
+        }
+    }
+
     useEffect(() => {
-        setValues(data);
+        setValues({ email: data.contact_email || '', phone_number: data?.contact_phone_number || ''});
     }, [data])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
+        let builder = formValidator.validateContactPersonDetails(values, getFormData(data), {}, setError)
+        if (!builder) {
+            return
+        }
         // update
-        onHide()
+        setLoading(true)
+        let reqData = await lib.updatePharmacy(data?._id, builder, user?.token)
+        setLoading(false)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'update successful'})
+            setValues({email: reqData.data.contact_email, phone_number: reqData.data.contact_phone_number})
+            onUpdated({...data, contact_email: reqData.data.contact_email, contact_phone_number: reqData.data.contact_phone_number})
+            // onUpdated({...data, ...reqData.data})
+        }
     }
 
     const onCancel = () => {
@@ -134,25 +164,11 @@ export const EditContactPersonForm = ({ data, show, onHide }) => {
   
     return show ? (
         <div className="container px-5 mt-5">
-            <h6 className="mb-1 mt-4">Update Contact Profile</h6>
+            <h6 className="mb-1 mt-4">Update Contact Person Details</h6>
             <div className="user-form__button-wp">
                 {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
             </div> 
             {error ? <ErrorMessage message={error} /> : null}
-            <div className="row mt-3">
-                <div className="col-lg-12">
-                    <div className="p-field mb-1">
-                        <label htmlFor="first_name">First Name</label><br />
-                        <InputText style={{width: '100%'}} id="first_name" name="first_name" onChange={e => setValues(d => ({...d, first_name: e.target.value}))} autoFocus value={values?.first_name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="fist name" />
-                    </div>
-                </div>
-                <div className="col-lg-12">
-                    <div className="p-field mb-2">
-                        <label htmlFor="last_name">Last Name</label><br />
-                        <InputText style={{width: '100%'}} id="last_name" name="last_name" type="text" onChange={e => setValues(d => ({...d, last_name: e.target.value}))} value={values?.last_name} className="p-inputtext-sm p-d-block p-mb-2" placeholder="last name" />
-                    </div>
-                </div>
-            </div> 
             <div className="row">
                 <div className="col-sm-12">
                     <div className="p-field mb-2">

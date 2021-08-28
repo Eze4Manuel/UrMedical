@@ -33,16 +33,6 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     }
 
     React.useEffect(() => {
-        // let pharm = data?.users_data[0] || {}
-        // let d = {
-        //     name: data?.name,
-        //     registration_id: data?.registration_id,
-        //     phone: pharm?.phone_number || '',
-        //     email: pharm?.email || '',
-        //     area: data?.area,
-        //     city: data?.area,
-        //     address: data?.address
-        // }
         setValues(getFormData(data))
         // setValues(data)
     }, [data])

@@ -1,6 +1,47 @@
 const formValidator = {}
 
 // validate pharmacy form
+formValidator.validateContactPersonDetails = (form, values, builder, setError) => {
+   setError("")
+   
+   //validate the phone
+    if (form.phone_number !== values.contact_phone_number) {
+       if (!form.phone_number) {
+           return setError("Contact person phone number is required")
+        }
+        if (!/^[0-9]+$/.test(form.phone_number)) {
+           return setError("Contact person phone number should be digits only")
+        }
+        if (!/^0/.test(form.phone_number)) {
+           return setError("Contact person phone number must start with zero. e.g (070........)")
+        }
+        if (form.phone_number.length !== 11) {
+           return setError("Invalid contact person phone number. Contact person phone number expects 11 digits")
+        }
+        builder.contact_phone_number = form.phone_number
+    }
+
+    //validate the email
+    console.log("form.email")
+    console.log(form.email)
+    console.log("values.contact_email")
+    console.log(values.contact_email)
+    if (form.email !== values.contact_email) {
+      if (!form.email) {
+         return setError("Contact person email is required")
+      }
+      builder.contact_email = form.email    
+   }
+
+   if (Object.keys(builder).length === 0) {
+      return setError("No changes to update") 
+   }
+   
+   // return payload
+   return builder
+}
+
+// validate pharmacy form
 formValidator.validatePharmacyUpdate = (form, values, builder, setError) => {
     setError("")
     

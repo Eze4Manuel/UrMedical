@@ -15,7 +15,7 @@ import { useNotifications } from '@mantine/notifications';
 
 const deleteWarning = "Are you sure you want to delete this account. This action is not reversible."
 
-const PartnerUserData = ({ data, show, onHide, onDeleted}) => {
+const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
@@ -73,7 +73,11 @@ const PartnerUserData = ({ data, show, onHide, onDeleted}) => {
         
     }
 
-    let contactPerson = data?.users_data?.filter(d => d?.user_type === 'pharmacy')[0] || {}
+    const onUpdateContactPerson = (d) => {
+        setValues(d)
+        onUpdated(d)
+    }
+
     return (
         <Dialog closeOnEscape header="Partner - (Pharmacy) Profile" visible={show} modal onHide={() => onHide()} style={{width: "70vw"}}>
             <div className="user-info__ctn">
@@ -95,7 +99,7 @@ const PartnerUserData = ({ data, show, onHide, onDeleted}) => {
                     </div>
                     <div className="col-5">
                         {/* EDIT PROFILE */}
-                        <EditContactPersonForm onHide={() => onCancelProfileEdit()} data={contactPerson} show={showProfile} />
+                        <EditContactPersonForm onUpdated={(data) => onUpdateContactPerson(data)} onHide={() => onCancelProfileEdit()} data={data} show={showProfile} />
                         <EditPharmacy onUpdated={(data) => setValues(data)} onHide={() => onCancelProfileEdit()} data={values} show={showPartner} />
                         {/* EDIT PASSWORD */}
                         <EditPassword onHide={() => onCancelPasswordEdit()} data={values} show={showPassword} />
