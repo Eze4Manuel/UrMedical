@@ -31,7 +31,10 @@ const Sidebar = (props) => {
                              if (sub.name === 'settings' && props?.user?.user_type === 'superadmin') {
                                 return null
                             } 
-                            return (
+                            if (sub.name === 'support' && props?.user?.user_type === 'admin') {
+                                return null
+                            }
+                             return (
                                 <li onClick={() => onLogout(sub.name)} key={sub.name}>
                                     <Link to={sub.link}>
                                         <span className={sub.icon}></span>{sub.name}
