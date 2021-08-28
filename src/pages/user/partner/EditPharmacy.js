@@ -19,12 +19,36 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
 
+    const getFormData = (data) => {
+        let pharm = data?.users_data[0] || {}
+        return {
+            name: data?.name,
+            registration_id: data?.registration_id,
+            phone: pharm?.phone_number || '',
+            email: pharm?.email || '',
+            area: data?.area,
+            city: data?.area,
+            address: data?.address
+        }
+    }
+
     React.useEffect(() => {
-        setValues(data)
+        // let pharm = data?.users_data[0] || {}
+        // let d = {
+        //     name: data?.name,
+        //     registration_id: data?.registration_id,
+        //     phone: pharm?.phone_number || '',
+        //     email: pharm?.email || '',
+        //     area: data?.area,
+        //     city: data?.area,
+        //     address: data?.address
+        // }
+        setValues(getFormData(data))
+        // setValues(data)
     }, [data])
 
     const handleSubmit = async () => {
-        let builder = formValidator.validatePharmacyUpdate(values, data, {}, setError)
+        let builder = formValidator.validatePharmacyUpdate(values, getFormData(data), {}, setError)
         if (!builder) {
             return
         }
@@ -39,8 +63,8 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
         }
         if (reqData.status === 'ok') {
             helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'update successful'})
-            setValues(reqData.data)
-            onUpdated(reqData.data)
+            setValues({...data, ...reqData.data})
+            onUpdated({...data, ...reqData.data})
         }
     }
 

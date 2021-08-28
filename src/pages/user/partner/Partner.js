@@ -16,6 +16,16 @@ import helpers from '../../../core/func/Helpers';
 const noDataTitle = "You haven't created any partner account yet.";
 const noDataParagraph = "You can create a partner yourself by clicking on the button Add partner.";
 
+const fQeury = (data) => {
+    return data.map(d => {
+        let px = d.users_data[0] || []
+        return {
+            email: px?.email || d?.contact_email,
+            phone_number: px?.phone_number || d?.contact_phone_nnumber,
+            ...d
+        }
+    })
+}
 
 const Partner = (props) => {
     const { set, user } = useAuth();
@@ -40,7 +50,7 @@ const Partner = (props) => {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
-                setData(reqData.data)
+                setData(fQeury(reqData.data))
             }
             setLoader(false)
         })()
@@ -61,7 +71,8 @@ const Partner = (props) => {
             helpers.sessionHasExpired(set, reqData.msg)
         }
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
-            setData(reqData.data)
+            setData(fQeury(reqData.data))
+
         } 
     } 
 
@@ -70,7 +81,7 @@ const Partner = (props) => {
         let reqData = await lib.get(1, searchInput, user?.token)
         setLoader(false)
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
-            setData(reqData.data)
+            setData(fQeury(reqData.data))
         } else {
             setNotFound(true)
             setTimeout(() => {
@@ -90,22 +101,22 @@ const Partner = (props) => {
             setValues(resetData)
             setOpenForm(false)
             helpers.alert({notifications: notify, icon: 'success', color: 'green', message: 'Pharmacy account created'})
-            reload()
+            await reload()
         }
     }
 
     const fetchMore = (page, key, set) => {
        onSetPage(page, key, set)
-        // fetch the next page from the service and update the state
     }
 
-    const onSelected = (value) => {
+    const onSelected = async (value) => {
         setLoader(true)
-        setTimeout(() => {
-            setSelected(value)
-            setOpenData(true)
-            setLoader(false)
-        }, 3000)
+        let reqData = await lib.getOne(value?.pharm_id, user?.token)
+        if (reqData.status === 'ok' && reqData?.data) {
+            setSelected(reqData.data)
+        }  
+        setLoader(false)
+        setOpenData(true)
     }
 
     const onDeleted = async (id) => {
@@ -115,7 +126,9 @@ const Partner = (props) => {
          setOpenData(false)
          // remove from data list
          let d = data.filter(val => (String(val?.auth_id) !== String(id)))
-         setData(d)
+         setData(fQeury(d))
+
+        //  setData(d)
          await reload()
     }
 
