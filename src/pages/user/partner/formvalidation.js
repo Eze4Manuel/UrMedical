@@ -241,24 +241,24 @@ formValidator.validateNewPartner = (form, builder, setError) => {
 
     //validate the phone
      if (!form.pharmacy_phone) {
-        return setError("Pharmacy phone number is required")
+        return setError("Contact person phone number is required")
      }
      if (!/^[0-9]+$/.test(form.pharmacy_phone)) {
-        return setError("Pharmacy Phone number should be digits only")
+        return setError("PContact person Phone number should be digits only")
      }
      if (!/^0/.test(form.pharmacy_phone)) {
-        return setError("Pharmacy Phone number must start with zero. e.g (070........)")
+        return setError("Contact person number must start with zero. e.g (070........)")
      }
      if (form.pharmacy_phone.length !== 11) {
-        return setError("Invalid pharmacy phone number. Pharmacy phone number expects 11 digits")
+        return setError("Invalid Contact person phone number. Pharmacy phone number expects 11 digits")
      }
-     builder.pharmacy_phone_number = form.pharmacy_phone
+     builder.contact_phone_number = form.pharmacy_phone
 
      //validate the email
      if (!form.pharmacy_email) {
-        return setError("Pharmacy email is required")
+        return setError("Contact person email is required")
      }
-     builder.pharmacy_email = form.pharmacy_email
+     builder.contact_email = form.pharmacy_email
 
     // if city
     if (!form.city) {

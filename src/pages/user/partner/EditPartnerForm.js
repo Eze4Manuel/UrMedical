@@ -126,13 +126,13 @@ export const EditContactPersonForm = ({ data, show, onHide, onUpdated }) => {
 
     const getFormData = (data) => {   
         return {
-            contact_email: data.contact_email || '',
+            contact_email: data?.contact_email || '',
             contact_phone_number: data?.contact_phone_number || ''
         }
     }
 
     useEffect(() => {
-        setValues({ email: data.contact_email || '', phone_number: data?.contact_phone_number || ''});
+        setValues({ email: data?.contact_email || '', phone_number: data?.contact_phone_number || ''});
     }, [data])
 
     const onSubmit = async () => {

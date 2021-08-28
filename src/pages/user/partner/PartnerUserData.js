@@ -59,7 +59,7 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
         setError('')
         setDelWarning(false)
         setLoading(true)
-        let reqData = await lib.delete(values?._id, user?.token)
+        let reqData = await lib.delete(data?._id, user?.token)
         setLoading(false)
         // error
         if (reqData.status === 'error') {
@@ -68,7 +68,7 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
         if (reqData.status === 'ok') {
             onDeleted(data?.auth_id)
             onHide()
-            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'user deleted'})
+            helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'pharmacy record deleted'})
         }
         
     }

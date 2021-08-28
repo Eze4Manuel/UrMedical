@@ -63,7 +63,7 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="email">Email*</label><br />
+                            <label htmlFor="email">Pharmacy Email*</label><br />
                             <InputText style={{width: '100%'}} id="email" name="email" onChange={e => setValues(d => ({...d, email: e.target.value}))} autoFocus value={values?.email} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="email" />
                         </div>
                     </div>
@@ -71,7 +71,7 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-1">
-                            <label htmlFor="phone_number">Phone number*</label><br />
+                            <label htmlFor="phone_number">Pharmacy Phone number*</label><br />
                             <InputText style={{width: '100%'}} id="phone_number" name="phone_number" onChange={e => setValues(d => ({...d, phone_number: e.target.value}))} value={values?.phone_number} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="080*********" />
                         </div>
                     </div>
@@ -103,7 +103,7 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
                     {/* LAST NAME */}
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="pharmacy_phone">Phone*</label><br />
+                            <label htmlFor="pharmacy_phone">Contact Phone*</label><br />
                             <InputText style={{width: '100%'}} id="pharmacy_phone" name="pharmacy_phone" type="text" onChange={e => setValues(d => ({...d, pharmacy_phone: e.target.value}))} value={values?.pharmacy_phone} className="p-inputtext-sm p-d-block p-mb-2" placeholder="080********90" />
                         </div>
                     </div>
@@ -112,7 +112,7 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="pharmacy_email">Email</label><br />
+                            <label htmlFor="pharmacy_email">Contact Email</label><br />
                             <InputText style={{width: '100%'}} id="pharmacy_email" name="pharmacy_email" onChange={e => setValues(d => ({...d, pharmacy_email: e.target.value}))} value={values?.pharmacy_email} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="email" />
                         </div>
                     </div>

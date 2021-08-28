@@ -127,8 +127,6 @@ const Partner = (props) => {
          // remove from data list
          let d = data.filter(val => (String(val?.auth_id) !== String(id)))
          setData(fQeury(d))
-
-        //  setData(d)
          await reload()
     }
 
