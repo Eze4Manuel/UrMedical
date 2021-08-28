@@ -3,7 +3,7 @@ import './CustomerUserData.css';
 import { Dialog } from 'primereact/dialog';
 import config from '../../../assets/utils/config';
 import EditCustomerForm, { EditPassword } from './EditCustomerForm';
-import DispatcherUserDetail from './CustomerUserDetail';
+import CustomerUserDetail from './CustomerUserDetail';
 import Flash from '../../../components/flash/Flash';
 import lib from './lib';
 import { useAuth } from '../../../core/hooks/useAuth';
@@ -68,7 +68,7 @@ const CustomerData = ({ data, show, onHide, onDeleted}) => {
                 <div className="row">
                     <div className="col-7 mt-5">
                         <Flash title="Warning!" show={delWarning} message={deleteWarning} onCancel={() => setDelWarning(false)} onProceed={() => deleteAccount()} />
-                        <DispatcherUserDetail data={values} />
+                        <CustomerUserDetail data={values} />
                     </div>
                     <div className="col-5">
                         {/* EDIT PROFILE */}

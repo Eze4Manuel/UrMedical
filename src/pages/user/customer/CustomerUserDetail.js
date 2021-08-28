@@ -23,8 +23,6 @@ const CustomerUserDetail = ({ data }) => {
                 <h6 className="mb-3">Account Information</h6>
                 <p className="user-info__detail"><span>Username</span> <span>{data?.email}</span></p>
                 <p className="user-info__detail"><span>Account</span> <span>{data?.user_type}</span></p>
-                <p className="user-info__detail"><span>Vehicle ID</span> <span>{data?.vehicle_id}</span></p>
-                <p className="user-info__detail"><span>License ID</span> <span>{data?.license_id}</span></p>
             </div>
         </Fragment>
     )
