@@ -71,7 +71,15 @@ export const EditLicense = ({ data, show, onHide, onUpdate }) => {
                         <InputText style={{width: '100%'}} id="license_id" name="license_id" type="text" onChange={e => setValues(d => ({...d, license_id: e.target.value}))} value={values?.license_id} className="p-inputtext-sm p-d-block p-mb-2" placeholder="AKW06968AA2" />
                     </div>
                 </div>
-            </div>  
+                <div className="col-sm-12">
+                    <div className="p-field mb-2">
+                        <label className="small" htmlFor="vehicle_type">Type of vehicle* <span className="small font-weight-bold">Options are motorbike, car, bus or truck</span></label>
+                        
+                        <br />
+                        <InputText style={{width: '100%'}} id="vehicle_type" name="vehicle_type" onChange={e => setValues(d => ({...d, vehicle_type: e.target.value}))} autoFocus value={values.vehicle_type} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="vehicle type" />
+                    </div>
+                    </div>
+                </div>  
             <div className="password-update__btn-ctn">
                 <button onClick={() => onCancel()} style={{width: 100, height: 30}} class="p-button p-component p-button-outlined"><span class="p-button-label p-c">Cancel</span></button>
                 <Button onClick={() => onSubmit()} style={{width: 100, height: 30}} loading={loading} color="#fff" label="Save"/>

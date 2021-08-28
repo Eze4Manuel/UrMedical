@@ -28,6 +28,16 @@ formValidator.validateLicenseUpdate = (values, data, builder, setError) => {
         }
         builder.license_id = values.license_id
     }
+    if (values.vehicle_type !== data.vehicle_type) {
+        // check vehicle type 
+        if (!values.vehicle_type) {
+           return setError("Vehicle type is required")
+        }
+        if (["motorbike", "car", "bus", "truck"].indexOf(values.vehicle_type) === -1) {
+           return setError("Vehicle type should be motobike, car, bus or truck")
+        }
+        builder.vehicle_type = values.vehicle_type
+    }
     
     if (Object.keys(builder).length === 0) {
         return setError("No data changed")
@@ -171,6 +181,38 @@ formValidator.validateNewDispatcher = (form, builder, setError) => {
         return setError("Invalid phone number. Phone number expects 11 digits")
      }
      builder.phone_number = form.phone_number
+
+     if (!form.license_id) {
+        return setError("License ID is required")
+     }
+     if (form.license_id.length < 6) {
+        return setError("License ID is too short")
+     }
+     if (form.license_id.length > 18) {
+        return setError("License ID is too long")
+     }
+     builder.license_id = form.license_id
+
+     // check vehicle ID 
+     if (!form.vehicle_id) {
+        return setError("Vehicle ID is required")
+     }
+     if (form.vehicle_id.length < 6) {
+        return setError("Vehicle ID is too short")
+     }
+     if (form.vehicle_id.length > 14) {
+        return setError("Vehicle ID is too long")
+     }
+     builder.vehicle_id = form.vehicle_id
+     
+     // check vehicle type 
+     if (!form.vehicle_type) {
+        return setError("Vehicle type is required")
+     }
+     if (["motorbike", "car", "bus", "truck"].indexOf(form.vehicle_type) === -1) {
+        return setError("Vehicle type should be motobike, car, bus or truck")
+     }
+     builder.vehicle_type = form.vehicle_type
 
      //if dob
      if (form.dob) {

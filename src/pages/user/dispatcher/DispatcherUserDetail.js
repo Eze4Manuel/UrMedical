@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import './DispatcherUserData.css';
 
 const DispatcherUserDetail = ({ data }) => {
-  
     return (
         <Fragment>
             <div className="my-3">
@@ -23,11 +22,11 @@ const DispatcherUserDetail = ({ data }) => {
                 <h6 className="mb-3">Account Information</h6>
                 <p className="user-info__detail"><span>Username</span> <span>{data?.email}</span></p>
                 <p className="user-info__detail"><span>Account</span> <span>{data?.user_type}</span></p>
-                <p className="user-info__detail"><span>Vehicle ID</span> <span>{data?.vehicle_id}</span></p>
-                <p className="user-info__detail"><span>License ID</span> <span>{data?.license_id}</span></p>
+                <p className="user-info__detail"><span>Vehicle ID</span> <span>{data?.dispatcher_data?.vehicle_id}</span></p>
+                <p className="user-info__detail"><span>License ID</span> <span>{data?.dispatcher_data?.license_id}</span></p>
+                <p className="user-info__detail"><span>Vehicle</span> <span>{data?.dispatcher_data?.vehicle_type}</span></p>
             </div>
         </Fragment>
     )
 }
-
 export default DispatcherUserDetail

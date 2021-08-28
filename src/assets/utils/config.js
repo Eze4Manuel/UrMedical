@@ -58,6 +58,7 @@ const config = {
         age: '',
         license_id: '',
         vehicle_id: '',
+        vehicle_type: '',
         occupation: '',
         home_address: '',
         city: '',
@@ -78,7 +79,10 @@ const config = {
         pharmacy_phone_number: '',
         pharmacy_email: '',
         pharmacy_area: '',
-        pharmacy_address: ''
+        pharmacy_address: '',
+        contact_name: '',
+        contact_email: '',
+        contact_phone_number: '',
     },
     product_category: [
         ''

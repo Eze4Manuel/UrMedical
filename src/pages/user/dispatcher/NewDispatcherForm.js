@@ -48,13 +48,13 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="first_name">First Name</label><br />
+                            <label htmlFor="first_name">First Name*</label><br />
                             <InputText style={{width: '100%'}} id="first_name" name="first_name" onChange={e => setValues(d => ({...d, first_name: e.target.value}))} autoFocus value={values.first_name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="fist name" />
                         </div>
                     </div>
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="last_name">Last Name</label><br />
+                            <label htmlFor="last_name">Last Name*</label><br />
                             <InputText style={{width: '100%'}} id="last_name" name="last_name" type="text" onChange={e => setValues(d => ({...d, last_name: e.target.value}))} value={values.last_name} className="p-inputtext-sm p-d-block p-mb-2" placeholder="last name" />
                         </div>
                     </div>
@@ -62,21 +62,29 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="email">Email</label><br />
+                            <label htmlFor="email">Email*</label><br />
                             <InputText style={{width: '100%'}} id="email" name="email" onChange={e => setValues(d => ({...d, email: e.target.value}))} autoFocus value={values.email} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="email" />
+                        </div>
+                    </div>
+                    <div className="col-sm-12">
+                        <div className="p-field mb-2">
+                            <label htmlFor="vehicle_type">Type of vehicle*</label>
+                            <span className="small font-weight-bold">Options are motorbike, car, bus or truck</span>
+                            <br />
+                            <InputText style={{width: '100%'}} id="vehicle_type" name="vehicle_type" onChange={e => setValues(d => ({...d, vehicle_type: e.target.value}))} autoFocus value={values.vehicle_type} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="vehicle type" />
                         </div>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="vehicle_id">Vehicle ID</label><br />
+                            <label htmlFor="vehicle_id">Vehicle ID*</label><br />
                             <InputText style={{width: '100%'}} id="vehicle_id" name="vehicle_id" onChange={e => setValues(d => ({...d, vehicle_id: e.target.value}))} value={values.vehicle_id} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="FKJ-254XA" />
                         </div>
                     </div>
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
-                            <label htmlFor="license_id">License ID</label><br />
+                            <label htmlFor="license_id">License ID*</label><br />
                             <InputText style={{width: '100%'}} id="license_id" name="license_id" type="text" onChange={e => setValues(d => ({...d, license_id: e.target.value}))} value={values.license_id} className="p-inputtext-sm p-d-block p-mb-2" placeholder="AKW06968AA2" />
                         </div>
                     </div>
