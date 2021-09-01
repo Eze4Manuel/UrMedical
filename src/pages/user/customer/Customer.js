@@ -157,7 +157,7 @@ const Customer = (props) => {
                                 perPage={perPage}
                                 route="" // {config.pages.user}
                                 tableTitle="Customers" 
-                                tableHeader={['#','First Name', 'Lasst Name', 'Email', 'Phone']}
+                                tableHeader={['#','First Name', 'Last Name', 'Email', 'Phone']}
                                 dataFields={['first_name', 'last_name', 'email', 'phone_number']}
                             />
                         </div>
