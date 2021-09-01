@@ -22,10 +22,6 @@ formValidator.validateContactPersonDetails = (form, values, builder, setError) =
     }
 
     //validate the email
-    console.log("form.email")
-    console.log(form.email)
-    console.log("values.contact_email")
-    console.log(values.contact_email)
     if (form.email !== values.contact_email) {
       if (!form.email) {
          return setError("Contact person email is required")
