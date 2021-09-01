@@ -41,7 +41,7 @@ const Login = (props) => {
             if (reqData.status === 'error') {
                 setError(reqData?.msg)
             }
-            if (reqData.status === 'ok' && ['pharmacist', 'assistant', 'pharmacy'].indexOf(reqData?.data?.user_type) === -1) {
+            if (reqData.status === 'ok' && ['admin', 'superadmin'].indexOf(reqData?.data?.user_type) === -1) {
                 setError("You do not have the right authorization for this resource")
             } else {
                 Helpers.loadUserInStore(reqData?.data)
