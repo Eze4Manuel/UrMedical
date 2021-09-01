@@ -8,7 +8,7 @@ export const SearchBar = (props) => {
                     value={props.searchInput}
                     onChange={e => props.onChangeInput(e.target.value)}
                     type="search" 
-                    className="form-control search-input" 
+                    className="form-control search-input ml-3" 
                     placeholder={props.searchPlaceholder} 
                     aria-label={props.ariaLabel} 
                     aria-describedby={props.ariaDescription} 

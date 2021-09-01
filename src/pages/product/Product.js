@@ -14,7 +14,6 @@ const noDataTitle = "No pharmacy have added to their product yet.";
 const noDataParagraph = "You can create a partner (pharmacy) yourself by clicking on the partner section of the sidebar.";
 
 const Product = (props) => {
-    const NavigationBar = props.NavigationBar;
     const [searchInput, setSearchInput] = useState('');
     const [openForm, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
@@ -69,7 +68,6 @@ const Product = (props) => {
 
     return (
         <div className='main-content'>
-            <NavigationBar {...props} />
             <main>
                 {loader ? <ContainerLoader /> : null}
                 {/* <NewCustomerForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} /> */}
