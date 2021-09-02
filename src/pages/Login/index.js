@@ -37,6 +37,7 @@ const Login = (props) => {
         setLoading(true) 
         try {
             let reqData = await (await request.post('/auth/login', userData)).data
+            console.log(reqData);
             setLoading(false)
             if (reqData.status === 'error') {
                 setError(reqData?.msg)

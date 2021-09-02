@@ -89,7 +89,7 @@ const Partner = (props) => {
             }, 3000)
         }
     }
-
+ 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
         setLoading(true)
         let reqData = await lib.create(values, user?.token)

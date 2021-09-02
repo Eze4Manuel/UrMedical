@@ -255,6 +255,7 @@ formValidator.validateNewPartner = (form, builder, setError) => {
      builder.contact_phone_number = form.pharmacy_phone
 
      //validate the email
+     console.log(form.pharmacy_email);
      if (!form.pharmacy_email) {
         return setError("Contact person email is required")
      }
