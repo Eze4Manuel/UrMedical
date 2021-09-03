@@ -42,6 +42,11 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
         setShowPassword(false)
         setShowProfile(true)
     }
+    const onEditPartner = () => {
+        setShowPartner(true)
+        setShowPassword(false)
+        setShowProfile(false)
+    }
 
     const onCancelPasswordEdit = () => {
         setShowPassword(false)
@@ -84,7 +89,8 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
                 <div className="user-info__btn-action-wp">
                     <div className="user-info__btn-action">
                         <button onClick={() => onEditPassword()} className="btn btn__edit-ctn btn-action__green">Change password</button>
-                        <button onClick={() => onEditProfile()} className="btn btn__edit-ctn btn-action__green">Update Profile</button>
+                        <button onClick={() => onEditPartner()} className="btn btn__edit-ctn btn-action__green">Update Partner Profile</button>
+                        <button onClick={() => onEditProfile()} className="btn btn__edit-ctn btn-action__green">Update Contact Profile</button>
                         <button onClick={() => setDelWarning(true)}  className="btn btn__edit-ctn btn-action__red">Delete</button>
                     </div>
                 </div>
@@ -98,8 +104,9 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
                         <PartnerUserDetail data={values} />
                     </div>
                     <div className="col-5">
-                        {/* EDIT PROFILE */}
+                        {/* EDIT CONTACT PROFILE */}
                         <EditContactPersonForm onUpdated={(data) => onUpdateContactPerson(data)} onHide={() => onCancelProfileEdit()} data={data} show={showProfile} />
+                        {/* EDIT PARTNER PROFILE */}
                         <EditPharmacy onUpdated={(data) => setValues(data)} onHide={() => onCancelProfileEdit()} data={values} show={showPartner} />
                         {/* EDIT PASSWORD */}
                         <EditPassword onHide={() => onCancelPasswordEdit()} data={values} show={showPassword} />

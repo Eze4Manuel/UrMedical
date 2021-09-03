@@ -42,7 +42,7 @@ formValidator.validateContactPersonDetails = (form, values, builder, setError) =
 }
 
 // validate pharmacy form
-formValidator.validatePharmacyUpdate = (form, values, builder, setError) => {
+formValidator.validatePharmacyUpdate = (form, values, builder, data, setError) => {
     setError("")
     
     //check pharmacy name
@@ -73,28 +73,30 @@ formValidator.validatePharmacyUpdate = (form, values, builder, setError) => {
     }
 
     //validate the phone
-     if (form.phone !== values.phone) {
-        if (!form.phone) {
+     if (form.phone_number !== values.phone_number) {
+        if (!form.phone_number) {
             return setError("Pharmacy phone number is required")
          }
-         if (!/^[0-9]+$/.test(form.phone)) {
+         if (!/^[0-9]+$/.test(form.phone_number)) {
             return setError("Pharmacy Phone number should be digits only")
          }
-         if (!/^0/.test(form.phone)) {
+         if (!/^0/.test(form.phone_number)) {
             return setError("Pharmacy Phone number must start with zero. e.g (070........)")
          }
-         if (form.phone.length !== 11) {
+         if (form.phone_number.length !== 11) {
             return setError("Invalid pharmacy phone number. Pharmacy phone number expects 11 digits")
          }
-         builder.phone = form.phone
+         builder.users_data = [{...data.users_data[0], phone_number: form.phone_number}]
+
      }
 
      //validate the email
      if (form.email !== values.email) {
-        if (!form.pharmacy_email) {
+        if (!form.email) {
             return setError("Pharmacy email is required")
          }
-         builder.email = form.email    
+         builder.users_data = [{...data.users_data[0], email: form.email}]
+    
     }
     
     // if city
@@ -129,7 +131,7 @@ formValidator.validatePharmacyUpdate = (form, values, builder, setError) => {
         }
         builder.address = form.address
     }
-
+    console.log(Object.keys(builder).length);
     if (Object.keys(builder).length === 0) {
         return setError("No changes to update") 
     }
@@ -137,6 +139,8 @@ formValidator.validatePharmacyUpdate = (form, values, builder, setError) => {
     // return payload
     return builder
 }
+
+
 
 // validate pharmacy form
 formValidator.validateNewPartner = (form, builder, setError) => {

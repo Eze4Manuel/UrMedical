@@ -53,7 +53,8 @@ const Partner = (props) => {
                 setData(fQeury(reqData.data))
             }
             setLoader(false)
-        })()
+        })();
+        console.log(user);
     }, [user?.token, page, set])
 
     // setup table data

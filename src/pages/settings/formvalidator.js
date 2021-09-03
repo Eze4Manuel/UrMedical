@@ -55,15 +55,16 @@ formValidation.validatProfileUpdate = (values, data, builder, setError) => {
             builder.home_address = values.home_address
         }
     }
-    // check home area
-    if (values.home_area !== data.home_area) {
-        if (values.home_address) {
-            if (!/^[\w\s\-',]+$/i.test(values.home_area)) {
-                return setError("No special character allowed for home area")
-            }
-            builder.home_area = values.home_area
-        }
+    
+
+    // check gender
+    if (values.gender !== data.gender) {
+        builder.gender = values.gender
     }
+    // check dob
+    if (values.dob !== data.dob) {
+        builder.dob = values.dob
+    } 
 
     if (Object.keys(builder).length === 0) {
         return setError("No changes to update")
