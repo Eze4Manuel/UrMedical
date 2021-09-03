@@ -75,7 +75,6 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
             onHide()
             helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'pharmacy record deleted'})
         }
-        
     }
 
     const onUpdateContactPerson = (d) => {
