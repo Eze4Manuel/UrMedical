@@ -5,19 +5,17 @@ import SubNavbar from '../../components/subnavbar/index';
 import lib from './lib';
 import Table from '../../components/table';
 import { getPageCount, getPages, goTo, onSetPage } from '../../core/func/utility';
-// import { pharmacyData } from '../../assets/data/product';
-// import NewCustomerForm from './NewCustomerForm';
 import { ContainerLoader } from '../../components/loading/Loading';
-// import ProductSummary from './ProductSummary'
+import Tabs from "../../components/tabs/Tabs";
 
 const noDataTitle = "No trips yet.";
 const noDataParagraph = "All dispatch trips will appear here.";
 
 const Trip = (props) => {
-    const NavigationBar = props.NavigationBar;
     const [searchInput, setSearchInput] = useState('');
     const [openForm, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
+    const [trips, setTrips] = useState("All");
     const [data, setData] = useState([]);
     const [selected, setSelected] = useState(null);
     const [option, setOption] = useState('name');
@@ -69,10 +67,8 @@ const Trip = (props) => {
 
     return (
         <div className='main-content'>
-            <NavigationBar {...props} />
             <main>
                 {loader ? <ContainerLoader /> : null}
-                {/* <NewCustomerForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} /> */}
                 <SubNavbar  
                     showFilter
                     showSearch
@@ -90,9 +86,10 @@ const Trip = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
-                {/* <ProductSummary onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} /> */}
                 <div className="trip-table__container">
+                    <Tabs onChangeTab={(val) => setTrips(val)} activeTab={trips} tabs={["All", "pending", "cancelled","fulfilled"]} />
+                    {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
+
                     {/* <Table
                         onSelectData={onSelected}
                         prev={() => fetchMore(page, 'prev', setPage)}
