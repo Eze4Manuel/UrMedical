@@ -50,7 +50,7 @@ const config = {
     },
     userData: {
         email: '',
-        phone: '',
+        phone_number: '',
         username: '',
         first_name: '',
         last_name: '',
