@@ -24,10 +24,10 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
         return {
             name: data?.name,
             registration_id: data?.registration_id,
-            phone: pharm?.phone_number || '',
+            phone_number: pharm?.phone_number || '',
             email: pharm?.email || '',
             area: data?.area,
-            city: data?.area,
+            city: data?.city,
             address: data?.address
         }
     }
@@ -38,7 +38,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
     }, [data])
 
     const handleSubmit = async () => {
-        let builder = formValidator.validatePharmacyUpdate(values, getFormData(data), {}, setError)
+        let builder = formValidator.validatePharmacyUpdate(values, getFormData(data), {}, data, setError)
         if (!builder) {
             return
         }
@@ -49,6 +49,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
         setLoading(false)
         // error
         if (reqData.status === 'error') {
+
             helpers.sessionHasExpired(set, reqData?.msg, setError)
         }
         if (reqData.status === 'ok') {
@@ -84,8 +85,8 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
                     {/* LAST NAME */}
                     <div className="col-lg-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="phone">Phone*</label><br />
-                            <InputText style={{width: '100%'}} id="phone" name="phone" type="text" onChange={e => setValues(d => ({...d, phone: e.target.value}))} value={values?.phone} className="p-inputtext-sm p-d-block p-mb-2" placeholder="080********90" />
+                            <label htmlFor="phone_number">Phone*</label><br />
+                            <InputText style={{width: '100%'}} id="phone_number" name="phone_number" type="text" onChange={e => setValues(d => ({...d, phone_number: e.target.value}))} value={values?.phone_number} className="p-inputtext-sm p-d-block p-mb-2" placeholder="080********90" />
                         </div>
                     </div>
                 </div> 
@@ -102,14 +103,14 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
                     {/* CITY */}
                     <div className="col-lg-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="city">City*</label><br />
+                            <label htmlFor="city">City</label><br />
                             <InputText style={{width: '100%'}} id="city" name="city" onChange={e => setValues(d => ({...d, city: e.target.value}))} value={values?.city} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="city" />
                         </div>
                     </div>
                     {/* AREA */}
                     <div className="col-lg-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="area">Area*</label><br />
+                            <label htmlFor="area">Area</label><br />
                             <InputText style={{width: '100%'}} id="area" name="area" type="text" onChange={e => setValues(d => ({...d, area: e.target.value}))} value={values?.area} className="p-inputtext-sm p-d-block p-mb-2" placeholder="area" />
                         </div>
                     </div>
@@ -117,7 +118,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="address">Address*</label><br />
+                            <label htmlFor="address">Address</label><br />
                             <InputTextarea  style={{width: '100%', height: '80px'}} id="address" name="address" onChange={e => setValues(d => ({...d, address: e.target.value}))} value={values?.address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="address" />
                         </div>
                     </div>
