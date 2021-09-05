@@ -57,7 +57,7 @@ lib.update = async (id, data, token) => {
 
 lib.updatePharmacy = async (id, data, token) => {
     try {
-        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        let cfg = helpers.getHeaderConfig(String(token).substr(7));
         return await (await request.put(`/auth/update-pharmacy/${id}`, data, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}

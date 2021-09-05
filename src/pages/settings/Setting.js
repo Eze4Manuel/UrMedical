@@ -6,7 +6,10 @@ import helpers from '../../core/func/Helpers';
 import { ContainerLoader } from '../../components/loading/Loading';
 import ErrorMessage from '../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner'
+import { Calendar } from 'primereact/calendar';
+import { RadioButton } from 'primereact/radiobutton';
 import { InputText } from 'primereact/inputtext'
+import config from '../../assets/utils/config';
 import { InputTextarea } from 'primereact/inputtextarea'
 import { Button } from 'primereact/button'
 import formValidation from './formvalidator';
@@ -36,7 +39,6 @@ const Setting = (props) => {
                     if (reqData.status === 'ok') {
                         setValues(reqData.data)
                         setProfile(reqData.data)
-                        helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'user profile updated'})
                     }
                 })
                 .catch(e => {
@@ -46,27 +48,32 @@ const Setting = (props) => {
                     // setValues(user)
                 })
         }
-
-        getData(user?.auth_id)
+        getData(user?.auth_id);
         // eslint-disable-next-line
     }, [user?.auth_id])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         let builder = formValidation.validatProfileUpdate(values, profile, {}, setError)
         if (!builder) {
             return
         }
-        setLoader(true)
-        request.post(`/auth/update-user/${profile.auth_id}`)
+        setLoader(true);
+
+        let cfg = helpers.getHeaderConfig(String(user?.token).substr(7));
+         request.put(`/auth/update-user/${profile.auth_id}`,  builder, cfg)
             .then(res => {
                 setLoader(false)
                 let reqData = res.data
                 if (reqData.status === 'error') {
-                    helpers.sessionHasExpired(set, reqData.msg)
+                    setError(reqData.msg)
+                    helpers.sessionHasExpired(set, reqData.msg);
+                    console.log(reqData);
                 }
                 if (reqData.status === 'ok') {
                     setValues(reqData.data)
-                    setProfile(reqData.data)
+                    setProfile(reqData.data);
+                    helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'user profile updated'})
+
                 }
             })
             .catch(e => {
@@ -101,7 +108,6 @@ const Setting = (props) => {
                                 <p className="user-info__detail"><span>Email</span> <span>{values?.email}</span></p>
                                 <p className="user-info__detail"><span>Phone</span> <span>{values?.phone_number}</span></p>
                                 <p className="user-info__detail"><span>Address</span> <span>{values?.home_address}</span></p>
-                                <p className="user-info__detail"><span>Area</span> <span>{values?.home_area}</span></p>
                             </div>
                             <div className="my-3">
                                 <h6 className="mb-3">Account Information</h6>
@@ -148,17 +154,34 @@ const Setting = (props) => {
                                 </div> 
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <div className="p-field mb-2">
-                                            <label htmlFor="home_area">Home Area</label><br />
-                                            <InputText style={{width: '100%'}} id="home_area" name="home_area" onChange={e => setValues(d => ({...d, home_area: e.target.value}))} value={values?.home_area} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="home area" />
+                                    <label htmlFor="last_name">Gender</label><br />
+                                        <div className="p-field-radiobutton">
+                                            <RadioButton  id={config.gender[0]} name="gender" onChange={(e) => setValues(d => ({...d, gender: e.value}))} value={config.gender[0]} checked={config.gender[0] === 'male'} className="p-inputtext-sm p-d-block p-mb-0"/>
+                                            <label htmlFor="city1">{config.gender[0]}</label>
                                         </div>
+                                        <div className="p-field-radiobutton">
+                                            <RadioButton id={config.gender[1]} name="gender" onChange={(e) => setValues(d => ({...d, gender: e.value}))}  value={config.gender[1]}  checked={config.gender[1] === 'female'} className="p-inputtext-sm p-d-block p-mb-0"/>      
+                                            <label htmlFor="city1">{config.gender[1]}</label>
+                                        </div>
+                                        <div className="p-field-radiobutton">
+                                            <RadioButton id={config.gender[2]} name="gender" onChange={(e) => setValues(d => ({...d, gender: e.value}))} value={config.gender[2]} checked={config.gender[2] === 'other'} className="p-inputtext-sm p-d-block p-mb-0"/>  
+                                            <label htmlFor="gender">{config.gender[2]}</label>
+                                        </div>
+                                        
                                     </div>
-                                    </div> 
+                                </div>
+                               
                                     <div className="row">
                                         <div className="col-lg-12">
                                             <div className="p-field mb-1">
                                             <label htmlFor="home_address">Home Address</label><br />
                                             <InputTextarea style={{width: '100%', height: '100px'}} id="home_address" name="home_address" onChange={e => setValues(d => ({...d, home_address: e.target.value}))} value={values?.home_address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="Home address" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-6">
+                                        <div className="p-field mb-2">
+                                            <label htmlFor="dob">DOB</label><br />
+                                            <Calendar id="dob" name="dob" onChange={(e) => setValues (d => ({...d, dob: e.target.value.toLocaleDateString('en-SE')})) } monthNavigator yearNavigator yearRange="1960:2030" value={values?.dob} className="p-inputtext-sm p-mb-2" placeholder="mm/dd/yy"/>
                                         </div>
                                     </div>
                                 </div> 

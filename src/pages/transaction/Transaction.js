@@ -5,13 +5,12 @@ import SubNavbar from '../../components/subnavbar/index';
 import lib from './lib';
 import Table from '../../components/table';
 import { getPageCount, getPages, goTo, onSetPage } from '../../core/func/utility';
-// import { pharmacyData } from '../../assets/data/product';
-// import NewCustomerForm from './NewCustomerForm';
 import { ContainerLoader } from '../../components/loading/Loading';
-// import ProductSummary from './ProductSummary'
+import TransactionDetail from './TransactionDetail'
+import transactionData from '../../assets/data/transaction';
 
-const noDataTitle = "No transactions yet.";
-const noDataParagraph = "All transactions will appear here.";
+const noDataTitle = "No transaction have have been made yet.";
+const noDataParagraph = "You will see all transactions on this page.";
 
 const Transaction = (props) => {
     const NavigationBar = props.NavigationBar;
@@ -27,7 +26,7 @@ const Transaction = (props) => {
 
     // data 
     useEffect(() => {
-        setData([])
+        setData(transactionData)
     }, [])
 
     // setup table data
@@ -72,29 +71,28 @@ const Transaction = (props) => {
             <NavigationBar {...props} />
             <main>
                 {loader ? <ContainerLoader /> : null}
-                {/* <NewCustomerForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} /> */}
                 <SubNavbar  
                     showFilter
                     showSearch
                     showButton={false}
-                    filterName="transactions"
+                    filterName="transaction"
                     filterList={['name', 'location','phone']}
-                    searchPlaceholder="Search for transactions..."
-                    ariaLabel="transactions"
-                    ariaDescription="transactions"
+                    searchPlaceholder="Search for transaction..."
+                    ariaLabel="transaction"
+                    ariaDescription="transaction"
                     onSearch={() => onSearch()}
                     searchInput={searchInput}
                     onChangeInput={setSearchInput}
-                    searchID="transactions"
+                    searchID="transaction"
                     buttonTitle="Add pharmacy"
                     onSelectChange={setOption}
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
                 {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
-                {/* <ProductSummary onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} /> */}
+                <TransactionDetail onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                 <div className="transaction-table__container">
-                    {/* <Table
+                    <Table
                         onSelectData={onSelected}
                         prev={() => fetchMore(page, 'prev', setPage)}
                         next={() => fetchMore(page, 'next', setPage)}
@@ -104,10 +102,10 @@ const Transaction = (props) => {
                         data={viewData}
                         perPage={perPage}
                         route="" // {config.pages.user}
-                        tableTitle="Transactions summary" 
-                        tableHeader={['#','Pharmacy', 'Products', 'Categories', 'Ratings']}
-                        dataFields={['name', 'products', 'categories', 'ratings']}
-                    /> */}
+                        tableTitle="Transactions" 
+                        tableHeader={['#','ID', 'Amount', 'Quantity', 'Date']}
+                        dataFields={['_id', 'amount', 'quantity', 'date']}
+                    />
                 </div>
             </main>
         </div>

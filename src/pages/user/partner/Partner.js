@@ -53,7 +53,8 @@ const Partner = (props) => {
                 setData(fQeury(reqData.data))
             }
             setLoader(false)
-        })()
+        })();
+        console.log(user);
     }, [user?.token, page, set])
 
     // setup table data
@@ -89,7 +90,7 @@ const Partner = (props) => {
             }, 3000)
         }
     }
-
+ 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
         setLoading(true)
         let reqData = await lib.create(values, user?.token)
