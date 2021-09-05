@@ -100,6 +100,9 @@ const config = {
         'zone 2','zone 4','zone 5','zone 6','gwagwalada','garki','asokoro','kurunduma',
         'jikwoyi','masaka','dawaki','dustse alaji','kubwa','utako','jabi','katampe','katampe extension',
         'karshi','zuba','yoba',
+    ],
+    gender: [
+        'male', 'female', 'other'
     ]
 };
 
