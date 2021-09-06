@@ -11,7 +11,7 @@ const getPageItems = (pages, goTo) => (
 )
 
 const Paginate = (props) => (
-    <li onClick={() => typeof props.func === 'function' ? props.func() : {}} 
+    <li onClick={() => typeof props?.func === 'function' ? props?.func() : {}} 
         className={`page-item ${props.disable ? 'disabled' : ''}`}>
         <a className="page-link text-success" href="#/" aria-label={props.ariaLabel}>
             {

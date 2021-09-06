@@ -24,7 +24,7 @@ const Table = (props = {
 }) => {
     const history = useHistory();
     const tableHeader = props.tableHeader.map(_th => (<th scope="col">{_th}</th>))
-    const tableRow = props.data.map((_tr, _idx) => {
+    const tableRow = props.data?.map((_tr, _idx) => {
         return (
             <tr 
                 className="table-effect" 

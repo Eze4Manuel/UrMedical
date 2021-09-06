@@ -74,7 +74,7 @@ const Partner = (props) => {
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
             setData(fQeury(reqData.data))
 
-        } 
+        }  
     } 
 
     const onSearch = async () => {

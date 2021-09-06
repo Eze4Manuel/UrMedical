@@ -10,7 +10,7 @@ lib.get = async (page, search, token) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         if (search) {
-            uri = `auth/pharmacy?page=${page}&q=${search}`;
+            uri = `products?page=${page}&q=${search}`;
         } else {
             uri = `auth/pharmacy?page=${page}`;
         }
@@ -21,13 +21,54 @@ lib.get = async (page, search, token) => {
 }
 
 lib.getOne = async (id, token) => {
-    let uri = `/product/${id}`;
+    let uri = `/products/${id}`;
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         return await (await request.get(uri, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
+}
+
+lib.getAll = async (page, search, token, pID) => {
+    let uri = `/products?px_id=${pID}&page=${page}`;
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        if (search) {
+            uri = `/products?px_id=${pID}&page=${page}&q=${search}`;
+        }
+        return await (await request.get(uri, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    } 
+}
+
+lib.getCategory = async (page, search, token, category) => {
+    let uri = `/products?&page=${page}&component=${category}`;
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        if (search) {
+            uri = `/products?&page=${page}&q=${search}`;
+        }
+        return await (await request.get(uri, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    } 
+}
+
+
+lib.getCount = async (page, search, token, count) => {
+    let uri = `/products?&page=${page}&component=${count}`;
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        if (search) {
+            uri = `/products?&page=${page}&q=${search}`;
+            console.log(uri);
+        }
+        return await (await request.get(uri, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    } 
 }
 
 lib.create = async (values, setLoading, setError, setValues, valuesInitialState) => {
