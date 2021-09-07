@@ -36,20 +36,21 @@ const Transaction = (props) => {
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
+    const [notFound, setNotFound] = useState(false);
 
     // data 
     useEffect(() => {
-        setLoader(true)
-        let reqData = lib.get(page, null, user?.token, user?.px_id);
-        if (reqData.status === "error") {
-            helpers.sessionHasExpired(set, reqData.msg)
-        }
-        if (reqData.status === 'ok') {
-            setData(fQeury(reqData.data))
-        }
-        setLoader(false);
-        // setData(transactionData)
-        console.log(data);
+        (async () => {
+            setLoader(true)
+            let reqData = await lib.get(page, null, user?.token);
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
+            if (reqData.status === 'ok') {
+                setData(fQeury(reqData.data))
+            }
+            setLoader(false);
+        })()
     }, [])
 
     // setup table data
@@ -59,7 +60,19 @@ const Transaction = (props) => {
     const stop = start + perPage;
     const viewData = data.slice(start, stop);
 
-    const onSearch = () => { }
+    const onSearch = async() => {
+        setLoader(true)
+        let reqData = await lib.get(1, searchInput, user?.token)
+        setLoader(false)
+        if (reqData.status === 'ok' && reqData?.data?.length > 0) {
+            setData(fQeury(reqData.data))
+        } else {
+            setNotFound(true)
+            setTimeout(() => {
+                setNotFound(false)
+            }, 3000)
+        }
+     }
 
     const onCreate = (values, setLoading, setError, setValues) => {
         lib.create()
@@ -127,8 +140,8 @@ const Transaction = (props) => {
                                 perPage={perPage}
                                 route="" // {config.pages.user}
                                 tableTitle="Transactions"
-                                tableHeader={['#', 'ID', 'Amount', 'Quantity', 'Date']}
-                                dataFields={['_id', 'amount', 'quantity', 'date']}
+                                tableHeader={['#', 'ID', 'Name', 'Email', 'Payment Method', 'Amount']}
+                                dataFields={['_id', 'name', 'email', 'payment_method', 'amount']}
                             />
                         </div>
                     </>

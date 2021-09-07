@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './TransactionDetail.css';
 import { Dialog } from 'primereact/dialog';
 import config from '../../assets/utils/config';
-import TransactionDetailSummary, { Customer, Dispatcher } from './TransactionDetailSummary'
+import TransactionDetailSummary, { Customer, Dispatcher, Pharmacy } from './TransactionDetailSummary'
 import Flash from '../../components/flash/Flash';
 import lib from './lib';
 import { useAuth } from '../../core/hooks/useAuth';
@@ -53,6 +53,7 @@ const TransactionData = ({ data, show, onHide, onDeleted}) => {
                     <div className="col-4">
                         <Customer data={values} />
                         <Dispatcher data={values} />
+                        <Pharmacy data={values} />
                     </div> 
                 </div>
             </div>

@@ -12,14 +12,14 @@ lib.create = async (values, setLoading, setError, setValues, valuesInitialState)
     // () => (values, setLoading, setError, setValues)
 }
 
-lib.get = async (page, search, token, id) => {
+lib.get = async (page, search, token) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         if (search) {
-            uri = `/transactions/${id}?page=${page}&q=${search}`;
+            uri = `/transactions/?page=${page}&q=${search}`;
         } else {
-            uri = `/transactions/${id}?page=${page}`;
+            uri = `/transactions/?page=${page}`;
         }
         return await (await request.get(uri, cfg)).data 
     } catch (e) {
