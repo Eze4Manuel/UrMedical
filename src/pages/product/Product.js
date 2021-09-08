@@ -104,14 +104,26 @@ const Product = (props) => {
         // fetch the next page from the service and update the state
     }
 
+    // const onSelected = async (value) => {
+    //     setLoader(true)
+    //     let reqData = await lib.getAll(page, null, user?.token, value.users_data[0].px_id);
+    //     if (reqData.status === "error") {
+    //         helpers.sessionHasExpired(set, reqData.msg)
+    //     }
+    //     if (reqData.status === 'ok' && reqData?.data) {
+    //         setPharmData(fQeury(reqData.data))
+    //     }
+    //     setLoader(false)
+    //     setOpenData(true)
+    // }
     const onSelected = async (value) => {
         setLoader(true)
-        let reqData = await lib.getAll(page, null, user?.token, value.users_data[0].px_id);
+        let reqData = await lib.getOne(value?._id, user?.token)
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg)
         }
         if (reqData.status === 'ok' && reqData?.data) {
-            setPharmData(fQeury(reqData.data))
+            setPharmData(reqData.data)
         }
         setLoader(false)
         setOpenData(true)
@@ -126,6 +138,8 @@ const Product = (props) => {
         let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
+
+    
     const updateIndex = async (id) => {
         setLoader(true)
         let reqDataCategory = await lib.getCategory(page, null, user?.token, 'category');
@@ -198,12 +212,12 @@ const Product = (props) => {
                                                     goTo={(id) => goTo(id, setActivePages)}
                                                     activePage={activePage}
                                                     pages={paginate}
-                                                    data={data}
+                                                    data={viewData}
                                                     perPage={perPage}
                                                     route="" // {config.pages.user}
                                                     tableTitle="Products summary"
-                                                    tableHeader={['#', 'Pharmacy', 'Email', 'City', 'Area',]}
-                                                    dataFields={['name', 'email', 'city', 'area',]}
+                                                    tableHeader={['#', 'Product', 'Price', 'Category', 'Quantity',]}
+                                                    dataFields={['name', 'price', 'category', 'quantity',]}
                                                 />
                                             </>
                                         }

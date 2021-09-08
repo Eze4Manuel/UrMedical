@@ -25,7 +25,7 @@ const Table = (props = {
     const history = useHistory();
     const tableHeader = props.tableHeader.map(_th => (<th scope="col">{_th}</th>))
     const tableRow = props.data?.map((_tr, _idx) => {
-        return (
+         return (
             <tr 
                 className="table-effect" 
                 onClick={() => typeof props.onSelectData === 'function' 
@@ -36,13 +36,26 @@ const Table = (props = {
                 <th scope="row">
                     {_idx+1}
                 </th>
-                {
+                {       
                     props.dataFields.map((key) => {
-                        let dk = key
+                        let dk = key;
+                        let value
                         if (key === 'username')  {
                             dk = 'email'
                         }
-                        return (<td>{_tr[dk]}</td> )
+                        value = _tr[dk]
+                        // nested object
+                        let nestedKey = key.split('.');
+                        if (nestedKey?.length > 1 && nestedKey[1] !== 'length') {
+                            value = _tr[nestedKey[0]][nestedKey[1]]
+                        }
+                        // array length
+                        if (nestedKey?.length > 1 && nestedKey[1] === 'length') {
+                            value = _tr[nestedKey[0]]?.length
+                        }
+                        return (<td>{value}</td> )
+
+                        // return (<td>{_tr[dk]}</td> )
                     })
                 }
             </tr>
@@ -57,7 +70,7 @@ const Table = (props = {
                     <tr className="app-table__header">{tableHeader}</tr>
                 </thead>
                 <tbody>
-                    {tableRow}
+                     {tableRow}
                 </tbody>
             </table>
             <Pagination {...props} />

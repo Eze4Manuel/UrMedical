@@ -12,13 +12,13 @@ lib.get = async (page, search, token) => {
         if (search) {
             uri = `products?page=${page}&q=${search}`;
         } else {
-            uri = `auth/pharmacy?page=${page}`;
+            uri = `products?page=${page}`;
         }
         return await (await request.get(uri, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     } 
-}
+} 
 
 lib.getOne = async (id, token) => {
     let uri = `/products/${id}`;
