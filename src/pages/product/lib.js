@@ -12,13 +12,27 @@ lib.get = async (page, search, token) => {
         if (search) {
             uri = `products?page=${page}&q=${search}`;
         } else {
-            uri = `products?page=${page}`;
+            uri = `auth/pharmacy?page=${page}`;
         }
         return await (await request.get(uri, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     } 
-} 
+}
+
+lib.getRevenue = async (id, token, component) => {
+    let uri = `/products?px_id=${id}&component=${component}`;
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        console.log(uri);
+        return await (await request.get(uri, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
+
+
+
 
 lib.getOne = async (id, token) => {
     let uri = `/products/${id}`;

@@ -35,6 +35,7 @@ const Product = (props) => {
     const [openForm, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
     const [data, setData] = useState([]);
+    const [revenue, setRevenue] = useState([]);
     const [pharmData, setPharmData] = useState([]);
     const [notFound, setNotFound] = useState(false);
     const [selected, setSelected] = useState(null);
@@ -72,6 +73,22 @@ const Product = (props) => {
         })()
     }, [])
 
+    useEffect(() => {
+        (async () => {
+            setLoader(true)
+            console.log(user);
+            let reqData = await lib.getRevenue(user?.px_id, user?.token, 'summary');
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
+            if (reqData.status === 'ok') {
+                setRevenue(fQeury(reqData.data))
+            }
+            setLoader(false);
+            console.log(revenue);
+        })()
+    }, [])
+
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data.length, perPage);
@@ -95,35 +112,19 @@ const Product = (props) => {
         }
     }
 
-    const onCreate = (values, setLoading, setError, setValues) => {
-        lib.create()
-    }
-
     const fetchMore = (page, key, set) => {
         onSetPage(page, key, set)
         // fetch the next page from the service and update the state
     }
 
-    // const onSelected = async (value) => {
-    //     setLoader(true)
-    //     let reqData = await lib.getAll(page, null, user?.token, value.users_data[0].px_id);
-    //     if (reqData.status === "error") {
-    //         helpers.sessionHasExpired(set, reqData.msg)
-    //     }
-    //     if (reqData.status === 'ok' && reqData?.data) {
-    //         setPharmData(fQeury(reqData.data))
-    //     }
-    //     setLoader(false)
-    //     setOpenData(true)
-    // }
     const onSelected = async (value) => {
         setLoader(true)
-        let reqData = await lib.getOne(value?._id, user?.token)
+        let reqData = await lib.getAll(page, null, user?.token, value.users_data[0].px_id);
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg)
         }
         if (reqData.status === 'ok' && reqData?.data) {
-            setPharmData(reqData.data)
+            setPharmData(fQeury(reqData.data))
         }
         setLoader(false)
         setOpenData(true)
@@ -138,8 +139,6 @@ const Product = (props) => {
         let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
-
-    
     const updateIndex = async (id) => {
         setLoader(true)
         let reqDataCategory = await lib.getCategory(page, null, user?.token, 'category');
@@ -156,7 +155,6 @@ const Product = (props) => {
         }
         if ( (reqDataCount.status === 'ok' && reqDataCount?.data)  ) {
             setCount(reqDataCount.data[0].total);
-            console.log(reqDataCount.data[0].total);
         }
         setLoader(false)
         setActiveIndex(id)
@@ -212,12 +210,12 @@ const Product = (props) => {
                                                     goTo={(id) => goTo(id, setActivePages)}
                                                     activePage={activePage}
                                                     pages={paginate}
-                                                    data={viewData}
+                                                    data={data}
                                                     perPage={perPage}
                                                     route="" // {config.pages.user}
                                                     tableTitle="Products summary"
-                                                    tableHeader={['#', 'Product', 'Price', 'Category', 'Quantity',]}
-                                                    dataFields={['name', 'price', 'category', 'quantity',]}
+                                                    tableHeader={['#', 'Pharmacy', 'Email', 'City', 'Area',]}
+                                                    dataFields={['name', 'email', 'city', 'area',]}
                                                 />
                                             </>
                                         }
@@ -226,10 +224,10 @@ const Product = (props) => {
                                     <TabPanel disabled header="Total Analytics">
                                         <div className="product-summary__ctn mt-5">
                                             <div className="row">
-                                                <div className="col-3">
+                                                {/* <div className="col-3">
                                                     <div className="card p-2 pl-3">
-                                                        <h5><span>Lifetime Revenue</span></h5>
-                                                        <h2><span>2.85M</span></h2>
+                                                        <h5><span>Pharmacy Revenue</span></h5>
+                                                        <h2><span>{revenue[0].pharmacy_revenue}</span></h2>
                                                         <p className="small"><span>July 12, 2021 - </span></p>
                                                     </div>
                                                 </div>
@@ -239,23 +237,23 @@ const Product = (props) => {
                                                         <h2 className="text-success"><span>285.6K</span></h2>
                                                         <p className="small"><span>August 12, 2021</span></p>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 <div className="col-3">
                                                     <div className="card p-2 pl-3">
-                                                        <h5><span>Products</span></h5>
+                                                        <h5><span>All Products</span></h5>
                                                         <h2 className="text-primary"><span>{count}</span></h2>
                                                         <p className="small"><span>Listed products</span></p>
                                                     </div>
                                                 </div>
                                                 <div className="col-3">
                                                     <div className="card p-2 pl-3">
-                                                        <h5><span>Categories</span></h5>
+                                                        <h5><span>All Categories</span></h5>
                                                         <h2 className="text-warning"><span>{category}</span></h2>
                                                         <p className="small"><span>Products categories</span></p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="row">
+                                            {/* <div className="row">
                                                 <div className="col-6 mt-4">
                                                     <div className="shadow-sm card border-light">
                                                         <div className="d-flex flex-row align-items-center flex-0 border-bottom card-body">
@@ -333,6 +331,7 @@ const Product = (props) => {
                                                     </div>
                                                 </div>
                                             </div>
+                                         */}
                                         </div>
                                     </TabPanel>
                                 </TabView>

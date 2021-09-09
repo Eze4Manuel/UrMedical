@@ -48,7 +48,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
     }
 
     useEffect(() => {
-        setPharmData(data);
+        setPharmData(fQeury(data));
         setDelWarning(false)
     }, [data])
 
