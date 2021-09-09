@@ -42,7 +42,8 @@ const Customer = (props) => {
             if (reqData.status === 'ok') {
                 setData(reqData.data)
             }
-            setLoader(false)
+            setLoader(false);
+            console.log(data);
         })()
     }, [user?.token, page, set])
 

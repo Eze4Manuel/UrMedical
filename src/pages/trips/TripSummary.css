@@ -1,0 +1,21 @@
+.order-summary__ctn {
+    background: #fbfbfb;
+}
+
+.shape-xs {
+    width: 10px;
+    height: 10px;
+}
+.pc-line {
+    line-height: 1.3;
+}
+
+.order-desc {
+    font-size: 13px;
+    line-height: 0.1;
+}
+
+.order-detail__left {
+    display: flex;
+    flex-direction: row-reverse;
+}

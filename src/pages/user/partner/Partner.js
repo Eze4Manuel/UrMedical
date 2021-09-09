@@ -52,10 +52,13 @@ const Partner = (props) => {
             if (reqData.status === 'ok') {
                 setData(fQeury(reqData.data))
             }
-            setLoader(false)
+            setLoader(false);
+            console.log(reqData);
+
         })();
-        console.log(user);
     }, [user?.token, page, set])
+
+      
 
     // setup table data
     const perPage = getPageCount(10);
@@ -74,7 +77,7 @@ const Partner = (props) => {
         if (reqData.status === 'ok' && reqData?.data?.length > 0) {
             setData(fQeury(reqData.data))
 
-        } 
+        }  
     } 
 
     const onSearch = async () => {

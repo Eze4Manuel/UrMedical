@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import './TransactionDetail.css';
+import './TripDetail.css';
 import { Dialog } from 'primereact/dialog';
 import config from '../../assets/utils/config';
-import TransactionDetailSummary, { Customer, Dispatcher, Pharmacy } from './TransactionDetailSummary'
+import OrderDetailSummary, { Details } from './TripDetailSummary'
 import Flash from '../../components/flash/Flash';
 import lib from './lib';
 import { useAuth } from '../../core/hooks/useAuth';
@@ -11,7 +11,7 @@ import helpers from '../../core/func/Helpers';
 
 const deleteWarning = "Are you sure you want to delete this account. This action is not reversible."
 
-const TransactionData = ({ data, show, onHide, onDeleted}) => {
+const TripData = ({ data, show, onHide, onDeleted}) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
@@ -25,6 +25,7 @@ const TransactionData = ({ data, show, onHide, onDeleted}) => {
         setDelWarning(false)
     }, [data])
 
+    
     const deleteAccount = async () => {
         setError('')
         setDelWarning(false)
@@ -39,21 +40,19 @@ const TransactionData = ({ data, show, onHide, onDeleted}) => {
             onDeleted(data?.auth_id)
             onHide()
             helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'Product deleted'})
-        }
+        }   
     }
 
     return (
-        <Dialog closeOnEscape header="Transaction Details" visible={show} modal onHide={() => onHide()} style={{width: "60vw"}}>
-            <div className="transaction-info__ctn">
+        <Dialog closeOnEscape header="Order Details" visible={show} modal onHide={() => onHide()} style={{width: "60vw"}}>
+            <div className="order-info__ctn">
                 <div className="row">
                     <div className="col-8">
                         <Flash title="Warning!" show={delWarning} message={deleteWarning} onCancel={() => setDelWarning(false)} onProceed={() => deleteAccount()} />
-                        <TransactionDetailSummary data={values} />
+                        <OrderDetailSummary data={values}/>
                     </div>
                     <div className="col-4">
-                        <Customer data={values} />
-                        <Dispatcher data={values} />
-                        <Pharmacy data={values} />
+                        <Details data={values}  />
                     </div> 
                 </div>
             </div>
@@ -61,4 +60,4 @@ const TransactionData = ({ data, show, onHide, onDeleted}) => {
     )
 }
 
-export default TransactionData
+export default TripData
