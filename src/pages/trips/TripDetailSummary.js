@@ -17,8 +17,7 @@ const Detail = ({ name, value }) => value ? (<p className="order-info__detail"><
 
 export const Details = ({ data }) => {
     const { set, user } = useAuth();
-    const [allow, setAllow] = useState(false);
-    const [edit, setEdit] = useState(true);
+    const [allow, setAllow] = useState(true);
     const [, setData] = useState([]);
     const [loader, setLoader] = useState(false);
     const notify = useNotifications();
@@ -29,9 +28,7 @@ export const Details = ({ data }) => {
 
 
     useEffect(() => {
-        console.log(data);
-        setAllow((data.order_status === 'pending') ? true : false)
-        setEdit((data.order_status == 'cancelled' || data.order_status == 'fulfilled') ? false : true)
+        setAllow((data.order_status === 'pending' || data.order_status === 'active') ? true : false)
     }, [])
 
 
@@ -42,15 +39,17 @@ export const Details = ({ data }) => {
         if (reqData.status === 'ok') {
             data.order_status = val;
             setData(data);
-            window.location.reload()
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Order Updated' })
+            setTimeout(() => window.location.reload(), 3000)
         } else {
             helpers.alert({ notifications: notify, icon: 'danger', color: 'red', message: reqData.msg })
         }
     }
 
     const assignDispatch = async () => {
-        setLoader(true)
+        setLoader(true);
+
+        // Fetches all available dispatchers
         let reqData = await lib.getDispatchers(user?.token, 'dispatcher');
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg)
@@ -60,8 +59,8 @@ export const Details = ({ data }) => {
                 setDispatchers(reqData.data);
                 setDisplayPosition(true)
                 setPosition('left');
-            }else{
-                helpers.alert({ notifications: notify, icon: 'warning', color: 'yellow', message: 'No available Dispatcher'})
+            } else {
+                helpers.alert({ notifications: notify, icon: 'warning', color: 'yellow', message: 'No available Dispatcher' })
             }
         }
         setLoader(false);
@@ -103,10 +102,27 @@ export const Details = ({ data }) => {
     }
 
 
-    const dispatchSelected = (val) => {
-        data.dispatcher = val;
-        setAllow(false)
-        onHide();
+    const dispatchSelected = async (val) => {
+        setLoader(true);
+        console.log(data);
+
+        // Fetches all available dispatchers
+        let reqData = await lib.updateDispatcher(user?.token, data?.order_id, val?.auth_id);
+        if (reqData.status === "error") {
+            helpers.alert({ notifications: notify, icon: 'warning', color: 'yellow', message: 'Failed to Assign Dispatcher' })
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Dispatcher Assigned' })
+            // Updating current selected data
+            data.dispatcher = val;
+            onHide();
+            setAllow(true);
+
+        }
+        setLoader(false);
+        console.log(reqData);
+
+
     }
 
 
@@ -128,24 +144,32 @@ export const Details = ({ data }) => {
                 </div>
             </Fragment>
             <Fragment>
-                {(!allow) ?
 
-                    <div className="mb-3">
-                        <h6 className="mb-3"> Dispatcher Detail</h6>
-                        <Detail name="Name" value={data?.dispatcher?.name} />
-                        <Detail name="Phone" value={data?.dispatcher?.phone_number} />
-                        <Detail name="Email" value={data?.dispatcher?.email} />
-                        <Detail name="License ID" value={data?.dispatcher?.license_id} />
-                        <Detail name="Vehicle ID" value={data?.dispatcher?.vehicle_id} />
-                    </div> :
-                    <div className="mb-3" >
-                        <Button onClick={() => assignDispatch()} icon="pi pi-bookmark" label="Assign Dispatch" className="p-button-sm" />
-                    </div>
-                }
+
+                <div className="mb-3">
+                    {(data?.dispatcher?.name == '') ?
+                        <>
+                            <h6 className="mb-3"> Dispatcher Detail</h6>
+                            <p style={{ 'color': 'red' }}>No Dispatcher Assigned</p>
+                        </>
+                        :
+                        <>
+                            <h6 className="mb-3"> Dispatcher Detail</h6>
+                            <Detail name="Name" value={data?.dispatcher?.name} />
+                            <Detail name="Phone" value={data?.dispatcher?.phone_number} />
+                            <Detail name="Email" value={data?.dispatcher?.email} />
+                            <Detail name="License ID" value={data?.dispatcher?.license_id} />
+                            <Detail name="Vehicle ID" value={data?.dispatcher?.vehicle_id} />
+                        </>
+
+                    }
+                </div>
+
+
             </Fragment>
 
             <Fragment>
-                <div className="mb-3">
+                <div className="mb-5">
                     <h6 className="mb-3">Customer Detail</h6>
                     <Detail name="Name" value={data?.customer?.name} />
                     <Detail name="Phone" value={data?.customer?.phone_number} />
@@ -154,13 +178,19 @@ export const Details = ({ data }) => {
             </Fragment>
             <Fragment>
 
-                {edit ?
-                    <div className="mb-3" >
-                        <SplitButton style={{ "font-size": "13px" }} label="update status" model={items} disabled={allow} className="p-button-sm p-button-warning p-mr-1"></SplitButton>
+                <div className="mt-3" >
+                    <div className="mb-2">
+                        <Button onClick={() => assignDispatch()} icon="pi pi-bookmark" disabled={!allow} label="Assign Dispatch" className="p-button-sm" />
                     </div>
-                    :
-                    null
-                }
+                    {(data?.dispatcher?.name != '') ?
+                        <div>
+                            <SplitButton style={{ "font-size": "10px" }} label="update status" model={items} disabled={!allow} className="p-button-sm p-button-warning p-mr-1"></SplitButton>
+                        </div>
+                        :
+                        null
+                    }
+
+                </div>
             </Fragment>
             {loader ? <ContainerLoader /> : null}
 

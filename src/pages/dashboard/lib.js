@@ -6,14 +6,14 @@ const lib = {}
 
 
 
-lib.get = async (page, search, token) => {
+lib.get = async (page, search, token, auth_id, user_type) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         if (search) {
-            uri = `/orders/?page=${page}&q=${search}`;
+            uri = `/orders?page=${page}&q=${search}`;
         } else {
-            uri = `/orders/?page=${page}`;
+            uri = `/orders?page=${page}&auth_id=${auth_id}&user_type=${user_type}`;
         }
         return await (await request.get(uri, cfg)).data
     } catch (e) {
@@ -21,12 +21,39 @@ lib.get = async (page, search, token) => {
     }
 }
 
-
-lib.getDispatchers = async (token, user_type) => {
+lib.getUsers = async (token, component) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `auth/admin?&user_type=${user_type}`;
+
+        uri = `/auth/admin?component=${component}`;
+
+        return await (await request.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+lib.getTransactionsSummary = async (token, component) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+
+        uri = `/transactions?component=${component}`;
+
+        return await (await request.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+lib.getOrderSummary = async (token, component) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+
+        uri = `/orders?component=${component}`;
+
         return await (await request.get(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
@@ -34,52 +61,5 @@ lib.getDispatchers = async (token, user_type) => {
 }
 
 
-lib.updateDispatcher = async (token, order_id, dispatcher_id) => {
-    let uri = '';
-    try {
-        let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `orders/assign-dispatcher`;
-         
-        return await (await request.put(uri, {order_id, dispatcher_id}, cfg)).data
-    } catch (e) {
-        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
-    }
-}
-
-
-
-
-
-lib.updateStauts = async (token, auth_id, state) => {
-    let uri = '';
-    try {
-        let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `/orders/update-order-status/${auth_id}`;
-        return await (await request.put(uri, { order_status: state }, cfg)).data
-    } catch (e) {
-        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
-    }
-}
-
-
-
-
-lib.create = async (values, setLoading, setError, setValues, valuesInitialState) => {
-    // check the form data
-
-    // send create request
-
-    // add to the list of user
-    // () => (values, setLoading, setError, setValues)
-}
-
-lib.delete = async (userID, setLoading, setError, onHide, onDeleted) => {
-
-    // delete user
-    // hide the modal 
-    onHide()
-    // remove the deleted data
-    onDeleted(userID)
-}
 
 export default lib;

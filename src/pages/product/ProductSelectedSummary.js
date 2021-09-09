@@ -22,6 +22,7 @@ const CustomerData = ({ data, show, onHide, onDeleted}) => {
 
     useEffect(() => {
         setValues(data);
+        console.log(data);
         setDelWarning(false)
     }, [data])
 
@@ -77,9 +78,9 @@ const ProductDetailSummary = ({ data }) => {
                 <Detail name="Quantity" value={data?.quantity} />
                 <Detail name="Category" value={data?.category} />
                 { data?.description ? <p className="product-info__detail"><span>Description</span></p> : null}
-                <p><span className="product-desc">{data?.description}</span></p>
+                <p><span className="product-desc" style={{"font-size": "14px", "color": "purple"}}>{data?.description}</span></p>
                 { data?.ingredients ? <p className="product-info__detail"><span>Ingredients</span></p> : null}
-                <p><span className="product-desc">{data?.ingredients}</span></p>
+                <p><span className="product-desc" style={{"font-size": "14px", "color": "purple"}}>{data?.ingredients}</span></p>
                 { data?.precautions ? <p className="product-info__detail"><span>Precautions</span></p> : null}
                 <p><span className="product-desc">{data?.precautions}</span></p>
             </div>

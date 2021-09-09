@@ -12,13 +12,27 @@ lib.get = async (page, search, token) => {
         if (search) {
             uri = `products?page=${page}&q=${search}`;
         } else {
-            uri = `products?page=${page}`;
+            uri = `auth/pharmacy?page=${page}`;
         }
         return await (await request.get(uri, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     } 
-} 
+}
+
+lib.getRevenue = async (id, token, component) => {
+    let uri = `/products?px_id=${id}&component=${component}`;
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        console.log(uri);
+        return await (await request.get(uri, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
+
+
+
 
 lib.getOne = async (id, token) => {
     let uri = `/products/${id}`;
@@ -43,13 +57,10 @@ lib.getAll = async (page, search, token, pID) => {
     } 
 }
 
-lib.getCategory = async (page, search, token, category) => {
-    let uri = `/products?&page=${page}&component=${category}`;
+lib.getCategory = async (token, category) => {
+    let uri = `/products?component=${category}`;
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        if (search) {
-            uri = `/products?&page=${page}&q=${search}`;
-        }
         return await (await request.get(uri, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
@@ -57,14 +68,34 @@ lib.getCategory = async (page, search, token, category) => {
 }
 
 
-lib.getCount = async (page, search, token, count) => {
-    let uri = `/products?&page=${page}&component=${count}`;
+lib.getSpecificCategory = async (id, token, category) => {
+    let uri = `/products?component=${category}&px_id=${id}`;
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        if (search) {
-            uri = `/products?&page=${page}&q=${search}`;
-            console.log(uri);
-        }
+        return await (await request.get(uri, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
+
+
+lib.getSpecificCount = async (id, token, count) => {
+    let uri = `/products?px_id=${id}&component=${count}`;
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7));
+        console.log(uri);
+        return await (await request.get(uri, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    } 
+}
+
+
+lib.getCount = async (token, count) => {
+    let uri = `/products?component=${count}`;
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        
         return await (await request.get(uri, cfg)).data 
     } catch (e) {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
