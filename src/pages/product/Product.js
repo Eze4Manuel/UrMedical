@@ -137,7 +137,6 @@ const Product = (props) => {
         let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
-
     const updateIndex = async (id) => {
         setLoader(true)
         let reqDataCategory = await lib.getCategory(user?.token, 'category');
