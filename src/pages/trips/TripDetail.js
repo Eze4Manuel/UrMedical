@@ -47,11 +47,11 @@ const TripData = ({ data, show, onHide, onDeleted}) => {
         <Dialog closeOnEscape header="Order Details" visible={show} modal onHide={() => onHide()} style={{width: "60vw"}}>
             <div className="order-info__ctn">
                 <div className="row">
-                    <div className="col-8">
+                    <div className="col-7">
                         <Flash title="Warning!" show={delWarning} message={deleteWarning} onCancel={() => setDelWarning(false)} onProceed={() => deleteAccount()} />
                         <OrderDetailSummary data={values}/>
                     </div>
-                    <div className="col-4">
+                    <div className="col-5">
                         <Details data={values}  />
                     </div> 
                 </div>

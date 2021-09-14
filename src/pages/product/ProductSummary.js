@@ -85,7 +85,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
 
     const updateIndex = async (id) => {
         setLoader(true)
-        let reqDataCategory = await lib.getSpecificCategory(data[0].px_id, user?.token, 'category');
+        let reqDataCategory = await lib.getSpecificCategory(data[0]?.px_id, user?.token, 'category');
         if (reqDataCategory.status === "error") {
             helpers.sessionHasExpired(set, reqDataCategory.msg)
         }
@@ -93,7 +93,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             setCategories(reqDataCategory.data.length);
         }
 
-        let reqDataCount = await lib.getSpecificCount(data[0].px_id, user?.token, 'count');
+        let reqDataCount = await lib.getSpecificCount(data[0]?.px_id, user?.token, 'count');
         if (reqDataCount.status === "error") {
             helpers.sessionHasExpired(set, reqDataCount.msg)
         }
