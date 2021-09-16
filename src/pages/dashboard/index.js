@@ -143,7 +143,6 @@ const Dashboard = (props) => {
             if (reqData.status === 'ok') {
                 setOrderMonth(reqData.data)
             }
-            console.log(reqData.data);
             setLoader(false)
             
         })()

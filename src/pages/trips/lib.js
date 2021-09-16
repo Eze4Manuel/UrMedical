@@ -1,9 +1,7 @@
 import request from '../../assets/utils/http-request';
-import conf from '../../assets/utils/config';
 import helpers from '../../core/func/Helpers';
 
 const lib = {}
-
 
 
 lib.get = async (page, search, token) => {
@@ -39,8 +37,8 @@ lib.updateDispatcher = async (token, order_id, dispatcher_id) => {
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
         uri = `orders/assign-dispatcher`;
-         
-        return await (await request.put(uri, {order_id, dispatcher_id}, cfg)).data
+
+        return await (await request.put(uri, { order_id, dispatcher_id }, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
@@ -61,6 +59,17 @@ lib.updateStauts = async (token, auth_id, state) => {
     }
 }
 
+
+lib.registerApp = async (token, phone_number) => {
+    let uri = `/notifications/web-subscription`;     
+    try {
+
+        let cfg = helpers.getHeaderAccessControl()
+        return await (await request.post(uri, {token, phone_number}, cfg )).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
 
 
 

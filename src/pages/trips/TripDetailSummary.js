@@ -32,26 +32,7 @@ export const Details = ({ data }) => {
     const [assign, setAssigning] = useState(true);
 
 
-    useEffect(() => {
-        setAllow((data.order_status === 'pending' || data.order_status === 'active') ? true : false);
-
-        // Handling firebase Dispatch
-        const messaging = getMessaging();
-        getToken(messaging, { vapidKey: 'BNTeFHUVuMTLfC47Az6gYzUd-wlm0ISnjxAnZhSkQ2THHhJs21Wyowe8i9bIQ-0kjd3wCIQuDwxSO-JnlouLCVc' }).then((currentToken) => {
-            if (currentToken) {
-                // Send the token to your server and update the UI if necessary
-                // ...
-                console.log(currentToken);
-            } else {
-                // Show permission request UI
-                console.log('No registration token available. Request permission to generate one.');
-            }
-        }).catch((err) => {
-            console.log('An error occurred while retrieving token. ', err);
-        });
-
-
-    }, [])
+   
 
 
     const updateStatus = async (val) => {
@@ -62,7 +43,7 @@ export const Details = ({ data }) => {
             data.order_status = val;
             setData(data);
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Order Updated' })
-            setTimeout(() => window.location.reload(), 3000)
+
         } else {
             helpers.alert({ notifications: notify, icon: 'danger', color: 'red', message: reqData.msg })
         }

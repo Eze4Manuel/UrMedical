@@ -1,15 +1,16 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+require('dotenv').config();
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD5J63iV2eirvF9a6MVvrc9KT-e6ihNlmM",
-  authDomain: "fir-cloud-messaging-e29d4.firebaseapp.com",
-  projectId: "fir-cloud-messaging-e29d4",
-  storageBucket: "fir-cloud-messaging-e29d4.appspot.com",
-  messagingSenderId: "963168775769",
-  appId: "1:963168775769:web:b37dac79568c333dd74b48",
-  measurementId: "G-N2L164F9NB"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
 // Initialize Firebase

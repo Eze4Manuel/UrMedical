@@ -11,7 +11,7 @@ import helpers from '../../core/func/Helpers';
 
 const deleteWarning = "Are you sure you want to delete this account. This action is not reversible."
 
-const TripData = ({ data, show, onHide, onDeleted}) => {
+const TripDetail = ({ data, show, onHide, onDeleted}) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
@@ -52,7 +52,7 @@ const TripData = ({ data, show, onHide, onDeleted}) => {
                         <OrderDetailSummary data={values}/>
                     </div>
                     <div className="col-5">
-                        <Details data={values}  />
+                        <Details data={values} />
                     </div> 
                 </div>
             </div>
@@ -60,4 +60,4 @@ const TripData = ({ data, show, onHide, onDeleted}) => {
     )
 }
 
-export default TripData
+export default TripDetail

@@ -11,6 +11,14 @@ Helpers.getHeaderConfig = (token) => {
     return {headers: {'Authorization': `Bearer ${token}`}}
 };
 
+
+// get header config
+Helpers.getHeaderAccessControl = () => {
+    return {headers: {'Access-Control-Allow-Origin': '*'}}
+};
+
+
+
 //for generating random token
 const randomToken = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-'
 Helpers.generateToken = (len) => {
