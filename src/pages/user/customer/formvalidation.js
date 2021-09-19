@@ -17,39 +17,39 @@ formValidation.validatCustomerForm = (form, builder, setError) => {
     //if last name is not alphabets
     if (!/^[a-z-]+$/i.test(form.last_name)) {
         return setError("Last name should be alphabets only")
-     }
+    }
 
-     if (!form.last_name) {
+    if (!form.last_name) {
         return setError("Last name is required")
-     }
-     if (form.last_name.length < 2) {
+    }
+    if (form.last_name.length < 2) {
         return setError("Last name is too short")
-     }
-     if (form.last_name.length > 45) {
+    }
+    if (form.last_name.length > 45) {
         return setError("Last name is too long")
-     }
-     builder.last_name = form.last_name
+    }
+    builder.last_name = form.last_name
 
-     //validate the email
-     if (!form.email) {
+    //validate the email
+    if (!form.email) {
         return setError("email is required")
-     }
-     builder.email = form.email
-     
-     //validate the phone
-     if (!form.phone_number) {
+    }
+    builder.email = form.email
+
+    //validate the phone
+    if (!form.phone_number) {
         return setError("phone number is required")
-     }
-     if (!/^[0-9]+$/.test(form.phone_number)) {
+    }
+    if (!/^[0-9]+$/.test(form.phone_number)) {
         return setError("Phone number should be digits only")
-     }
-     if (!/^0/.test(form.phone_number)) {
+    }
+    if (!/^0/.test(form.phone_number)) {
         return setError("Phone number must start with zero. e.g (070........)")
-     }
-     if (form.phone_number.length !== 11) {
+    }
+    if (form.phone_number.length !== 11) {
         return setError("Invalid phone number. Phone number expects 11 digits")
-     }
-     builder.phone_number = form.phone_number
+    }
+    builder.phone_number = form.phone_number
 
     // check if home address
     if (form.home_address) {
@@ -66,31 +66,31 @@ formValidation.validatCustomerForm = (form, builder, setError) => {
         builder.home_area = form.home_area
     }
 
-     //check the password
-     if (!form.password) {
+    //check the password
+    if (!form.password) {
         return setError("password is required")
-     }
-     //check if its above minimum number
-     if (form.password.length < 6) {
+    }
+    //check if its above minimum number
+    if (form.password.length < 6) {
         return setError("Password must be 6 characters or more")
-     }
-     //check if its above minimum number
-     if (form.password.length > 15) {
+    }
+    //check if its above minimum number
+    if (form.password.length > 15) {
         return setError("Password must be less than 15 characters")
-     }
-     //check if there's capital letter
-     if (!/[A-Z]/.test(form.password)) {
+    }
+    //check if there's capital letter
+    if (!/[A-Z]/.test(form.password)) {
         return setError("Password must have atleast one capital letter, one small letter and one number")
-     }
-      //check if there's small letter
-     if (!/[a-z]/.test(form.password)) {
+    }
+    //check if there's small letter
+    if (!/[a-z]/.test(form.password)) {
         return setError("Password must have atleast one capital letter, one small letter and one number")
-     }
-      //check if there's number
-     if (!/[0-9]/.test(form.password)) {
+    }
+    //check if there's number
+    if (!/[0-9]/.test(form.password)) {
         return setError("Password must have atleast one capital letter, one small letter and one number")
-     }
-     builder.password = form.password
+    }
+    builder.password = form.password
 
     // set user type
     builder.user_type = "dispatcher"
@@ -143,6 +143,20 @@ formValidation.validatCustomerEditForm = (values, data, builder, setError) => {
         }
         builder.email = values.email
     }
+    // if dob
+    if (values.dob !== data.dob) {
+        if (!values.dob) {
+            return setError("DOB name is unset")
+        }
+        builder.dob = values.dob
+    }
+    // check if Gender
+    if (values.gender !== data.gender) {
+        if (!values.gender) {
+            return setError("Gender is unset")
+        }
+        builder.gender = values.gender
+    }
     // check home address
     if (values.home_address !== data.home_address) {
         if (values.home_address) {
@@ -152,16 +166,6 @@ formValidation.validatCustomerEditForm = (values, data, builder, setError) => {
             builder.home_address = values.home_address
         }
     }
-    // check home area
-    if (values.home_area !== data.home_area) {
-        if (values.home_address) {
-            if (!/^[\w\s\-',]+$/i.test(values.home_area)) {
-                return setError("No special character allowed for home area")
-            }
-            builder.home_area = values.home_area
-        }
-    }
-
     if (Object.keys(builder).length === 0) {
         return setError("No changes to update")
     }

@@ -101,7 +101,6 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             setCount(reqDataCount.data[0].total);
         }
 
-        console.log(reqDataCount);
         setLoader(false)
         setActiveIndex(id)
     }

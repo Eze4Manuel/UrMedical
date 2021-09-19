@@ -22,7 +22,6 @@ const CustomerData = ({ data, show, onHide, onDeleted}) => {
 
     useEffect(() => {
         setValues(data);
-        console.log(data);
         setDelWarning(false)
     }, [data])
 
