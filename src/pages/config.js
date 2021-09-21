@@ -25,5 +25,4 @@ export const routes = [
     {link: pages.transactions, Component: Transaction, access: 2, NavigationBar: Navbar},
     {link: pages.trips, Component: Trip, access: 2, NavigationBar: Navbar},
     {link: pages.settings, Component: Setting, access: 2, NavigationBar: Navbar},
-    {link: pages.messages, Component: Message, access: 2, NavigationBar: Navbar},
 ]

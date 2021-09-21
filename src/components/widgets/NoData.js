@@ -24,5 +24,4 @@ const NoData = (props) => {
         </div>
     )
 }
-
 export default NoData;

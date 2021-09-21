@@ -139,15 +139,15 @@ const Dashboard = (props) => {
             // let today = new Date(Date.now())
             // let start_date = formatDate(today, 'yy-mm-dd');
 
-            let reqData = await lib.getOrderSummary(user?.token, 'month' )
+            let reqData = await lib.getOrderSummary(user?.token, 'month')
             if (reqData.status === 'ok') {
                 setOrderMonth(reqData.data)
             }
             setLoader(false)
-            
+
         })()
     }, [user?.token, page, set])
-    
+
 
     const months = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
@@ -173,7 +173,7 @@ const Dashboard = (props) => {
             yy: date.getFullYear().toString().slice(-2),
             yyyy: date.getFullYear()
         }
-    
+
         return format.replace(/mm|dd|yy|yyy/gi, matched => map[matched])
     }
 
@@ -199,9 +199,6 @@ const Dashboard = (props) => {
         [
             { areas: 'life camp', total: 0, sn: '1', },
         ]
-
-
-
 
 
     return (
@@ -233,7 +230,7 @@ const Dashboard = (props) => {
                             <DashboardCard color='black' col="3" header="Pharmacists" value={userTypes[4]?.total ? userTypes[4]?.total : 0} desc="Listed pharmacists" />
                         </div>
                         <div className="row">
-                            <DashboardBar iconDesc="Total order in the last 6 months" desc="Order by Area" header="Orders" icon="las la-users" Bar={ProgressBar} data={userData2} dataKey="total" />
+                            <DashboardBar iconDesc="Total order in the last 6 months" desc="Orders" header="Orders" icon="las la-users" Bar={ProgressBar} data={userData2} dataKey="total" />
                             <DashbaordTable data={userData} dataRow={['sn', 'areas', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'No of Orders']} />
                         </div>
                         <div className="row mb-5 pb-5">
