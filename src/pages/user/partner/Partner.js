@@ -53,6 +53,7 @@ const Partner = (props) => {
                 setData(fQeury(reqData.data))
             }
             setLoader(false);
+            console.log(reqData);
 
         })();
     }, [user?.token, page, set])

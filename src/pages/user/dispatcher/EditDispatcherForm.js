@@ -214,7 +214,6 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
 
     useEffect(() => {
         setValues(data);
-        console.log(data);
     }, [data])
 
     const onSubmit = async () => {
@@ -228,7 +227,6 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
         setLoading(true)
         let reqData = await lib.update(data?._id, builder, user?.token)
         setLoading(false);
-        console.log(reqData);
         // error
         if (reqData.status === 'error') {
             helpers.sessionHasExpired(set, reqData?.msg, setError)

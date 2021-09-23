@@ -43,6 +43,7 @@ const Customer = (props) => {
                 setData(reqData.data)
             }
             setLoader(false);
+            console.log(reqData.data);
         })()
     }, [user?.token, page, set])
 

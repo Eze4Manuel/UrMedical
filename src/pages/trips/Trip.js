@@ -56,7 +56,6 @@ const Trip = (props) => {
     useEffect(() => {
         (async () => {
             // Handling firebase Dispatch
-            
             const messaging = getMessaging();
             getToken(messaging, { vapidKey: process.env.REACT_APP_VAPID_KEY }).then(async (currentToken) => {
                 if (currentToken) {
@@ -92,6 +91,7 @@ const Trip = (props) => {
                 setProcessedData(fQeury(reqData.data));
             }
 
+            console.log(reqData.data);
             setLoader(false);
         })()
 

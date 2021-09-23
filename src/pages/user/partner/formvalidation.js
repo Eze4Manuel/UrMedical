@@ -127,7 +127,6 @@ formValidator.validatePharmacyUpdate = (form, values, builder, data, setError) =
         }
         builder.address = form.address
     }
-    console.log(Object.keys(builder).length);
     if (Object.keys(builder).length === 0) {
         return setError("No changes to update") 
     }

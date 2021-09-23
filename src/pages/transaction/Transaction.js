@@ -11,6 +11,9 @@ import transactionData from '../../assets/data/transaction';
 import { useAuth } from '../../core/hooks/useAuth';
 import helpers from '../../core/func/Helpers';
 
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+
 const noDataTitle = "No transaction have have been made yet.";
 const noDataParagraph = "You will see all transactions on this page.";
 
@@ -37,7 +40,13 @@ const Transaction = (props) => {
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
     const [notFound, setNotFound] = useState(false);
+    const [editable, setEditable] = useState(true);
+    const [dispatchFee, setDispatchFee] = useState('');
 
+  
+    const updateFee = () => {   
+
+    } 
     // data 
     useEffect(() => {
         (async () => {
@@ -48,11 +57,12 @@ const Transaction = (props) => {
             }
             if (reqData.status === 'ok') {
                 setData(fQeury(reqData.data))
+                setDispatchFee(reqData.data?.dispatch_fee);
             }
             setLoader(false);
         })()
     }, [])
-
+  
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data.length, perPage);
@@ -60,7 +70,9 @@ const Transaction = (props) => {
     const stop = start + perPage;
     const viewData = data.slice(start, stop);
 
-    const onSearch = async() => {
+    
+
+    const onSearch = async () => {
         setLoader(true)
         let reqData = await lib.get(1, searchInput, user?.token)
         setLoader(false)
@@ -72,7 +84,7 @@ const Transaction = (props) => {
                 setNotFound(false)
             }, 3000)
         }
-     }
+    }
 
     const onCreate = (values, setLoading, setError, setValues) => {
         lib.create()
@@ -101,7 +113,17 @@ const Transaction = (props) => {
         let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
-
+    const updateDispatchFee = (
+        <div className="p-grid p-fluid">
+            <div className="p-col-12">
+                <div className="p-inputgroup">
+                    <InputText placeholder={dispatchFee} id='dispatchFee' onChange={(e) => setDispatchFee(e.target.value)} value={dispatchFee} disabled={editable} />
+                    <Button icon="pi pi-pencil" onClick={() => setEditable(!editable)} className="p-button-primary p-button-edit" />
+                    <Button icon="pi pi-check" onClick={() => updateFee()} disabled={editable} className="p-button-success p-button-update" />
+                </div>
+            </div>
+        </div>
+    );
     return (
         <div className='main-content'>
             <NavigationBar {...props} />
@@ -128,7 +150,7 @@ const Transaction = (props) => {
                 {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                     <>
                         <TransactionDetail onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
-                        <div className="transaction-table__container">
+                        <div className="transaction-table__container">  
                             <Table
                                 onSelectData={onSelected}
                                 prev={() => fetchMore(page, 'prev', setPage)}
@@ -138,6 +160,8 @@ const Transaction = (props) => {
                                 pages={paginate}
                                 data={viewData}
                                 perPage={perPage}
+                                rightSide = {updateDispatchFee}
+                                sideTitle = 'Update Dispatch Fee'
                                 route="" // {config.pages.user}
                                 tableTitle="Transactions"
                                 tableHeader={['#', 'ID', 'Name', 'Email', 'Payment Method', 'Amount']}
@@ -145,7 +169,6 @@ const Transaction = (props) => {
                             />
                         </div>
                     </>
-
                 }
             </main>
         </div>

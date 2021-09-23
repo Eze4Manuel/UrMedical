@@ -1,11 +1,8 @@
 import React, { Fragment, useState } from 'react';
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
 import { toNumber } from '../../core/func/format';
 import './TransactionDetailSummary.css';
 import DashbaordTable from '../../components/dashboardhelps/DashbaordTable';
-import { useEffect } from 'react/cjs/react.development';
+
 import { set } from 'react-hook-form';
 
 const Detail = ({ name, value }) => value ? (<p className="transaction-info__detail"><span>{name}</span> <span>{value}</span> </p>) : null
@@ -25,15 +22,7 @@ export const Customer = ({ data }) => {
 }
 
 export const Dispatcher = ({ data }) => {
-    const [editable, setEditable] = useState(true);
-    const [dispatchFee, setDispatchFee] = useState('');
-
-    useEffect(()=>{
-        // setDispatchFee(data?.dispatch_fee)
-    })
-    const updateFee = () => {   
-        console.log(dispatchFee);
-    }   
+      
     return (
         <Fragment>
             <div className="mb-3">
@@ -43,15 +32,7 @@ export const Dispatcher = ({ data }) => {
                 <Detail name="Phone" value={data?.order.dispatcher?.phone_number} />
                 <Detail name="License ID" value={data?.order.dispatcher?.license_id} />
                 <Detail name="Dispatch Fee" value={data?.dispatch_fee} />
-                <div className="p-grid p-fluid">
-                    <div className="p-col-12">
-                        <div className="p-inputgroup">
-                            <InputText placeholder={data?.dispatch_fee} id='dispatchFee' onChange = {(e) => setDispatchFee(e.target.value)} value = {dispatchFee} disabled = {editable}/>
-                            <Button icon="pi pi-pencil"  onClick = {() => setEditable(!editable)} className="p-button-primary p-button-edit" />
-                            <Button icon="pi pi-check" onClick = {() => updateFee()}  disabled = {editable} className="p-button-success p-button-update" />
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </Fragment>
     )

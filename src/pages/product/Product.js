@@ -157,18 +157,30 @@ const Product = (props) => {
         setLoader(false)
         setActiveIndex(id)
     }
+    {console.log(user?.user_type)}
 
     const changeTab = (val) => {
-        switch (val) {
-            case 'Pharmacy':
-                updateIndex(0)
-                setOrder(val);
-                break;
-            case 'Analytics':
-                updateIndex(1)
-                setOrder(val)
-                break;
+        if(user?.user_type == 'superadmin'){
+            switch (val) {
+                case 'Pharmacy':
+                    updateIndex(0)
+                    setOrder(val);
+                    break;
+                case 'Analytics':
+                    updateIndex(1)
+                    setOrder(val)
+                    break;
+            }
         }
+        else {
+            switch (val) {
+                case 'Pharmacy':
+                    updateIndex(0)
+                    setOrder(val);
+                    break;
+            }
+        }
+        
     }
     
     return (
@@ -198,14 +210,13 @@ const Product = (props) => {
                     <ProductSummary onDeleted={(id) => onDeleted(id)} data={pharmData} show={openData} onHide={() => setOpenData(false)} />
                     : null
                 }
-
                 {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                     <div className="user-table__container">
 
                         <div className="conatainer overflow-hidden">
                             <div className="product-table__container">
-                                <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["Pharmacy", "Analytics"]} />
-                                {activeIndex == 0 ?
+                                <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs = { ( user?.user_type == 'superadmin' ) ? ["Pharmacy", "Analytics"] : ["Pharmacy"] } />
+                                { activeIndex == 0 ?
                                     <>
                                         {(data?.length === 0) ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                                             <>
@@ -336,7 +347,6 @@ const Product = (props) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        
                                     </div>
                                 }
                             </div>

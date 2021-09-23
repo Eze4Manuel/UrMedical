@@ -6,3 +6,8 @@
 .table-effect:hover {
     cursor: pointer !important;
 }
+
+.table-header-container {
+    display: flex;
+    justify-content: space-between;
+}
