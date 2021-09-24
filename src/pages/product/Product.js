@@ -7,13 +7,12 @@ import lib from './lib';
 import Table from '../../components/table';
 import { useNotifications } from '@mantine/notifications';
 import { getPageCount, getPages, goTo, onSetPage } from '../../core/func/utility';
-import ProgressBar from '../../components/progressbar/ProgressBar';
+import Tabs from "../../components/tabs/Tabs";
 import helpers from '../../core/func/Helpers';
 import { ContainerLoader } from '../../components/loading/Loading';
 import ProductSummary from './ProductSummary'
-import Alert from '../../components/flash/Alert';
-import { TabView, TabPanel } from 'primereact/tabview';
-import { Button } from 'primereact/button';
+import Alert from '../../components/flash/Alert'; 
+import ProgressBar from '../../components/progressbar/ProgressBar';
 
 const noDataTitle = "No pharmacy have added to their product yet.";
 const noDataParagraph = "You can create a product yourself by clicking on the add product button.";
@@ -24,7 +23,7 @@ const salesData = [
     { month: 'MAY', amount: 20000 },
     { month: 'JUN', amount: 34950 },
     { month: 'JUL', amount: 18000 },
-    { month: 'AUG', amount: 10000 },
+    { month: 'AUG', amount: 10000 }
 ]
 
 const Product = (props) => {
@@ -46,6 +45,7 @@ const Product = (props) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [category, setCategories] = useState(0);
     const [count, setCount] = useState(0);
+    const [order, setOrder] = useState("Pharmacy");
 
     const fQeury = (data) => {
         return data.map(d => {
@@ -76,7 +76,6 @@ const Product = (props) => {
     useEffect(() => {
         (async () => {
             setLoader(true)
-            console.log(user);
             let reqData = await lib.getRevenue(user?.px_id, user?.token, 'summary');
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
@@ -85,7 +84,6 @@ const Product = (props) => {
                 setRevenue(fQeury(reqData.data))
             }
             setLoader(false);
-            console.log(revenue);
         })()
     }, [])
 
@@ -97,7 +95,7 @@ const Product = (props) => {
     const viewData = data.slice(start, stop);
 
 
-    const onSearch = async () => { 
+    const onSearch = async () => {
         setLoader(true)
         let reqData = await lib.get(1, searchInput, user?.token)
         setLoader(false)
@@ -141,31 +139,55 @@ const Product = (props) => {
     }
     const updateIndex = async (id) => {
         setLoader(true)
-        let reqDataCategory = await lib.getCategory(page, null, user?.token, 'category');
-        if (reqDataCategory.status === "error" ) {
+        let reqDataCategory = await lib.getCategory(user?.token, 'category');
+        if (reqDataCategory.status === "error") {
             helpers.sessionHasExpired(set, reqDataCategory.msg)
         }
-        if ( (reqDataCategory.status === 'ok' && reqDataCategory?.data)  ) {
+        if ((reqDataCategory.status === 'ok' && reqDataCategory?.data)) {
             setCategories(reqDataCategory.data.length);
         }
 
-        let reqDataCount = await lib.getCount(page, null, user?.token, 'count');
+        let reqDataCount = await lib.getCount( user?.token, 'count');
         if (reqDataCount.status === "error") {
             helpers.sessionHasExpired(set, reqDataCount.msg)
         }
-        if ( (reqDataCount.status === 'ok' && reqDataCount?.data)  ) {
+        if ((reqDataCount.status === 'ok' && reqDataCount?.data)) {
             setCount(reqDataCount.data[0].total);
         }
         setLoader(false)
         setActiveIndex(id)
     }
+    {console.log(user?.user_type)}
+
+    const changeTab = (val) => {
+        if(user?.user_type == 'superadmin'){
+            switch (val) {
+                case 'Pharmacy':
+                    updateIndex(0)
+                    setOrder(val);
+                    break;
+                case 'Analytics':
+                    updateIndex(1)
+                    setOrder(val)
+                    break;
+            }
+        }
+        else {
+            switch (val) {
+                case 'Pharmacy':
+                    updateIndex(0)
+                    setOrder(val);
+                    break;
+            }
+        }
+        
+    }
+    
     return (
         <div className='main-content'>
-            <NavigationBar {...props} />
             <main>
                 {loader ? <ContainerLoader /> : null}
                 <Alert onCancel={() => setNotFound(false)} show={notFound} title="Notification" message="No match found" />
-                {/* <NewProductForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} /> */}
                 <SubNavbar
                     showFilter
                     showSearch
@@ -188,19 +210,14 @@ const Product = (props) => {
                     <ProductSummary onDeleted={(id) => onDeleted(id)} data={pharmData} show={openData} onHide={() => setOpenData(false)} />
                     : null
                 }
-
                 {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                     <div className="user-table__container">
+
                         <div className="conatainer overflow-hidden">
                             <div className="product-table__container">
-                                <div className="p-pt-2 p-pb-4">
-                                    <Button onClick={() => updateIndex(0)} className="p-button-text" label="Pharmacy" />
-                                    <Button onClick={() => updateIndex(1)} className="p-button-text" label="Analytics" />
-                                </div>
-
-
-                                <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
-                                    <TabPanel disabled header="List of pharmacies">
+                                <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs = { ( user?.user_type == 'superadmin' ) ? ["Pharmacy", "Analytics"] : ["Pharmacy"] } />
+                                { activeIndex == 0 ?
+                                    <>
                                         {(data?.length === 0) ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                                             <>
                                                 <Table
@@ -219,15 +236,14 @@ const Product = (props) => {
                                                 />
                                             </>
                                         }
-
-                                    </TabPanel>
-                                    <TabPanel disabled header="Total Analytics">
-                                        <div className="product-summary__ctn mt-5">
-                                            <div className="row">
-                                                {/* <div className="col-3">
+                                    </>
+                                    :
+                                    <div className="product-summary__ctn mt-5">
+                                        <div className="row">
+                                            <div className="col-3">
                                                     <div className="card p-2 pl-3">
                                                         <h5><span>Pharmacy Revenue</span></h5>
-                                                        <h2><span>{revenue[0].pharmacy_revenue}</span></h2>
+                                                        <h2><span>230K</span></h2>
                                                         <p className="small"><span>July 12, 2021 - </span></p>
                                                     </div>
                                                 </div>
@@ -237,23 +253,23 @@ const Product = (props) => {
                                                         <h2 className="text-success"><span>285.6K</span></h2>
                                                         <p className="small"><span>August 12, 2021</span></p>
                                                     </div>
-                                                </div> */}
-                                                <div className="col-3">
-                                                    <div className="card p-2 pl-3">
-                                                        <h5><span>All Products</span></h5>
-                                                        <h2 className="text-primary"><span>{count}</span></h2>
-                                                        <p className="small"><span>Listed products</span></p>
-                                                    </div>
                                                 </div>
-                                                <div className="col-3">
-                                                    <div className="card p-2 pl-3">
-                                                        <h5><span>All Categories</span></h5>
-                                                        <h2 className="text-warning"><span>{category}</span></h2>
-                                                        <p className="small"><span>Products categories</span></p>
-                                                    </div>
+                                            <div className="col-3">
+                                                <div className="card p-2 pl-3">
+                                                    <h5><span>All Products</span></h5>
+                                                    <h2 className="text-primary"><span>{count}</span></h2>
+                                                    <p className="small"><span>Listed products</span></p>
                                                 </div>
                                             </div>
-                                            {/* <div className="row">
+                                            <div className="col-3">
+                                                <div className="card p-2 pl-3">
+                                                    <h5><span>All Categories</span></h5>
+                                                    <h2 className="text-warning"><span>{category}</span></h2>
+                                                    <p className="small"><span>Products categories</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row">
                                                 <div className="col-6 mt-4">
                                                     <div className="shadow-sm card border-light">
                                                         <div className="d-flex flex-row align-items-center flex-0 border-bottom card-body">
@@ -331,20 +347,13 @@ const Product = (props) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                         */}
-                                        </div>
-                                    </TabPanel>
-                                </TabView>
-
+                                    </div>
+                                }
                             </div>
                         </div>
-
                     </div>
-
                 }
-
             </main>
-
         </div>
     );
 }

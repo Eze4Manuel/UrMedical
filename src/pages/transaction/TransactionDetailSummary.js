@@ -1,12 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { toNumber } from '../../core/func/format';
 import './TransactionDetailSummary.css';
 import DashbaordTable from '../../components/dashboardhelps/DashbaordTable';
 
-const Detail = ({ name, value }) => value ? (<p className="transaction-info__detail"><span>{name}</span> <span>{value}</span></p>) : null
+import { set } from 'react-hook-form';
+
+const Detail = ({ name, value }) => value ? (<p className="transaction-info__detail"><span>{name}</span> <span>{value}</span> </p>) : null
 
 export const Customer = ({ data }) => {
-    console.log(data);
 
     return (
         <Fragment>
@@ -21,6 +22,7 @@ export const Customer = ({ data }) => {
 }
 
 export const Dispatcher = ({ data }) => {
+      
     return (
         <Fragment>
             <div className="mb-3">
@@ -29,6 +31,8 @@ export const Dispatcher = ({ data }) => {
                 <Detail name="Email" value={data?.order.dispatcher?.email} />
                 <Detail name="Phone" value={data?.order.dispatcher?.phone_number} />
                 <Detail name="License ID" value={data?.order.dispatcher?.license_id} />
+                <Detail name="Dispatch Fee" value={data?.dispatch_fee} />
+                
             </div>
         </Fragment>
     )
@@ -56,7 +60,7 @@ const ProductDetailSummary = ({ data }) => {
                     <span className="mb-3 ml-3">#Transaction</span>
                     <span>
                         <div className="mb-3 ml-3">{data?.order.order_date}</div>
-                        <div className="mb-3 ml-3" style={{"float": "right"}}>{data?.order.order_time}</div>
+                        <div className="mb-3 ml-3" style={{ "float": "right" }}>{data?.order.order_time}</div>
                     </span>
                 </h6>
                 <DashbaordTable col={12} dataRow={['name', 'quantity', 'amount']} data={data?.order.products || []} header={'Products purchased'} headerRow={['Item', 'Quanity', 'Amount']} />
@@ -75,6 +79,15 @@ const ProductDetailSummary = ({ data }) => {
                     </div>
                 </div>
             </div>
+
+            <div className="mb-3">
+                <h6 className="mb-3">Order Detail</h6>
+                <Detail name="Order Status" value={data?.order.order_status} />
+                <Detail name="Order quantity" value={data?.order.order_quantity} />
+                <Detail name="Order Amount" value={data?.order.order_amount} />
+                <Detail name="Pharmacy Area" value={data?.order.pharmacy_area} />
+                <Detail name="Pharmacy Address" value={data?.order.pharmacy_address} />
+            </div>
             <div className="mb-3">
                 <h6 className="mb-3">Transaction Detail</h6>
                 <Detail name="Name" value={data?.name} />
@@ -86,17 +99,8 @@ const ProductDetailSummary = ({ data }) => {
                     <span className="mb-3">#Total</span>
                     <span>
                         <span className="mb-3 ml-3">N{data?.total}</span>
-                     </span>
+                    </span>
                 </h6>
-            </div>
-            <div className="mb-3">
-                <h6 className="mb-3">Order Detail</h6>                
-                <Detail name="Order Status" value={data?.order.order_status} />
-                <Detail name="Order quantity" value={data?.order.order_quantity} />
-                <Detail name="Order Amount" value={data?.order.order_amount} />
-                <Detail name="Pharmacy Area" value={data?.order.pharmacy_area} />
-                <Detail name="Pharmacy Address" value={data?.order.pharmacy_address} />
-                <Detail name="Dispatch Fee" value={data?.dispatch_fee} />
             </div>
         </Fragment>
     )

@@ -17,7 +17,6 @@ const CustomerUserDetail = ({ data }) => {
                 <p className="user-info__detail"><span>Email</span> <span>{data?.email}</span></p>
                 <p className="user-info__detail"><span>Phone</span> <span>{data?.phone_number}</span></p>
                 <p className="user-info__detail"><span>Address</span> <span>{data?.home_address}</span></p>
-                <p className="user-info__detail"><span>Area</span> <span>{data?.home_area}</span></p>
             </div>
             <div className="my-3">
                 <h6 className="mb-3">Account Information</h6>

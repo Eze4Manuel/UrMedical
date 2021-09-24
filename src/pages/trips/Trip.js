@@ -9,7 +9,12 @@ import { getPageCount, getPages, goTo, onSetPage } from '../../core/func/utility
 import { ContainerLoader } from '../../components/loading/Loading';
 import Tabs from "../../components/tabs/Tabs";
 import helpers from '../../core/func/Helpers';
-import TripDetail from './TripDetail'
+import TripDetail from './TripDetail';
+
+
+import firebase from '../../firebase';
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+require('dotenv').config();
 
 const noDataTitle = "No Order yet.";
 const noDataParagraph = "All Orders made will appear here.";
@@ -47,11 +52,36 @@ const Trip = (props) => {
             }
         })
     }
-    // data 
+
+    useEffect(() => {
+        (async () => {
+            // Handling firebase Dispatch
+            const messaging = getMessaging();
+            getToken(messaging, { vapidKey: process.env.REACT_APP_VAPID_KEY }).then(async (currentToken) => {
+                if (currentToken) {
+                    // Send the token to your server and update the UI if necessary
+                    let reqData = await lib.registerApp(currentToken, user?.phone_number);
+                   
+
+                    if (reqData.status === "error") {
+                        console.log('error registering token');
+                    }
+                    if (reqData.status === 'ok') {
+                        console.log('success');
+                    }
+                } else {
+                    // Show permission request UI
+                    console.log('No registration token available. Request permission to generate one.');
+                }
+            }).catch((err) => {
+                console.log('An error occurred while retrieving token. ', err);
+            });
+        })()
+    }, [])
+
     useEffect(() => {
         (async () => {
             setLoader(true)
-            // let reqData = await lib.get(page, null, user?.token, user?.auth_id, user?.user_type);
             let reqData = await lib.get(page, null, user?.token);
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
@@ -60,8 +90,11 @@ const Trip = (props) => {
                 setData(fQeury(reqData.data));
                 setProcessedData(fQeury(reqData.data));
             }
+
+            console.log(reqData.data);
             setLoader(false);
         })()
+
     }, [])
 
 
@@ -170,7 +203,7 @@ const Trip = (props) => {
                 <div className="trip-table__container">
                     <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["All", "pending", "active", "cancelled", "fulfilled"]} />
                     {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
-                        <>  
+                        <>
                             <TripDetail onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                             <Table
                                 onSelectData={onSelected}
