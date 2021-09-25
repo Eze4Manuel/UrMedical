@@ -16,7 +16,6 @@ const CustomerData = ({ data, show, onHide, onDeleted}) => {
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [, setLoading] = React.useState(false);
-    const [showProduct, ] = React.useState(true);
     const [delWarning, setDelWarning] = React.useState(false);
     const [, setError] = React.useState(false);
 

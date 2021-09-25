@@ -1,5 +1,4 @@
 import request from '../../assets/utils/http-request';
-import conf from '../../assets/utils/config';
 import helpers from '../../core/func/Helpers';
 
 const lib = {}

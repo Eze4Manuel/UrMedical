@@ -17,15 +17,14 @@ const Dashboard = (props) => {
 
     const { set, user } = useAuth();
     const [loader, setLoader] = useState(false);
-    const [data, setData] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page,] = useState(1);
     const [totalUsers, setTotalUsers] = useState(1);
     const [userTypes, setUserTypes] = useState([]);
     const [totalTransactions, setTotalTransaction] = useState([]);
     const [revenueFor6Months, setRevenueFor6Months] = useState([]);
     const [revenueByArea, setRevenueByArea] = useState([]);
     const [revenueByMonth, setRevenueByMonth] = useState({});
-    const [totalCustomerRevenue, setTotalCustomerRevenue] = useState([]);
+    const [, setTotalCustomerRevenue] = useState([]);
     const [totalPharmacyRevenue, setTotalPharmacyRevenue] = useState({});
     const [orderCount, setOrderCount] = useState([]);
     const [orderStatus, setOrderStatus] = useState({});
@@ -49,7 +48,6 @@ const Dashboard = (props) => {
             }
             if (reqData.status === 'ok') {
                 setUserTypes(reqData.data);
-                console.log(user);
             }
             setLoader(false)
         })()
@@ -79,7 +77,7 @@ const Dashboard = (props) => {
             }
             setLoader(false)
         })()
-    }, [user?.token, page, set])
+    }, [user?.token, page, set, currentYear])
 
     // Getting Transaction summary by customer
     useEffect(() => {
@@ -89,7 +87,7 @@ const Dashboard = (props) => {
                 setTotalCustomerRevenue(reqData.data[0])
             }
         })()
-    }, [user?.token, page, set])
+    }, [user?.token, page, set, currentYear])
 
     // Getting Transaction summary by pharmacy
     useEffect(() => {
@@ -100,7 +98,7 @@ const Dashboard = (props) => {
             }
 
         })()
-    }, [user?.token, page, set])
+    }, [user?.token, page, set, currentYear])
 
     // Getting Transaction summary by Area
     useEffect(() => {
@@ -110,7 +108,7 @@ const Dashboard = (props) => {
                 setRevenueByArea(reqData.data)
             }
         })()
-    }, [user?.token, page, set])
+    }, [user?.token, page, set, currentYear])
 
     // Getting Transaction summary by Month
     useEffect(() => {
@@ -118,13 +116,13 @@ const Dashboard = (props) => {
             let reqData = await lib.getTransactionsSummary(user?.token, 'month', currentYear)
             if (reqData.status === 'ok') {
                 setRevenueByMonth(reqData.data.find(e => {
-                    return e._id == currentMonth
+                    return e._id === currentMonth
                 }));
                 console.log(reqData.data);
                 setRevenueFor6Months(reqData.data)
             }
         })()
-    }, [user?.token, page, set])
+    }, [user?.token, page, set, currentMonth, currentYear])
 
 
 
@@ -192,7 +190,7 @@ const Dashboard = (props) => {
             fulfilled: 0,
             pending: 0
         }
-        res.map(e => {
+        res.forEach(e => {
             obj[`${e._id}`] = e.total
         })
         setOrderStatus(obj);
@@ -256,7 +254,7 @@ const Dashboard = (props) => {
                             <DashboardBar iconDesc="Total order in the last 6 months" desc="Orders" header="Orders" icon="las la-users" Bar={ProgressBar} data={userData2} dataKey="total" />
                         </div>
                         <div className="row mb-5 pb-5">
-                            <DashbaordTable data={userData} col = "6" dataRow={['sn', 'areas', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'No of Orders']} />
+                            <DashbaordTable data={userData} col="6" dataRow={['sn', 'areas', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'No of Orders']} />
                             <DashbaordTable order={true} col="6" data={deliveryData} dataRow={['status', 'total']} header="Current deliveries" headerRow={['Status', 'Quantity']} />
                         </div>
                     </div>

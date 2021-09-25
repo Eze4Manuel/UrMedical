@@ -1,9 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { toNumber } from '../../core/func/format';
 import './TransactionDetailSummary.css';
 import DashbaordTable from '../../components/dashboardhelps/DashbaordTable';
 
-import { set } from 'react-hook-form';
 
 const Detail = ({ name, value }) => value ? (<p className="transaction-info__detail"><span>{name}</span> <span>{value}</span> </p>) : null
 

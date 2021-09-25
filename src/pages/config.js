@@ -7,7 +7,6 @@ import config from '../assets/utils/config';
 import Navbar from "../components/navigation/Navbar";
 import Setting from "../pages/settings/Setting";
 import Transaction from "../pages/transaction/Transaction";
-import Message from "../pages/message/Message";
 import Partner from "../pages/user/partner/Partner";
 import Product from "./product/Product";
 import Trip from "./trips/Trip";
