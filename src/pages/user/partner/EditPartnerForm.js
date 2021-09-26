@@ -195,8 +195,8 @@ export const EditContactPersonForm = ({ data, show, onHide, onUpdated }) => {
 
 const EditPharmacyForm = ({ data, show, onHide }) => {
     const [values, setValues] = React.useState(config.userData);
-    const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState(false);
+    const [loading, ] = React.useState(false);
+    const [error, ] = React.useState(false);
 
     useEffect(() => {
         setValues(data);

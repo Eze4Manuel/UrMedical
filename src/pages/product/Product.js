@@ -5,7 +5,6 @@ import NoData from '../../components/widgets/NoData';
 import SubNavbar from '../../components/subnavbar/index';
 import lib from './lib';
 import Table from '../../components/table';
-import { useNotifications } from '@mantine/notifications';
 import { getPageCount, getPages, goTo, onSetPage } from '../../core/func/utility';
 import Tabs from "../../components/tabs/Tabs";
 import helpers from '../../core/func/Helpers';
@@ -28,16 +27,14 @@ const salesData = [
 
 const Product = (props) => {
     const { set, user } = useAuth();
-    const notify = useNotifications();
     const [searchInput, setSearchInput] = useState('');
-    const NavigationBar = props.NavigationBar;
-    const [openForm, setOpenForm] = useState(false);
+    const [, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
     const [data, setData] = useState([]);
-    const [revenue, setRevenue] = useState([]);
+    const [, setRevenue] = useState([]);
     const [pharmData, setPharmData] = useState([]);
     const [notFound, setNotFound] = useState(false);
-    const [selected, setSelected] = useState(null);
+    const [, setSelected] = useState(null);
     const [option, setOption] = useState('name');
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
@@ -71,7 +68,7 @@ const Product = (props) => {
             }
             setLoader(false)
         })()
-    }, [])
+    }, [page, set, user?.token])
 
     useEffect(() => {
         (async () => {
@@ -85,14 +82,14 @@ const Product = (props) => {
             }
             setLoader(false);
         })()
-    }, [])
+    }, [page, set, user?.px_id, user?.token])
 
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data.length, perPage);
-    const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
-    const stop = start + perPage;
-    const viewData = data.slice(start, stop);
+    // const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
+    // const stop = start + perPage;
+    // const viewData = data.slice(start, stop);
 
 
     const onSearch = async () => {
@@ -157,10 +154,9 @@ const Product = (props) => {
         setLoader(false)
         setActiveIndex(id)
     }
-    {console.log(user?.user_type)}
 
     const changeTab = (val) => {
-        if(user?.user_type == 'superadmin'){
+        if(user?.user_type === 'superadmin'){
             switch (val) {
                 case 'Pharmacy':
                     updateIndex(0)
@@ -170,6 +166,8 @@ const Product = (props) => {
                     updateIndex(1)
                     setOrder(val)
                     break;
+                default:
+                    break;
             }
         }
         else {
@@ -177,6 +175,8 @@ const Product = (props) => {
                 case 'Pharmacy':
                     updateIndex(0)
                     setOrder(val);
+                    break;
+                default:
                     break;
             }
         }
@@ -215,8 +215,8 @@ const Product = (props) => {
 
                         <div className="conatainer overflow-hidden">
                             <div className="product-table__container">
-                                <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs = { ( user?.user_type == 'superadmin' ) ? ["Pharmacy", "Analytics"] : ["Pharmacy"] } />
-                                { activeIndex == 0 ?
+                                <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs = { ( user?.user_type === 'superadmin' ) ? ["Pharmacy", "Analytics"] : ["Pharmacy"] } />
+                                { activeIndex === 0 ?
                                     <>
                                         {(data?.length === 0) ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                                             <>

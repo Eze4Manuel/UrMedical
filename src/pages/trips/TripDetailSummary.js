@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { toNumber } from '../../core/func/format';
 import './TripSummary.css';
 import DashbaordTable from '../../components/dashboardhelps/DashbaordTable';
@@ -11,12 +11,7 @@ import helpers from '../../core/func/Helpers';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { ListBox } from 'primereact/listbox';
-import { dispatcher } from '../../core/context/Store';
-
-import firebase from '../../firebase';
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
-
-
+  
 const Detail = ({ name, value }) => value ? (<p className="order-info__detail"><span>{name}</span> <span>{value}</span></p>) : null
 
 export const Details = ({ data }) => {
@@ -26,8 +21,8 @@ export const Details = ({ data }) => {
     const [loader, setLoader] = useState(false);
     const notify = useNotifications();
     const [displayPosition, setDisplayPosition] = useState(false);
-    const [position, setPosition] = useState('left');
-    const [selectedDispatch, setSelectedDispatch] = useState(null);
+    const [, setPosition] = useState('left');
+    const [selectedDispatch,] = useState(null);
     const [dispatchers, setDispatchers] = useState([]);
     const [assign, setAssigning] = useState(true);
 
@@ -140,7 +135,7 @@ export const Details = ({ data }) => {
             </Fragment>
             <Fragment>
                 <div className="mb-3">
-                    {(data?.dispatcher?.name == '') ?
+                    {(data?.dispatcher?.name === '') ?
                         <>
                             <h6 className="mb-3"> Dispatcher Detail</h6>
                             <p style={{ 'color': 'red' }}>No Dispatcher Assigned</p>
@@ -173,7 +168,7 @@ export const Details = ({ data }) => {
                         <Button style={{ 'background': '#011b33' }} onClick={() => assignDispatch()} disabled={!allow} label="Assign Dispatcher" className="p-button-sm" />
                     </span>
                     
-                    {(data?.dispatcher?.name != '') ?
+                    {(data?.dispatcher?.name !== '') ?
                         <span className='ml-2'>
                             <SplitButton style={{ "font-size": "10px", 'background': '#011b33' }} label="update status" model={items} disabled={!allow} className="p-button-sm p-mr-1"></SplitButton>
                         </span>

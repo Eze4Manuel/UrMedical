@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ProductSummary.css';
 import { Dialog } from 'primereact/dialog';
-import config from '../../assets/utils/config';
 import lib from './lib';
-import { TabView, TabPanel } from 'primereact/tabview';
 import Table from '../../components/table';
 import { useAuth } from '../../core/hooks/useAuth';
 import { getPageCount, getPages, goTo, onSetPage } from '../../core/func/utility';
@@ -27,14 +25,10 @@ const salesData = [
 
 const SupportUserData = ({ data, show, onHide, onDeleted }) => {
     const { set, user } = useAuth();
-    const [values, setValues] = React.useState(config.userData);
-    const [loading, setLoading] = React.useState(false);
-    const [showProfile, setShowProfile] = React.useState(true);
-    const [revenue, setRevenue] = useState([]);
-    const [delWarning, setDelWarning] = React.useState(false);
+    const [, setDelWarning] = React.useState(false);
     const [pharmData, setPharmData] = React.useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [loader, setLoader] = useState(false);
+    const [, setLoader] = useState(false);
     const [selected, setSelected] = useState(null);
     const [page, setPage] = useState(1);
     const [openData, setOpenData] = useState(false);
@@ -42,8 +36,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
     const [order, setOrder] = useState("Products");
     const [category, setCategories] = useState(0);
     const [count, setCount] = useState(0);
-    const [summary, setSummary] = useState(0);
-
+ 
     const fQeury = (data) => {
         return data.map(d => {
             let px = d || []
@@ -115,6 +108,8 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
                 updateIndex(1)
                 setOrder(val)
                 break;
+            default:
+                break;
         }
     }
 
@@ -122,7 +117,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
     return (
         <Dialog closeOnEscape header="Pharmacy Product Summary" visible={show} modal onHide={() => onHide()} style={{ width: "70vw" }}>
             <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["Products", "Analytics"]} />
-            {activeIndex == 0 ?
+            {activeIndex === 0 ?
                 <>
                     {(data?.length === 0) ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                         <>

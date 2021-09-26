@@ -13,7 +13,7 @@ import TripDetail from './TripDetail';
 
 
 import firebase from '../../firebase';
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken,  } from "firebase/messaging";
 require('dotenv').config();
 
 const noDataTitle = "No Order yet.";
@@ -22,11 +22,11 @@ const noDataParagraph = "All Orders made will appear here.";
 const Trip = (props) => {
     const { set, user } = useAuth();
     const [searchInput, setSearchInput] = useState('');
-    const [openForm, setOpenForm] = useState(false);
+    const [, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
     const [order, setOrder] = useState("All");
     const [data, setData] = useState([]);
-    const [notFound, setNotFound] = useState(false);
+    const [, setNotFound] = useState(false);
     const [processedData, setProcessedData] = useState([]);
     const [selected, setSelected] = useState(null);
     const [option, setOption] = useState('name');
@@ -61,7 +61,6 @@ const Trip = (props) => {
                 if (currentToken) {
                     // Send the token to your server and update the UI if necessary
                     let reqData = await lib.registerApp(currentToken, user?.phone_number);
-                   
 
                     if (reqData.status === "error") {
                         console.log('error registering token');
@@ -77,7 +76,7 @@ const Trip = (props) => {
                 console.log('An error occurred while retrieving token. ', err);
             });
         })()
-    }, [])
+    }, [user?.phone_number])
 
     useEffect(() => {
         (async () => {
@@ -95,7 +94,7 @@ const Trip = (props) => {
             setLoader(false);
         })()
 
-    }, [])
+    }, [page, set, user?.token])
 
 
 
@@ -115,9 +114,7 @@ const Trip = (props) => {
         }
     }
 
-    const onCreate = (values, setLoading, setError, setValues) => {
-        lib.create()
-    }
+    
 
     const fetchMore = (page, key, set) => {
         onSetPage(page, key, set)
@@ -142,28 +139,30 @@ const Trip = (props) => {
                 break;
             case 'pending':
                 setProcessedData(data.filter(e => {
-                    return e.order_status == val
+                    return e.order_status === val
                 }));
                 setOrder(val)
                 break;
             case 'active':
                 setProcessedData(data.filter(e => {
-                    return e.order_status == val
+                    return e.order_status === val
                 }));
                 setOrder(val)
                 break;
             case 'cancelled':
                 setProcessedData(data.filter(e => {
-                    return e.order_status == val
+                    return e.order_status === val
                 }));
                 setOrder(val)
                 break;
             case 'fulfilled':
                 setProcessedData(data.filter(e => {
-                    return e.order_status == val
+                    return e.order_status === val
                 }));
                 setOrder(val)
                 break;
+            default:
+                break
         }
 
     }
