@@ -18,12 +18,16 @@ export const EditPassword = ({ data, show, onHide }) => {
     const [values, setValues] = React.useState({new_password: '', confirm_password: ''});
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const { set, user } = useAuth();
+    const notify = useNotifications();
 
     useEffect(() => {
         setValues(data);
     }, [data])
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
+        let builder = {}
+
         // validate password
         setError('')
         //check if its above minimum number
@@ -65,7 +69,20 @@ export const EditPassword = ({ data, show, onHide }) => {
             return
         }
         // submit the password
-        setLoading(true)
+        builder.password = values.new_password;
+        builder.auth_id = data?.auth_id
+        setLoading(true);
+
+        let reqData = await lib.updatePassword(builder, user?.token)
+        // error
+        if (reqData.status === 'error') {
+            helpers.sessionHasExpired(set, reqData?.msg, setError)
+        }
+        if (reqData.status === 'ok') {
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'password updated' })
+        }
+        setLoading(false);
+
         // update
     }
 

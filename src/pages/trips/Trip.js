@@ -89,10 +89,9 @@ const Trip = (props) => {
                 setData(fQeury(reqData.data));
                 setProcessedData(fQeury(reqData.data));
             }
-
-            console.log(reqData.data);
             setLoader(false);
         })()
+
 
     }, [page, set, user?.token])
 
@@ -164,8 +163,12 @@ const Trip = (props) => {
             default:
                 break
         }
-
     }
+
+    const updateAllData = (updateData) => {
+        //update data is data returned from child prop after update
+    }
+
 
 
     const onDeleted = (id) => {
@@ -203,7 +206,7 @@ const Trip = (props) => {
                     <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["All", "pending", "active", "cancelled", "fulfilled"]} />
                     {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                         <>
-                            <TripDetail onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                            <TripDetail onDeleted={(id) => onDeleted(id)} data={selected} updateAllData={updateAllData}  show={openData} onHide={() => setOpenData(false)} />
                             <Table
                                 onSelectData={onSelected}
                                 prev={() => fetchMore(page, 'prev', setPage)}

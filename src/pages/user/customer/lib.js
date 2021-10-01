@@ -1,7 +1,7 @@
 import request from '../../../assets/utils/http-request';
 import helpers from '../../../core/func/Helpers';
 
-const lib = {}
+const lib = {} 
 
 lib.get = async (page, search, token) => {
     let uri = '';

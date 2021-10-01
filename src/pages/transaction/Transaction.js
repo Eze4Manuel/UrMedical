@@ -53,8 +53,10 @@ const Transaction = (props) => {
                 helpers.alert({notifications: notify, icon: 'error', color:'red', message: reqData.msg})
             }
             if (reqData.status === 'ok') {
+                data.forEach( e => {
+                    e.dispatch_fee = parseInt(dispatchFee);
+                });
                 helpers.alert({notifications: notify, icon: 'success', color:'green', message: "Dispatch Fee Updated"})
-
             }
             setLoader(false);
 
