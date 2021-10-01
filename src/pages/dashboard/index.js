@@ -111,7 +111,7 @@ const Dashboard = (props) => {
     }, [user?.token, page, set, currentYear])
 
     // Getting Transaction summary by Month
-    useEffect(() => {
+    useEffect(() => { 
         (async () => {
             let reqData = await lib.getTransactionsSummary(user?.token, 'month', currentYear)
             if (reqData.status === 'ok') {

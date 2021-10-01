@@ -36,7 +36,12 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
     const [order, setOrder] = useState("Products");
     const [category, setCategories] = useState(0);
     const [count, setCount] = useState(0);
- 
+    const [totalPharmacyRevenue, setTotalPharmacyRevenue] = useState({});
+
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
+
+
     const fQeury = (data) => {
         return data.map(d => {
             let px = d || []
@@ -53,6 +58,19 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
         setDelWarning(false)
     }, [data])
 
+     // Getting Transaction summary by pharmacy
+     useEffect(() => {
+        (async () => {
+            let reqData = await lib.getPharmacyTransactions(user?.auth_id, user?.token, 'pharmacy', 'pharmacy', currentYear)
+            if (reqData.status === 'ok') {
+                setTotalPharmacyRevenue(reqData.data[0]);
+            }
+            console.log(data);
+            console.log(reqData);
+
+        })()
+    }, [user?.token, page, set])
+
 
     const perPageA = getPageCount(10);
     const paginateA = getPages(pharmData?.length, perPageA);
@@ -62,7 +80,6 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
 
     const onProdSelected = async (value) => {
         setLoader(true)
-        // console.log(value);
         let reqData = await lib.getOne(value?._id, user?.token)
         if (reqData.status === 'ok' && reqData?.data) {
             setSelected(reqData.data)
@@ -101,7 +118,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
     const changeTab = (val) => {
         switch (val) {
             case 'Products':
-                updateIndex(0)
+                setActiveIndex(0)
                 setOrder(val);
                 break;
             case 'Analytics':

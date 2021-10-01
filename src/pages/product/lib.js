@@ -99,6 +99,21 @@ lib.getCount = async (token, count) => {
     } 
 }
 
+
+lib.getPharmacyTransactions = async (px_id, token, component, q_type, year) => {
+    let uri = '';
+    console.log(px_id);
+     
+
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        uri = `/transactions/?component=${component}&auth_id=${px_id}&year=${year}&q_type=${q_type}`;
+        return await (await request.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
 lib.create = async (values, setLoading, setError, setValues, valuesInitialState) => {
     // check the form data
 

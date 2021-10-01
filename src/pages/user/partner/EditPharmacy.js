@@ -42,14 +42,13 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
         if (!builder) {
             return
         }
-        
+         
         // update
         setLoading(true)
         let reqData = await lib.updatePharmacy(data?._id, builder, user?.token)
         setLoading(false)
         // error
         if (reqData.status === 'error') {
-
             helpers.sessionHasExpired(set, reqData?.msg, setError)
         }
         if (reqData.status === 'ok') {
@@ -57,7 +56,10 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
             setValues({...data, ...reqData.data})
             onUpdated({...data, ...reqData.data})
         }
+
     }
+
+
 
     return show ? (
         <div className="container px-5">

@@ -37,6 +37,8 @@ formValidator.validateContactPersonDetails = (form, values, builder, setError) =
    return builder
 }
 
+
+
 // validate pharmacy form
 formValidator.validatePharmacyUpdate = (form, values, builder, data, setError) => {
     setError("")
