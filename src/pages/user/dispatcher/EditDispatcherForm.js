@@ -145,6 +145,7 @@ export const EditPassword = ({ data, show, onHide }) => {
         }
         builder.password = values.new_password;
         builder.auth_id = data?.auth_id
+        setLoading(true);
 
         let reqData = await lib.updatePassword(builder, user?.token)
         setLoading(false)

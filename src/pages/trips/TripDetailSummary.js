@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { toNumber } from '../../core/func/format';
 import './TripSummary.css';
 import DashbaordTable from '../../components/dashboardhelps/DashbaordTable';
@@ -14,7 +14,7 @@ import { ListBox } from 'primereact/listbox';
   
 const Detail = ({ name, value }) => value ? (<p className="order-info__detail"><span>{name}</span> <span>{value}</span></p>) : null
 
-export const Details = ({ data }) => {
+export const Details = ({ data, updateAllData }) => {
     const { set, user } = useAuth();
     const [allow, setAllow] = useState(true);
     const [, setData] = useState([]);
@@ -27,8 +27,6 @@ export const Details = ({ data }) => {
     const [assign, setAssigning] = useState(true);
 
 
-   
-
 
     const updateStatus = async (val) => {
         setLoader(true);
@@ -37,6 +35,7 @@ export const Details = ({ data }) => {
         if (reqData.status === 'ok') {
             data.order_status = val;
             setData(data);
+            console.log(reqData);
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Order Updated' })
 
         } else {
@@ -46,7 +45,6 @@ export const Details = ({ data }) => {
 
     const assignDispatch = async () => {
         setLoader(true);
-
         // Fetches all available dispatchers
         let reqData = await lib.getDispatchers(user?.token, 'dispatcher');
         if (reqData.status === "error") {
@@ -86,16 +84,11 @@ export const Details = ({ data }) => {
                 updateStatus('fulfilled')
             }
         },
-
     ];
-
-
 
     const onHide = (name) => {
         setDisplayPosition(false);
-
     }
-
 
     const dispatchSelected = async (val) => {
         setLoader(true);
@@ -106,18 +99,18 @@ export const Details = ({ data }) => {
             helpers.alert({ notifications: notify, icon: 'warning', color: 'yellow', message: 'Failed to Assign Dispatcher' })
         }
         if (reqData.status === 'ok') {
-            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Dispatcher Assigned' })
             // Updating current selected data
             data.dispatcher = val;
+            data.order_status = reqData.data.order_status;
+            setData(data);
             onHide();
             setAllow(true);
+            // updateAllData(data);
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Dispatcher Assigned' })
         }
         setLoader(false);
         setAssigning(true);
-
     }
-
-
 
     return (
         <>

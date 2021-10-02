@@ -111,7 +111,7 @@ const Dashboard = (props) => {
     }, [user?.token, page, set, currentYear])
 
     // Getting Transaction summary by Month
-    useEffect(() => {
+    useEffect(() => { 
         (async () => {
             let reqData = await lib.getTransactionsSummary(user?.token, 'month', currentYear)
             if (reqData.status === 'ok') {
@@ -176,10 +176,10 @@ const Dashboard = (props) => {
 
     const months = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-    const reveneData = revenueFor6Months.length > 0 ? revenueFor6Months?.map((e, ind) => {
+    let reveneData = revenueFor6Months.length > 0 ? revenueFor6Months?.map((e, ind) => {
         return { sn: ind + 1, month: months[e._id], dispatch_fee: e.dispatch_fee, amount: e.amount, total: e.total }
     }) : [{ sn: 0, month: '', dispatch_fee: '', amount: '', total: '' }]
-
+    reveneData.splice(5);
 
 
 
@@ -210,7 +210,7 @@ const Dashboard = (props) => {
         { areas: e._id, total: e.total, sn: ind + 1, }
     )) :
         [
-            { areas: 'life camp', total: 0, sn: '1', },
+            { areas: '', total: 0, sn: '', },
         ]
 
 
@@ -218,7 +218,7 @@ const Dashboard = (props) => {
         { sn: ind, total: e.total, month: months[e._id], }
     )) :
         [
-            { areas: 'life camp', total: 0, sn: '1', },
+            { areas: '', total: 0, sn: '', },
         ]
 
 
@@ -231,10 +231,10 @@ const Dashboard = (props) => {
                     <div className="product-summary__ctn mt-5">
                         {/* REVENUE */}
                         <div className="row">
-                            <DashboardCard color='green' col="3" header="Transactions" value={totalTransactions?.total ? totalTransactions?.total : 0} desc="Total transactions" />
                             <DashboardCard col="3" header="Monthly Revenue" value={`N${revenueByMonth?.total ?? 0}`} desc="The current month" />
-                            <DashboardCard color='blue' col="3" header="Platform" value="N2.3M" desc="Direct sales" />
                             <DashboardCard color='yellow' col="3" header="Pharmacies" value={`N${totalPharmacyRevenue?.total ?? 0}`} desc="All pharmacy gross revenue" />
+                            <DashboardCard color='green' col="3" header="Transactions" value={totalTransactions?.total ? totalTransactions?.total : 0} desc="Total transactions" />
+
                         </div>
                         <div className="row">
                             <DashbaordTable dataRow={['sn', '_id', 'amount', 'dispatch_fee', 'total']} data={revenueByArea} header="Revenue by Area" headerRow={['#', 'Area', 'Amount', 'Dispatch Fee', 'Total']} />
@@ -246,7 +246,7 @@ const Dashboard = (props) => {
                             <DashboardCard color='red' col="3" header="User" value={totalUsers?.total ? totalUsers?.total : 0} desc="Total users" />
                             <DashboardCard color='green' col="3" header="Support" value={userTypes[1]?.total ? userTypes[1]?.total : 0} desc="Total Support" />
                             <DashboardCard col="3" header="Customers" value={userTypes[3]?.total ? userTypes[3]?.total : 0} desc="Listed customers" />
-                            <DashboardCard color='blue' col="3" header="Dispatchers" value={userTypes[0]?.total ? userTypes[0]?.total : 0} desc="Delivery personnel" />
+                            <DashboardCard color='blue' col="3" header="Dispatches" value={userTypes[0]?.total ? userTypes[0]?.total : 0} desc="Delivery personnel" />
                             <DashboardCard color='yellow' col="3" header="Pharmacies" value={userTypes[2]?.total ? userTypes[2]?.total : 0} desc="Listed partner pharmacies" />
                             <DashboardCard color='black' col="3" header="Pharmacists" value={userTypes[4]?.total ? userTypes[4]?.total : 0} desc="Listed pharmacists" />
                         </div>
