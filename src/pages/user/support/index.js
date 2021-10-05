@@ -140,6 +140,7 @@ const Support = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
+                {console.log(viewData)}
                 { viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
                     <div className="support-table__container">
                         <div className="conatainer overflow-hidden">
