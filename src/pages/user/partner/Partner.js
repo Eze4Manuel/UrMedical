@@ -163,7 +163,7 @@ const Partner = (props) => {
                 {
                     viewData.length > 0
                     ? (
-                        <div className="customer-table__container">
+                        <div className="partner-table__container">
                             <Table
                                 onSelectData={onSelected}
                                 prev={() => fetchMore(page, 'prev', setPage)}

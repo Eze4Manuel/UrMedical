@@ -35,7 +35,6 @@ export const Details = ({ data, updateAllData }) => {
         if (reqData.status === 'ok') {
             data.order_status = val;
             setData(data);
-            console.log(reqData);
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Order Updated' })
 
         } else {

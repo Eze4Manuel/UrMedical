@@ -44,7 +44,7 @@ const TripDetail = ({ data, show, onHide, updateAllData, onDeleted}) => {
     }
 
     return (
-        <Dialog closeOnEscape header="Order Details" visible={show} modal onHide={() => onHide()} style={{width: "60vw"}}>
+        <Dialog closeOnEscape header="Order Details" visible={show} modal onHide={() => onHide()} style={{width: "70vw"}}>
             <div className="order-info__ctn">
                 <div className="row">
                     <div className="col-7">
