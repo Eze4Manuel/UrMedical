@@ -82,7 +82,7 @@ export const EditLicense = ({ data, show, onHide, onUpdate }) => {
                     </div>
                 </div>
             </div>
-            <div className="password-update__btn-ctn">
+            <div className="user-info__btn-ctn">
                 <button onClick={() => onCancel()} style={{ width: 100, height: 30 }} class="p-button p-component p-button-outlined"><span class="p-button-label p-c">Cancel</span></button>
                 <Button onClick={() => onSubmit()} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Save" />
             </div>
