@@ -37,6 +37,8 @@ formValidator.validateContactPersonDetails = (form, values, builder, setError) =
    return builder
 }
 
+
+
 // validate pharmacy form
 formValidator.validatePharmacyUpdate = (form, values, builder, data, setError) => {
     setError("")
@@ -127,7 +129,6 @@ formValidator.validatePharmacyUpdate = (form, values, builder, data, setError) =
         }
         builder.address = form.address
     }
-    console.log(Object.keys(builder).length);
     if (Object.keys(builder).length === 0) {
         return setError("No changes to update") 
     }
@@ -255,7 +256,6 @@ formValidator.validateNewPartner = (form, builder, setError) => {
      builder.contact_phone_number = form.pharmacy_phone
 
      //validate the email
-     console.log(form.pharmacy_email);
      if (!form.pharmacy_email) {
         return setError("Contact person email is required")
      }

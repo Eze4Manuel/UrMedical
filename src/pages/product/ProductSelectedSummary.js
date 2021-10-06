@@ -16,7 +16,6 @@ const CustomerData = ({ data, show, onHide, onDeleted}) => {
     const notify = useNotifications();
     const [values, setValues] = React.useState(config.userData);
     const [, setLoading] = React.useState(false);
-    const [showProduct, ] = React.useState(true);
     const [delWarning, setDelWarning] = React.useState(false);
     const [, setError] = React.useState(false);
 
@@ -77,9 +76,9 @@ const ProductDetailSummary = ({ data }) => {
                 <Detail name="Quantity" value={data?.quantity} />
                 <Detail name="Category" value={data?.category} />
                 { data?.description ? <p className="product-info__detail"><span>Description</span></p> : null}
-                <p><span className="product-desc">{data?.description}</span></p>
+                <p><span className="product-desc" style={{"font-size": "14px", "color": "purple"}}>{data?.description}</span></p>
                 { data?.ingredients ? <p className="product-info__detail"><span>Ingredients</span></p> : null}
-                <p><span className="product-desc">{data?.ingredients}</span></p>
+                <p><span className="product-desc" style={{"font-size": "14px", "color": "purple"}}>{data?.ingredients}</span></p>
                 { data?.precautions ? <p className="product-info__detail"><span>Precautions</span></p> : null}
                 <p><span className="product-desc">{data?.precautions}</span></p>
             </div>

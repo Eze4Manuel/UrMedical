@@ -1,5 +1,4 @@
 import request from '../../assets/utils/http-request';
-import conf from '../../assets/utils/config';
 import helpers from '../../core/func/Helpers';
 
 const lib = {}
@@ -34,12 +33,12 @@ lib.getUsers = async (token, component) => {
     }
 }
 
-lib.getTransactionsSummary = async (token, component) => {
-    let uri = '';
+lib.getTransactionsSummary = async (token, component, year) => {
+    let uri = ''
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
 
-        uri = `/transactions?component=${component}`;
+        uri = `/transactions?component=${component}&year=${year}`;
 
         return await (await request.get(uri, cfg)).data
     } catch (e) {

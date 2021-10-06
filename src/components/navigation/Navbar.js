@@ -3,8 +3,6 @@ import './Navbar.css';
 
 import {Link} from 'react-router-dom';
 import './Navbar.css';
-import {dispatcher} from '../../core/context/Store';
-import AppActions from '../../core/context/ReducerAction';
 import { useHistory } from 'react-router-dom';
 import Helpers from '../../core/func/Helpers';
 import { useAuth } from '../../core/hooks/useAuth';

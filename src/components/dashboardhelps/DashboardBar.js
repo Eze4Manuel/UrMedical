@@ -8,6 +8,7 @@ const DashboardBar = ({
     icon,
     iconDesc,
     desc,
+    total,
     col
 }) => {
     return (

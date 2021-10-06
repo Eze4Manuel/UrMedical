@@ -13,7 +13,6 @@ import helpers from '../../../core/func/Helpers';
 import { useNotifications } from '@mantine/notifications';
 import Alert from '../../../components/flash/Alert';
 
-
 const noDataTitle = "You haven't created any customer account yet.";
 const noDataParagraph = "You can create a customer yourself by clicking on the button Add customer.";
 
@@ -43,7 +42,6 @@ const Customer = (props) => {
                 setData(reqData.data)
             }
             setLoader(false);
-            console.log(data);
         })()
     }, [user?.token, page, set])
 

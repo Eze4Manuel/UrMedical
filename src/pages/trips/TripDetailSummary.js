@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { toNumber } from '../../core/func/format';
 import './TripSummary.css';
 import DashbaordTable from '../../components/dashboardhelps/DashbaordTable';
@@ -11,25 +11,21 @@ import helpers from '../../core/func/Helpers';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { ListBox } from 'primereact/listbox';
-import { dispatcher } from '../../core/context/Store';
-
+  
 const Detail = ({ name, value }) => value ? (<p className="order-info__detail"><span>{name}</span> <span>{value}</span></p>) : null
 
-export const Details = ({ data }) => {
+export const Details = ({ data, updateAllData }) => {
     const { set, user } = useAuth();
     const [allow, setAllow] = useState(true);
     const [, setData] = useState([]);
     const [loader, setLoader] = useState(false);
     const notify = useNotifications();
     const [displayPosition, setDisplayPosition] = useState(false);
-    const [position, setPosition] = useState('left');
-    const [selectedDispatch, setSelectedDispatch] = useState(null);
+    const [, setPosition] = useState('left');
+    const [selectedDispatch,] = useState(null);
     const [dispatchers, setDispatchers] = useState([]);
+    const [assign, setAssigning] = useState(true);
 
-
-    useEffect(() => {
-        setAllow((data.order_status === 'pending' || data.order_status === 'active') ? true : false)
-    }, [])
 
 
     const updateStatus = async (val) => {
@@ -40,7 +36,7 @@ export const Details = ({ data }) => {
             data.order_status = val;
             setData(data);
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Order Updated' })
-            setTimeout(() => window.location.reload(), 3000)
+
         } else {
             helpers.alert({ notifications: notify, icon: 'danger', color: 'red', message: reqData.msg })
         }
@@ -48,7 +44,6 @@ export const Details = ({ data }) => {
 
     const assignDispatch = async () => {
         setLoader(true);
-
         // Fetches all available dispatchers
         let reqData = await lib.getDispatchers(user?.token, 'dispatcher');
         if (reqData.status === "error") {
@@ -57,17 +52,14 @@ export const Details = ({ data }) => {
         if (reqData.status === 'ok') {
             if (reqData.data.length > 0) {
                 setDispatchers(reqData.data);
+                setPosition('right');
                 setDisplayPosition(true)
-                setPosition('left');
             } else {
                 helpers.alert({ notifications: notify, icon: 'warning', color: 'yellow', message: 'No available Dispatcher' })
             }
         }
         setLoader(false);
     }
-
-
-
 
     const items = [
         {
@@ -91,49 +83,39 @@ export const Details = ({ data }) => {
                 updateStatus('fulfilled')
             }
         },
-
     ];
-
-
 
     const onHide = (name) => {
         setDisplayPosition(false);
-
     }
-
 
     const dispatchSelected = async (val) => {
         setLoader(true);
-        console.log(data);
-
+        setAssigning(false);
         // Fetches all available dispatchers
         let reqData = await lib.updateDispatcher(user?.token, data?.order_id, val?.auth_id);
         if (reqData.status === "error") {
             helpers.alert({ notifications: notify, icon: 'warning', color: 'yellow', message: 'Failed to Assign Dispatcher' })
         }
         if (reqData.status === 'ok') {
-            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Dispatcher Assigned' })
             // Updating current selected data
             data.dispatcher = val;
+            data.order_status = reqData.data.order_status;
+            setData(data);
             onHide();
             setAllow(true);
-
+            // updateAllData(data);
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Dispatcher Assigned' })
         }
         setLoader(false);
-        console.log(reqData);
-
-
+        setAssigning(true);
     }
-
-
 
     return (
         <>
-            <Dialog header="Header" visible={displayPosition} style={{ width: '30rem' }} onHide={() => onHide()}>
-                <ListBox value={selectedDispatch} options={dispatchers} onChange={(e) => dispatchSelected(e.value)} optionLabel="email" style={{ width: '30vw' }} />
+            <Dialog header={ assign ? "Assign Dispatch" : "Assigning ..."} visible={displayPosition} style={{'border': 'none' }} onHide={() => onHide()}>
+                <ListBox value={selectedDispatch} options={dispatchers} onChange={(e) => dispatchSelected(e.value)} optionLabel="email" style={{ width: '20vw', 'border': 'none', 'padding': '0px', 'background': 'lightgrey' }} />
             </Dialog>
-
-
             <Fragment>
                 <div className="mb-3">
                     <h6 className="mb-3"> Pharmacy Detail</h6>
@@ -144,10 +126,8 @@ export const Details = ({ data }) => {
                 </div>
             </Fragment>
             <Fragment>
-
-
                 <div className="mb-3">
-                    {(data?.dispatcher?.name == '') ?
+                    {(data?.dispatcher?.name === '') ?
                         <>
                             <h6 className="mb-3"> Dispatcher Detail</h6>
                             <p style={{ 'color': 'red' }}>No Dispatcher Assigned</p>
@@ -161,10 +141,8 @@ export const Details = ({ data }) => {
                             <Detail name="License ID" value={data?.dispatcher?.license_id} />
                             <Detail name="Vehicle ID" value={data?.dispatcher?.vehicle_id} />
                         </>
-
                     }
                 </div>
-
 
             </Fragment>
 
@@ -177,15 +155,15 @@ export const Details = ({ data }) => {
                 </div>
             </Fragment>
             <Fragment>
-
-                <div className="mt-3" >
-                    <div className="mb-2">
-                        <Button onClick={() => assignDispatch()} icon="pi pi-bookmark" disabled={!allow} label="Assign Dispatch" className="p-button-sm" />
-                    </div>
-                    {(data?.dispatcher?.name != '') ?
-                        <div>
-                            <SplitButton style={{ "font-size": "10px" }} label="update status" model={items} disabled={!allow} className="p-button-sm p-button-warning p-mr-1"></SplitButton>
-                        </div>
+                <div className="mt-3" style={{ 'display': 'flex' }}>
+                    <span className="mb-2 mr-2">
+                        <Button style={{ 'background': '#011b33' }} onClick={() => assignDispatch()} disabled={!allow} label="Assign Dispatcher" className="p-button-sm" />
+                    </span>
+                    
+                    {(data?.dispatcher?.name !== '') ?
+                        <span className='ml-2'>
+                            <SplitButton style={{ "font-size": "10px", 'background': '#011b33' }} label="update status" model={items} disabled={!allow} className="p-button-sm p-mr-1"></SplitButton>
+                        </span>
                         :
                         null
                     }
@@ -212,13 +190,13 @@ const TripDetailSummary = ({ data }) => {
                     <DashbaordTable col={12} dataRow={['name', 'quantity', 'unit_value', 'amount']} data={data?.products || []} header="Products" headerRow={['Item', 'Quanity', 'Unit', 'Amount']} />
                     <div className="row ml-1 mt-3">
                         <div className="col-6">
-                            <h5>Total quantity</h5>
+                            <h5>Total Quantity</h5>
                         </div>
                         <div className="col-6">
                             <h5 className="order-detail__left mr-3">{quantity}</h5>
                         </div>
                         <div className="col-6">
-                            <h5>Total amount</h5>
+                            <h5>Total Amount</h5>
                         </div>
                         <div className="col-6">
                             <h5 className="order-detail__left mr-3">₦{toNumber(amount)}</h5>

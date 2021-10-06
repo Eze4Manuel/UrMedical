@@ -6,14 +6,16 @@ import UnAuthenticated from './pages/Login';
 import Authenticated from './pages/index';
 import Loading from './components/loading/Loading'
 
+
 PrimeReact.ripple = true;
 PrimeReact.autoZIndex = true;
 
 const App = () => {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   Helpers.loadUserInStore(user);
-  
+
+
   // TODO: verify token authenticity
   // wait for resource
   setTimeout(() => {
@@ -26,8 +28,8 @@ const App = () => {
 
   return (
     <>
-      {user 
-        ? <Authenticated user={user} /> 
+      {user
+        ? <Authenticated user={user} />
         : <UnAuthenticated />
       }
     </>

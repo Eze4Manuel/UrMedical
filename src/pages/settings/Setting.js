@@ -67,7 +67,6 @@ const Setting = (props) => {
                 if (reqData.status === 'error') {
                     setError(reqData.msg)
                     helpers.sessionHasExpired(set, reqData.msg);
-                    console.log(reqData);
                 }
                 if (reqData.status === 'ok') {
                     setValues(reqData.data)

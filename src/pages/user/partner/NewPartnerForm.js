@@ -112,7 +112,7 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false}) =>
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="p-field mb-2">
-                            <label htmlFor="pharmacy_email">Contact Email</label><br />
+                            <label htmlFor="pharmacy_email">Contact Email*</label><br />
                             <InputText style={{width: '100%'}} id="pharmacy_email" name="pharmacy_email" onChange={e => setValues(d => ({...d, pharmacy_email: e.target.value}))} value={values?.pharmacy_email} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="email" />
                         </div>
                     </div>
