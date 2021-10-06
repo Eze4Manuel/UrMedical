@@ -15,12 +15,9 @@
     "bootstrap": "4.6.0",
     "chart.js": "^3.4.1",
     "classnames": "^2.3.1",
-<<<<<<< HEAD
     "firebase-admin": "^9.11.1",
-=======
     "dotenv": "^10.0.0",
     "firebase": "^9.0.2",
->>>>>>> 498b2fcb8babc08a6989c0758a5e213e8346bbc7
     "formik": "^2.2.9",
     "google-maps": "^4.3.3",
     "jquery": "^3.6.0",
