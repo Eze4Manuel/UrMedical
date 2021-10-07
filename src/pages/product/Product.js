@@ -37,7 +37,7 @@ const Product = (props) => {
     const [order, setOrder] = useState("Pharmacy");
 
     const fQeury = (data) => {
-        return data.map(d => {
+        return data?.map(d => {
             let px = d || []
             return {
                 email: px?.email || d?.contact_email,
@@ -123,7 +123,7 @@ const Product = (props) => {
         // close modal
         setOpenData(false)
         // remove from data list
-        let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
+        let d = data?.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
     const updateIndex = async (id) => {
@@ -133,7 +133,7 @@ const Product = (props) => {
             helpers.sessionHasExpired(set, reqDataCategory.msg)
         }
         if ((reqDataCategory.status === 'ok' && reqDataCategory?.data)) {
-            setCategories(reqDataCategory.data.length);
+            setCategories(reqDataCategory?.data?.length);
         }
 
         let reqDataCount = await lib.getCount(user?.token, 'count');
@@ -141,7 +141,7 @@ const Product = (props) => {
             helpers.sessionHasExpired(set, reqDataCount.msg)
         }
         if ((reqDataCount.status === 'ok' && reqDataCount?.data)) {
-            setCount(reqDataCount.data[0].total);
+            setCount(reqDataCount?.data[0]?.total);
         }
         setLoader(false)
         setActiveIndex(id)
@@ -202,7 +202,7 @@ const Product = (props) => {
                     <ProductSummary onDeleted={(id) => onDeleted(id)} data={pharmData} show={openData} onHide={() => setOpenData(false)} />
                     : null
                 }
-                {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
+                {data?.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                     <div className="user-table__container">
 
                         <div className="conatainer overflow-hidden">

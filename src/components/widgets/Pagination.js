@@ -50,7 +50,7 @@ const Pagination = (props) => {
                     />
                     {pageItems}
                     <Paginate 
-                        disable={props.data.length < 10 ? true : false}
+                        disable={props.data?.length < 10 ? true : false}
                         func={props.next} 
                         ariaLabel="Next" 
                         label="next" 

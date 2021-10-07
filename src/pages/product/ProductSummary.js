@@ -100,7 +100,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             helpers.sessionHasExpired(set, reqDataCategory.msg)
         }
         if ((reqDataCategory.status === 'ok' && reqDataCategory?.data)) {
-            setCategories(reqDataCategory.data.length);
+            setCategories(reqDataCategory.data?.length);
         }
 
         let reqDataCount = await lib.getSpecificCount(data[0]?.px_id, user?.token, 'count');
@@ -108,7 +108,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             helpers.sessionHasExpired(set, reqDataCount.msg)
         }
         if ((reqDataCount.status === 'ok' && reqDataCount?.data)) {
-            setCount(reqDataCount.data[0].total);
+            setCount(reqDataCount.data[0]?.total);
         }
 
         setLoader(false)

@@ -3,8 +3,8 @@ import './ProgressBar.css';
 import { toNumber } from '../../core/func/format'
 
 const ProgressBar = ({ data, barValue, format=false ,width='200px' }) => {
-    let total = data.map(v => v[barValue]).reduce((t,c) => t+c)
-    let pb = data.map((n,idx)=> {
+    let total = data?.map(v => v[barValue]).reduce((t,c) => t+c)
+    let pb = data?.map((n,idx)=> {
         let barColor = ['bg-success', 'bg-info', 'bg-warning', 'bg-secondary','bg-primary','bg-warning']
         let per = ((n[barValue]*100)/total).toFixed(2)+"%"
         let val = format ? toNumber(n[barValue]) : n[barValue]

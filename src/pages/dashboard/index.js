@@ -115,7 +115,7 @@ const Dashboard = (props) => {
         (async () => {
             let reqData = await lib.getTransactionsSummary(user?.token, 'month', currentYear)
             if (reqData.status === 'ok') {
-                setRevenueByMonth(reqData.data.find(e => {
+                setRevenueByMonth(reqData.data?.find(e => {
                     return e._id === currentMonth
                 }));
                 setRevenueFor6Months(reqData.data)

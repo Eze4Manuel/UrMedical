@@ -18,7 +18,7 @@ const noDataTitle = "No transaction have have been made yet.";
 const noDataParagraph = "You will see all transactions on this page.";
 
 const fQeury = (data) => {
-    return data.map(d => {
+    return data?.map(d => {
         let px = d || []
         return {
             email: px?.email || d?.contact_email,
@@ -53,7 +53,7 @@ const Transaction = (props) => {
                 helpers.alert({notifications: notify, icon: 'error', color:'red', message: reqData.msg})
             }
             if (reqData.status === 'ok') {
-                data.forEach( e => {
+                data?.forEach( e => {
                     e.dispatch_fee = parseInt(dispatchFee);
                 });
                 helpers.alert({notifications: notify, icon: 'success', color:'green', message: "Dispatch Fee Updated"})
@@ -92,10 +92,10 @@ const Transaction = (props) => {
   
     // setup table data
     const perPage = getPageCount(10);
-    const paginate = getPages(data.length, perPage);
+    const paginate = getPages(data?.length, perPage);
     const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
     const stop = start + perPage;
-    const viewData = data.slice(start, stop);
+    const viewData = data?.slice(start, stop);
 
     
 
@@ -134,7 +134,7 @@ const Transaction = (props) => {
         // close modal
         setOpenData(false)
         // remove from data list
-        let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
+        let d = data?.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
     const updateDispatchFee = (
@@ -171,7 +171,7 @@ const Transaction = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
+                {data?.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
                     <>
                         <TransactionDetail onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                         <div className="transaction-table__container">  

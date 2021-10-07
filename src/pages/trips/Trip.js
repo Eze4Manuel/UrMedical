@@ -11,7 +11,7 @@ import Tabs from "../../components/tabs/Tabs";
 import helpers from '../../core/func/Helpers';
 import TripDetail from './TripDetail';
 
-
+import firebase from '../../firebase';
 import { getMessaging, getToken,  } from "firebase/messaging";
 require('dotenv').config();
 
@@ -36,7 +36,7 @@ const Trip = (props) => {
 
     // setup table data
     const perPage = getPageCount(10);
-    const paginate = getPages(data.length, perPage);
+    const paginate = getPages(data?.length, perPage);
     const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
     const stop = start + perPage;
     const viewData = processedData.slice(start, stop);
@@ -176,7 +176,7 @@ const Trip = (props) => {
         // close modal
         setOpenData(false)
         // remove from data list
-        let d = data.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
+        let d = data?.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
 

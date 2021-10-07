@@ -167,7 +167,7 @@ const EditCustomerForm = ({ data, show, onHide, onUpdate }) => {
                 <div className="col-lg-6">
                     <div className="p-field mb-2">
                         <label htmlFor="dob">DOB</label><br />
-                        <Calendar id="dob" name="dob" onChange={(e) => setValues(d => ({ ...d, dob: e.target.value.toLocaleDateString('en-SE') }))} monthNavigator yearNavigator yearRange="1960:2030" value={values?.dob} className="p-inputtext-sm p-mb-2" placeholder={values.dob ?? 'mm/dd/yy'} />
+                        <Calendar id="dob" name="dob" onChange={(e) => setValues(d => ({ ...d, dob: e.target.value.toLocaleDateString('en-SE') }))} monthNavigator yearNavigator yearRange="1960:2030" value={values?.dob} className="p-inputtext-sm p-mb-2" placeholder={values?.dob ?? 'mm/dd/yy'} />
                     </div>
                 </div>
             </div>
@@ -176,12 +176,12 @@ const EditCustomerForm = ({ data, show, onHide, onUpdate }) => {
                     <label htmlFor="gender">Gender</label><br />
                     <div style={{ "display": "flex" }}>
                         <span className="p-field-radiobutton ml-3">
-                            <label htmlFor="gender">{config.gender[0]}</label>
-                            <RadioButton id={config.gender[0]} name="gender" onChange={(e) => setValues(d => ({ ...d, gender: 'male' }))} value={values.gender} checked={values.gender === 'male'} className="p-inputtext-sm p-d-block p-mb-0 ml-1" />
+                            <label htmlFor="gender">{config?.gender[0]}</label>
+                            <RadioButton id={config?.gender[0]} name="gender" onChange={(e) => setValues(d => ({ ...d, gender: 'male' }))} value={values?.gender} checked={values?.gender === 'male'} className="p-inputtext-sm p-d-block p-mb-0 ml-1" />
                         </span>
                         <span className="p-field-radiobutton ml-3">
                             <label htmlFor="gender">{config.gender[1]}</label>
-                            <RadioButton id={config.gender[1]} name="gender" onChange={(e) => setValues(d => ({ ...d, gender: 'female' }))} value={values.gender} checked={values.gender === 'female'} className="p-inputtext-sm p-d-block p-mb-0 ml-1" />
+                            <RadioButton id={config?.gender[1]} name="gender" onChange={(e) => setValues(d => ({ ...d, gender: 'female' }))} value={values?.gender} checked={values?.gender === 'female'} className="p-inputtext-sm p-d-block p-mb-0 ml-1" />
                         </span>
                     </div>
                 </div>
