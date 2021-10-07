@@ -118,7 +118,6 @@ const Dashboard = (props) => {
                 setRevenueByMonth(reqData.data.find(e => {
                     return e._id === currentMonth
                 }));
-                console.log(reqData.data);
                 setRevenueFor6Months(reqData.data)
             }
         })()

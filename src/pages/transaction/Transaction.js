@@ -87,7 +87,7 @@ const Transaction = (props) => {
                 setDispatchFee(reqData.data?.amount);
             }
         })()
-    }, [user?.token])
+    }, [user?.token, set])
 
   
     // setup table data

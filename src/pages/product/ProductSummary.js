@@ -36,10 +36,9 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
     const [order, setOrder] = useState("Products");
     const [category, setCategories] = useState(0);
     const [count, setCount] = useState(0);
-    const [totalPharmacyRevenue, setTotalPharmacyRevenue] = useState({});
+    const [, setTotalPharmacyRevenue] = useState({});
 
     const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
 
 
     const fQeury = (data) => {
@@ -60,6 +59,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
 
      // Getting Transaction summary by pharmacy
      useEffect(() => {
+         
         (async () => {
             let reqData = await lib.getPharmacyTransactions(user?.auth_id, user?.token, 'pharmacy', 'pharmacy', currentYear)
             if (reqData.status === 'ok') {
@@ -69,7 +69,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             console.log(reqData);
 
         })()
-    }, [user?.token, page, set])
+    }, [user?.token, page, set, data, currentYear, user?.auth_id ])
 
 
     const perPageA = getPageCount(10);

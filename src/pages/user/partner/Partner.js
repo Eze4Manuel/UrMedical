@@ -16,7 +16,7 @@ import helpers from '../../../core/func/Helpers';
 const noDataTitle = "You haven't created any partner account yet.";
 const noDataParagraph = "You can create a partner yourself by clicking on the button Add partner.";
 
-const fQeury = (data) => {
+const fQeury = (data) => { 
     return data.map(d => {
         let px = d.users_data[0] || []
         return {
@@ -66,6 +66,8 @@ const Partner = (props) => {
     const start = (activePage === 1) ? 0 : (activePage*perPage)  - perPage;
     const stop = start+perPage;
     const viewData = data.slice(start, stop);
+
+
 
     const reload = async () => {
         setLoader(true)
@@ -158,8 +160,8 @@ const Partner = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                {viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
                 <PartnerUserData onUpdated={(data) => setSelected(data)} onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                {viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
                 {
                     viewData.length > 0
                     ? (

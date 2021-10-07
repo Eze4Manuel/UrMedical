@@ -11,19 +11,11 @@ import helpers from '../../core/func/Helpers';
 import { ContainerLoader } from '../../components/loading/Loading';
 import ProductSummary from './ProductSummary'
 import Alert from '../../components/flash/Alert';
-import ProgressBar from '../../components/progressbar/ProgressBar';
 
 const noDataTitle = "No pharmacy have added to their product yet.";
 const noDataParagraph = "You can create a product yourself by clicking on the add product button.";
 
 
-const salesData = [
-    { month: 'APR', amount: 19000 },
-    { month: 'MAY', amount: 20000 },
-    { month: 'JUN', amount: 34950 },
-    { month: 'JUL', amount: 18000 },
-    { month: 'AUG', amount: 10000 }
-]
 
 const Product = (props) => {
     const { set, user } = useAuth();

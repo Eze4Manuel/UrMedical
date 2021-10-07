@@ -12,7 +12,6 @@ import helpers from '../../core/func/Helpers';
 import TripDetail from './TripDetail';
 
 
-import firebase from '../../firebase';
 import { getMessaging, getToken,  } from "firebase/messaging";
 require('dotenv').config();
 
