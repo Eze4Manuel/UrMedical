@@ -36,10 +36,9 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
     const [order, setOrder] = useState("Products");
     const [category, setCategories] = useState(0);
     const [count, setCount] = useState(0);
-    const [totalPharmacyRevenue, setTotalPharmacyRevenue] = useState({});
+    const [, setTotalPharmacyRevenue] = useState({});
 
     const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth();
 
 
     const fQeury = (data) => {
@@ -60,16 +59,14 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
 
      // Getting Transaction summary by pharmacy
      useEffect(() => {
+         
         (async () => {
             let reqData = await lib.getPharmacyTransactions(user?.auth_id, user?.token, 'pharmacy', 'pharmacy', currentYear)
             if (reqData.status === 'ok') {
                 setTotalPharmacyRevenue(reqData.data[0]);
             }
-            console.log(data);
-            console.log(reqData);
-
         })()
-    }, [user?.token, page, set])
+    }, [user?.token, page, set, data, currentYear, user?.auth_id ])
 
 
     const perPageA = getPageCount(10);
@@ -100,17 +97,15 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             helpers.sessionHasExpired(set, reqDataCategory.msg)
         }
         if ((reqDataCategory.status === 'ok' && reqDataCategory?.data)) {
-            setCategories(reqDataCategory.data.length);
+            setCategories(reqDataCategory.data?.length);
         }
-
         let reqDataCount = await lib.getSpecificCount(data[0]?.px_id, user?.token, 'count');
         if (reqDataCount.status === "error") {
             helpers.sessionHasExpired(set, reqDataCount.msg)
         }
         if ((reqDataCount.status === 'ok' && reqDataCount?.data)) {
-            setCount(reqDataCount.data[0].total);
+            setCount(reqDataCount.data[0]?.total);
         }
-
         setLoader(false)
         setActiveIndex(id)
     }
@@ -129,8 +124,6 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
                 break;
         }
     }
-
-
     return (
         <Dialog closeOnEscape header="Pharmacy Product Summary" visible={show} modal onHide={() => onHide()} style={{ width: "70vw" }}>
             <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["Products", "Analytics"]} />
@@ -159,20 +152,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
                 :
                 <div className="product-summary__ctn mt-5">
                     <div className="row">
-                        <div className="col-3">
-                            <div className="card p-2 pl-3">
-                                <h5><span>Pharmacy Revenue</span></h5>
-                                <h2><span>230K</span></h2>
-                                <p className="small"><span>July 12, 2021 - </span></p>
-                            </div>
-                        </div>
-                        <div className="col-3">
-                            <div className="card p-2 pl-3">
-                                <h5><span>August</span></h5>
-                                <h2 className="text-success"><span>285.6K</span></h2>
-                                <p className="small"><span>August 12, 2021</span></p>
-                            </div>
-                        </div>
+                        
                         <div className="col-3">
                             <div className="card p-2 pl-3">
                                 <h5><span>All Products</span></h5>
@@ -188,7 +168,7 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="row">
+                    {/* <div className="row">
                         <div className="col-6 mt-4">
                             <div className="shadow-sm card border-light">
                                 <div className="d-flex flex-row align-items-center flex-0 border-bottom card-body">
@@ -265,10 +245,9 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             }
-
         </Dialog>
     )
 }

@@ -49,10 +49,10 @@ const Dispatcher = (props) => {
 
     // setup table data
     const perPage = getPageCount(10);
-    const paginate = getPages(data.length, perPage); 
+    const paginate = getPages(data?.length, perPage); 
     const start = (activePage === 1) ? 0 : (activePage*perPage)  - perPage;
     const stop = start+perPage;
-    const viewData = data.slice(start, stop);
+    const viewData = data?.slice(start, stop);
 
     const reload = async() => {
         setLoader(true)

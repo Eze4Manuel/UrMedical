@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import { toNumber } from '../../core/func/format';
 import './TripSummary.css';
 import DashbaordTable from '../../components/dashboardhelps/DashbaordTable';
@@ -16,7 +16,7 @@ const Detail = ({ name, value }) => value ? (<p className="order-info__detail"><
 
 export const Details = ({ data, updateAllData }) => {
     const { set, user } = useAuth();
-    const [allow, setAllow] = useState(true);
+    const [, setAllow] = useState(true);
     const [, setData] = useState([]);
     const [loader, setLoader] = useState(false);
     const notify = useNotifications();
@@ -50,7 +50,7 @@ export const Details = ({ data, updateAllData }) => {
             helpers.sessionHasExpired(set, reqData.msg)
         }
         if (reqData.status === 'ok') {
-            if (reqData.data.length > 0) {
+            if (reqData.data?.length > 0) {
                 setDispatchers(reqData.data);
                 setPosition('right');
                 setDisplayPosition(true)
@@ -157,12 +157,11 @@ export const Details = ({ data, updateAllData }) => {
             <Fragment>
                 <div className="mt-3" style={{ 'display': 'flex' }}>
                     <span className="mb-2 mr-2">
-                        <Button style={{ 'background': '#011b33' }} onClick={() => assignDispatch()} disabled={!allow} label="Assign Dispatcher" className="p-button-sm" />
+                        <Button style={{ 'background': '#011b33' }} onClick={() => assignDispatch()} disabled={( data?.order_status === 'fulfilled' || data?.order_status === 'cancelled') } label="Assign Dispatcher" className="p-button-sm" />
                     </span>
-                    
                     {(data?.dispatcher?.name !== '') ?
                         <span className='ml-2'>
-                            <SplitButton style={{ "font-size": "10px", 'background': '#011b33' }} label="update status" model={items} disabled={!allow} className="p-button-sm p-mr-1"></SplitButton>
+                            <SplitButton style={{ "font-size": "10px", 'background': '#011b33' }} label="update status" model={items} disabled={( data?.order_status === 'fulfilled' || data?.order_status === 'cancelled') } className="p-button-sm p-mr-1"></SplitButton>
                         </span>
                         :
                         null

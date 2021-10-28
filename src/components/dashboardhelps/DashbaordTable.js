@@ -9,7 +9,7 @@ const DashbaordTable = ({
     order
 }) => {
     let dataHeader = order ? [<td>#</td>].concat(headerRow.map(d => <td>{d}</td>)) : headerRow.map(d => <td>{d}</td>)
-    let tableData = data.map((value, idx) => {
+    let tableData = data?.map((value, idx) => {
         let dt = order ? [<td>{idx+1}</td>] : []
         dt = dt.concat(dataRow.map(key => (<td>{value[key]}</td>)))
         return (

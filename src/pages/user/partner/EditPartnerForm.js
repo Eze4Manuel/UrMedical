@@ -169,7 +169,6 @@ export const EditContactPersonForm = ({ data, show, onHide, onUpdated }) => {
             helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'update successful'})
             setValues({email: reqData.data.contact_email, phone_number: reqData.data.contact_phone_number})
             onUpdated({...data, contact_email: reqData.data.contact_email, contact_phone_number: reqData.data.contact_phone_number})
-            // onUpdated({...data, ...reqData.data})
         }
     }
 

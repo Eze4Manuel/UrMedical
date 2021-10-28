@@ -10,7 +10,7 @@ import lib from './lib';
 import { useAuth } from '../../core/hooks/useAuth';
 import helpers from '../../core/func/Helpers';
 import { ContainerLoader } from '../../components/loading/Loading';
-
+import { fShortenNumber } from '../../assets/utils/formatNumber';
 
 
 const Dashboard = (props) => {
@@ -115,10 +115,9 @@ const Dashboard = (props) => {
         (async () => {
             let reqData = await lib.getTransactionsSummary(user?.token, 'month', currentYear)
             if (reqData.status === 'ok') {
-                setRevenueByMonth(reqData.data.find(e => {
+                setRevenueByMonth(reqData.data?.find(e => {
                     return e._id === currentMonth
                 }));
-                console.log(reqData.data);
                 setRevenueFor6Months(reqData.data)
             }
         })()
@@ -231,9 +230,9 @@ const Dashboard = (props) => {
                     <div className="product-summary__ctn mt-5">
                         {/* REVENUE */}
                         <div className="row">
-                            <DashboardCard col="3" header="Monthly Revenue" value={`N${revenueByMonth?.total ?? 0}`} desc="The current month" />
-                            <DashboardCard color='yellow' col="3" header="Pharmacies" value={`N${totalPharmacyRevenue?.total ?? 0}`} desc="All pharmacy gross revenue" />
-                            <DashboardCard color='green' col="3" header="Transactions" value={totalTransactions?.total ? totalTransactions?.total : 0} desc="Total transactions" />
+                            <DashboardCard col="3" header="Monthly Revenue" value={`${fShortenNumber(revenueByMonth?.total) ?? 0}`} desc="The current month" />
+                            <DashboardCard color='yellow' col="3" header="Pharmacies" value={`${fShortenNumber(totalPharmacyRevenue?.total) ?? 0}`} desc="All pharmacy gross revenue" />
+                            <DashboardCard color='green' col="3" header="Transactions" value={fShortenNumber(totalTransactions?.total) ??  0} desc="Total transactions" />
 
                         </div>
                         <div className="row">
@@ -243,12 +242,12 @@ const Dashboard = (props) => {
                         </div>
                         {/* ORDERS */}
                         <div className="row mt-5">
-                            <DashboardCard color='red' col="3" header="User" value={totalUsers?.total ? totalUsers?.total : 0} desc="Total users" />
-                            <DashboardCard color='green' col="3" header="Support" value={userTypes[1]?.total ? userTypes[1]?.total : 0} desc="Total Support" />
-                            <DashboardCard col="3" header="Customers" value={userTypes[3]?.total ? userTypes[3]?.total : 0} desc="Listed customers" />
-                            <DashboardCard color='blue' col="3" header="Dispatches" value={userTypes[0]?.total ? userTypes[0]?.total : 0} desc="Delivery personnel" />
-                            <DashboardCard color='yellow' col="3" header="Pharmacies" value={userTypes[2]?.total ? userTypes[2]?.total : 0} desc="Listed partner pharmacies" />
-                            <DashboardCard color='black' col="3" header="Pharmacists" value={userTypes[4]?.total ? userTypes[4]?.total : 0} desc="Listed pharmacists" />
+                            <DashboardCard color='red' col="3" header="User" value={totalUsers?.total ?? 0} desc="Total users" />
+                            <DashboardCard color='green' col="3" header="Support" value={userTypes[1]?.total ?? 0} desc="Total Support" />
+                            <DashboardCard col="3" header="Customers" value={userTypes[3]?.total ?? 0} desc="Listed customers" />
+                            <DashboardCard color='blue' col="3" header="Dispatches" value={userTypes[0]?.total ?? 0} desc="Delivery personnel" />
+                            <DashboardCard color='yellow' col="3" header="Pharmacies" value={userTypes[2]?.total ?? 0} desc="Listed partner pharmacies" />
+                            <DashboardCard color='black' col="3" header="Pharmacists" value={userTypes[4]?.total ?? 0} desc="Listed pharmacists" />
                         </div>
                         <div className="row">
                             <DashboardBar iconDesc="Total order in the last 6 months" desc="Orders" header="Orders" icon="las la-users" Bar={ProgressBar} data={userData2} dataKey="total" />
