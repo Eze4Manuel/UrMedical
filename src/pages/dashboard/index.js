@@ -12,9 +12,7 @@ import helpers from '../../core/func/Helpers';
 import { ContainerLoader } from '../../components/loading/Loading';
 import { fShortenNumber } from '../../assets/utils/formatNumber';
 
-
 const Dashboard = (props) => {
-
     const { set, user } = useAuth();
     const [loader, setLoader] = useState(false);
     const [page,] = useState(1);
@@ -96,7 +94,6 @@ const Dashboard = (props) => {
             if (reqData.status === 'ok') {
                 setTotalPharmacyRevenue(reqData.data[0])
             }
-
         })()
     }, [user?.token, page, set, currentYear])
 
@@ -122,9 +119,6 @@ const Dashboard = (props) => {
             }
         })()
     }, [user?.token, page, set, currentMonth, currentYear])
-
-
-
 
     // Getting Order summary by count
     useEffect(() => {
@@ -170,17 +164,12 @@ const Dashboard = (props) => {
         })()
     }, [user?.token, page, set])
 
-
-
-
     const months = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
     let reveneData = revenueFor6Months.length > 0 ? revenueFor6Months?.map((e, ind) => {
         return { sn: ind + 1, month: months[e._id], dispatch_fee: e.dispatch_fee, amount: e.amount, total: e.total }
     }) : [{ sn: 0, month: '', dispatch_fee: '', amount: '', total: '' }]
     reveneData.splice(5);
-
-
 
     const mapStatus = (res) => {
         let obj = {
