@@ -225,7 +225,7 @@ const Dashboard = (props) => {
 
                         </div>
                         <div className="row">
-                            <DashbaordTable dataRow={['sn', '_id', 'amount', 'dispatch_fee', 'total']} data={revenueByArea} header="Revenue by Area" headerRow={['#', 'Area', 'Amount', 'Dispatch Fee', 'Total']} />
+                            <DashbaordTable dataRow={['sn', '_id', 'amount', 'dispatch_fee', 'total']} data={revenueByArea} header="Revenue by Area" headerRow={['#', 'Area', 'Amount', 'Dispatch Fee', 'Total']} style={{maxHeight: "400px", overflow: "scroll"}} />
                             <DashbaordTable dataRow={['sn', 'month', 'amount', 'dispatch_fee', 'total']} data={reveneData} header="Revenue For Last 6 months" headerRow={['#', 'Month', 'Amount', 'Dispatch Fee', 'Total']} />
                             <DashboardBar header="Revenue Chart" iconDesc="Total revenue for the last 6 months" desc="Generated revenue" icon="las la-users" Bar={ProgressBar} data={reveneData} dataKey="total" />
                         </div>
@@ -242,7 +242,7 @@ const Dashboard = (props) => {
                             <DashboardBar iconDesc="Total order in the last 6 months" desc="Orders" header="Orders" icon="las la-users" Bar={ProgressBar} data={userData2} dataKey="total" />
                         </div>
                         <div className="row mb-5 pb-5">
-                            <DashbaordTable data={userData} col="6" dataRow={['sn', 'areas', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'No of Orders']} />
+                            <DashbaordTable data={userData} col="6" dataRow={['sn', 'areas', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'No of Orders']} style={{maxHeight: "400px", overflow: "scroll"}} />
                             <DashbaordTable order={true} col="6" data={deliveryData} dataRow={['status', 'total']} header="Current deliveries" headerRow={['Status', 'Quantity']} />
                         </div>
                     </div>
