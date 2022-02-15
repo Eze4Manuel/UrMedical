@@ -24,6 +24,7 @@ const config = {
                 {name: 'products', icon: 'las la-store-alt', link: conf.pages.products},
                 {name: 'transactions', icon: 'las la-book', link: conf.pages.transactions},
                 {name: 'trips', icon: 'las la-map-signs', link: conf.pages.trips},
+                {name: 'location', icon: 'las la-map', link: conf.pages.location},
 
             ]
         },

@@ -9,21 +9,13 @@ import Tabs from "../../components/tabs/Tabs";
 import NoData from '../../components/widgets/NoData';
 import ProductSelectedSummary from './ProductSelectedSummary';
 import helpers from '../../core/func/Helpers';
-import ProgressBar from '../../components/progressbar/ProgressBar';
 
 
 const noDataTitle = "No product available yet.";
 const noDataParagraph = "Pharmacy currently has not created a product yet";
+ 
 
-const salesData = [
-    { month: 'APR', amount: 19000 },
-    { month: 'MAY', amount: 20000 },
-    { month: 'JUN', amount: 34950 },
-    { month: 'JUL', amount: 18000 },
-    { month: 'AUG', amount: 10000 },
-]
-
-const SupportUserData = ({ data, show, onHide, onDeleted }) => {
+const ProductSummary = ({ data, show, onHide, onDeleted }) => {
     const { set, user } = useAuth();
     const [, setDelWarning] = React.useState(false);
     const [pharmData, setPharmData] = React.useState(null);
@@ -168,88 +160,10 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="row">
-                        <div className="col-6 mt-4">
-                            <div className="shadow-sm card border-light">
-                                <div className="d-flex flex-row align-items-center flex-0 border-bottom card-body">
-                                    <div className="d-block">
-                                        <h5>Sales Revenue</h5>
-                                        <div className="small mt-2 mb-3">
-                                            <span><i class="las la-book-open"></i> 6 month sales</span>
-                                        </div>
-                                        <div className="d-flex">
-                                            <div className="d-flex align-items-center mr-3 pc-line">
-                                                <span class="shape-xs rounded-circle bg-secondary mr-2"></span>
-                                                <small class="fw-normal">April - August</small>
-                                            </div>
-                                        </div>
-                                        <div className="p-2 card-body">
-                                            <ProgressBar format={true} data={salesData} barValue="amount" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-6">
-                            <div>
-                                <div className="px-5 pt-3 table-responsive table-height card mt-4 overflow-scroll">
-                                    <h6>Sale Location Hubs (City Area)</h6>
-                                    <table class="table table-hover table-sm">
-                                        <thead>
-                                            <tr className="small fw-bold">
-                                                <td>Area</td>
-                                                <td>Orders</td>
-                                                <td>Products</td>
-                                                <td>Amount</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr className="small">
-                                                <td>Maitama</td>
-                                                <td>76</td>
-                                                <td>600</td>
-                                                <td>₦120,000</td>
-                                            </tr>
-                                            <tr className="small">
-                                                <td>Maitama</td>
-                                                <td>76</td>
-                                                <td>600</td>
-                                                <td>₦120,000</td>
-                                            </tr>
-                                            <tr className="small">
-                                                <td>Maitama</td>
-                                                <td>76</td>
-                                                <td>600</td>
-                                                <td>₦120,000</td>
-                                            </tr>
-                                            <tr className="small">
-                                                <td>Maitama</td>
-                                                <td>76</td>
-                                                <td>600</td>
-                                                <td>₦120,000</td>
-                                            </tr>
-                                            <tr className="small">
-                                                <td>Maitama</td>
-                                                <td>76</td>
-                                                <td>600</td>
-                                                <td>₦120,000</td>
-                                            </tr>
-                                            <tr className="small">
-                                                <td>Maitama</td>
-                                                <td>76</td>
-                                                <td>600</td>
-                                                <td>₦120,000</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
             }
         </Dialog>
     )
 }
 
-export default SupportUserData
+export default ProductSummary

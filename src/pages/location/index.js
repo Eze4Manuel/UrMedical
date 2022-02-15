@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import './Support.css';
-// import NoData from '../../../components/widgets/NoData';
-import SubNavbar from '../../../components/subnavbar/index';
-import NewSupportForm from './NewSupportForm';
+import './Location.css';
+import SubNavbar from '../../components/subnavbar/index';
+import NewLocationForm from './NewLocationForm';
 import lib from './lib';
-import Table from '../../../components/table';
-import { getPageCount, getPages, goTo, onSetPage } from '../../../core/func/utility';
-import SupportUserData from './SupportUserData';
-import { ContainerLoader } from '../../../components/loading/Loading';
-import { useAuth } from '../../../core/hooks/useAuth';
-import helpers from '../../../core/func/Helpers';
+import Table from '../../components/table';
+import { getPageCount, getPages, goTo, onSetPage } from '../../core/func/utility';
+import { ContainerLoader } from '../../components/loading/Loading';
+import { useAuth } from '../../core/hooks/useAuth';
+import helpers from '../../core/func/Helpers';
 import { useNotifications } from '@mantine/notifications';
-import Alert from '../../../components/flash/Alert';
+import Alert from '../../components/flash/Alert';
+import LocationSummary from './LocationSummary'
 
-// const noDataTitle = "You haven't created any support user yet.";
-// const noDataParagraph = "You can create a support yourself by clicking on the button Add support.";
 
-const Support = (props) => {
+// const noDataTitle = "You haven't created any location user yet.";
+// const noDataParagraph = "You can create a location yourself by clicking on the button Add location.";
+
+const Location = (props) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
     const [searchInput, setSearchInput] = useState('');
@@ -24,7 +24,7 @@ const Support = (props) => {
     const [openData, setOpenData] = useState(false);
     const [notFound, setNotFound] = useState(false);
     const [data, setData] = useState([]);
-    const [selected, setSelected] = useState(null);
+    const [selected, setSelected] = useState([]);
     const [option, setOption] = useState('name');
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
@@ -40,12 +40,12 @@ const Support = (props) => {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
-                (reqData.data?.length === 0) ? 
-                setNoDataAlert(true)
-                :
-                setData(reqData.data);
+                (reqData.data?.length === 0) ?
+                    setNoDataAlert(true)
+                    :
+                    setData(reqData.data)
             }
-            setLoader(false);
+            setLoader(false)
         })()
     }, [user?.token, page, set])
 
@@ -81,7 +81,7 @@ const Support = (props) => {
 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
         setLoading(true)
-        let reqData = await lib.create(values, user?.token)
+        let reqData = await lib.createLocation(values, user?.token)
         setLoading(false)
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg, setError)
@@ -90,7 +90,7 @@ const Support = (props) => {
             setValues(resetData)
             setOpenForm(false)
             setData([reqData.data, ...data])
-            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Support created' })
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Location created' })
         }
     }
 
@@ -99,12 +99,7 @@ const Support = (props) => {
     }
 
     const onSelected = async (value) => {
-        setLoader(true)
-        let reqData = await lib.getOne(value?.auth_id, user?.token)
-        if (reqData.status === 'ok' && reqData?.data) {
-            setSelected(reqData.data)
-        }
-        setLoader(false)
+        setSelected(value)
         setOpenData(true)
     }
 
@@ -114,7 +109,7 @@ const Support = (props) => {
         // close modal
         setOpenData(false)
         // remove from data list
-        let d = data?.filter(val => (String(val?.auth_id) !== String(id)))
+        let d = data?.filter(val => (String(val?._id) !== String(id)))
         setData(d)
         await reload()
     }
@@ -123,49 +118,54 @@ const Support = (props) => {
         <div className='main-content'>
             <main>
                 {loader ? <ContainerLoader /> : null}
-                
                 <Alert onCancel={() => setNoDataAlert(false)} show={noDataAlert} title="Notification" message="You have no more data" />
 
                 <Alert onCancel={() => setNotFound(false)} show={notFound} title="Notification" message="No match found" />
-                <NewSupportForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
+                <NewLocationForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
                 <SubNavbar
                     showFilter
                     showSearch
                     showButton
-                    filterName="support"
+                    filterName="location"
                     filterList={['name', 'location', 'phone']}
-                    searchPlaceholder="Search for support..."
-                    ariaLabel="support"
-                    ariaDescription="support"
+                    searchPlaceholder="Search for location..."
+                    ariaLabel="location"
+                    ariaDescription="location"
                     onSearch={() => onSearch()}
                     searchInput={searchInput}
                     onChangeInput={setSearchInput}
-                    searchID="support"
-                    buttonTitle="Add support"
+                    searchID="location"
+                    buttonTitle="Add location"
                     onSelectChange={setOption}
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                <div className="support-table__container">
+                {openData ?
+                    <LocationSummary onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                    : null
+                }
+
+                <div className="location-table__container">
                     <div className="conatainer overflow-hidden">
-                        <SupportUserData onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                         {
-                            (
-                                <Table
-                                    onSelectData={onSelected}
-                                    prev={() => fetchMore(page, 'prev', setPage)}
-                                    next={() => fetchMore(page, 'next', setPage)}
-                                    goTo={(id) => goTo(id, setActivePages)}
-                                    activePage={activePage}
-                                    pages={paginate}
-                                    data={viewData}
-                                    perPage={perPage}
-                                    route="" // {config.pages.user}
-                                    tableTitle="Support"
-                                    tableHeader={['#', 'username', 'First Name', 'Last Name', 'Phone']}
-                                    dataFields={['email', 'first_name', 'last_name', 'phone_number']}
-                                />
-                            )
+                            viewData.length > 0
+                                ? (
+                                    <Table
+                                        onSelectData={onSelected}
+                                        prev={() => fetchMore(page, 'prev', setPage)}
+                                        next={() => fetchMore(page, 'next', setPage)}
+                                        goTo={(id) => goTo(id, setActivePages)}
+                                        activePage={activePage}
+                                        pages={paginate}
+                                        data={viewData}
+                                        perPage={perPage}
+                                        route="" // {config.pages.user}
+                                        tableTitle="Location"
+                                        tableHeader={['#', 'ID', 'Location Name', 'City', 'No of Areas']}
+                                        dataFields={['_id', 'name', 'city', `${'areas.length'}`]}
+                                    />
+                                )
+                                : null
                         }
                     </div>
                 </div>
@@ -174,4 +174,4 @@ const Support = (props) => {
     );
 }
 
-export default Support;
+export default Location;

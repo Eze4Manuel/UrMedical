@@ -36,7 +36,7 @@ const Paginate = (props) => (
  * }} props 
  * @returns 
  */
-const Pagination = (props) => {
+const Pagination = (props) => { 
     const pageItems = getPageItems(props.pages, props.goTo);
     return (
         <div className="mt-5" style={{ display: 'flex', flexDirection: 'row-reverse' }}>

@@ -12,9 +12,7 @@ import helpers from '../../core/func/Helpers';
 import { ContainerLoader } from '../../components/loading/Loading';
 import { fShortenNumber } from '../../assets/utils/formatNumber';
 
-
 const Dashboard = (props) => {
-
     const { set, user } = useAuth();
     const [loader, setLoader] = useState(false);
     const [page,] = useState(1);
@@ -96,7 +94,6 @@ const Dashboard = (props) => {
             if (reqData.status === 'ok') {
                 setTotalPharmacyRevenue(reqData.data[0])
             }
-
         })()
     }, [user?.token, page, set, currentYear])
 
@@ -122,9 +119,6 @@ const Dashboard = (props) => {
             }
         })()
     }, [user?.token, page, set, currentMonth, currentYear])
-
-
-
 
     // Getting Order summary by count
     useEffect(() => {
@@ -170,17 +164,12 @@ const Dashboard = (props) => {
         })()
     }, [user?.token, page, set])
 
-
-
-
     const months = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
     let reveneData = revenueFor6Months.length > 0 ? revenueFor6Months?.map((e, ind) => {
         return { sn: ind + 1, month: months[e._id], dispatch_fee: e.dispatch_fee, amount: e.amount, total: e.total }
     }) : [{ sn: 0, month: '', dispatch_fee: '', amount: '', total: '' }]
     reveneData.splice(5);
-
-
 
     const mapStatus = (res) => {
         let obj = {
@@ -236,7 +225,7 @@ const Dashboard = (props) => {
 
                         </div>
                         <div className="row">
-                            <DashbaordTable dataRow={['sn', '_id', 'amount', 'dispatch_fee', 'total']} data={revenueByArea} header="Revenue by Area" headerRow={['#', 'Area', 'Amount', 'Dispatch Fee', 'Total']} />
+                            <DashbaordTable dataRow={['sn', '_id', 'amount', 'dispatch_fee', 'total']} data={revenueByArea} header="Revenue by Area" headerRow={['#', 'Area', 'Amount', 'Dispatch Fee', 'Total']} style={{maxHeight: "400px", overflow: "scroll"}} />
                             <DashbaordTable dataRow={['sn', 'month', 'amount', 'dispatch_fee', 'total']} data={reveneData} header="Revenue For Last 6 months" headerRow={['#', 'Month', 'Amount', 'Dispatch Fee', 'Total']} />
                             <DashboardBar header="Revenue Chart" iconDesc="Total revenue for the last 6 months" desc="Generated revenue" icon="las la-users" Bar={ProgressBar} data={reveneData} dataKey="total" />
                         </div>
@@ -253,7 +242,7 @@ const Dashboard = (props) => {
                             <DashboardBar iconDesc="Total order in the last 6 months" desc="Orders" header="Orders" icon="las la-users" Bar={ProgressBar} data={userData2} dataKey="total" />
                         </div>
                         <div className="row mb-5 pb-5">
-                            <DashbaordTable data={userData} col="6" dataRow={['sn', 'areas', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'No of Orders']} />
+                            <DashbaordTable data={userData} col="6" dataRow={['sn', 'areas', 'total']} header="Orders by Area" headerRow={['#', 'Area', 'No of Orders']} style={{maxHeight: "400px", overflow: "scroll"}} />
                             <DashbaordTable order={true} col="6" data={deliveryData} dataRow={['status', 'total']} header="Current deliveries" headerRow={['Status', 'Quantity']} />
                         </div>
                     </div>
