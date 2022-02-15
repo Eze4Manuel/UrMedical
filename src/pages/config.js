@@ -9,6 +9,7 @@ import Setting from "../pages/settings/Setting";
 import Transaction from "../pages/transaction/Transaction";
 import Partner from "../pages/user/partner/Partner";
 import Product from "./product/Product";
+import Location from '../pages/location/index';
 import Trip from "./trips/Trip";
 
 // Access 1 - super admin, 2 - admin staff
@@ -24,4 +25,5 @@ export const routes = [
     {link: pages.transactions, Component: Transaction, access: 2, NavigationBar: Navbar},
     {link: pages.trips, Component: Trip, access: 2, NavigationBar: Navbar},
     {link: pages.settings, Component: Setting, access: 2, NavigationBar: Navbar},
+    {link: pages.location, Component: Location, access: 2, NavigationBar: Navbar},
 ]

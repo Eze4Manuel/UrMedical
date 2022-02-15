@@ -43,11 +43,10 @@ const SupportUserData = ({ data, show, onHide, onDeleted }) => {
             onHide()
             helpers.alert({notifications: notify, icon: 'success', color:'green', message: 'user deleted'})
         }
-        
     }
   
     return (
-        <Dialog closeOnEscape header="User Profile" visible={show} modal onHide={() => onHide()} style={{width: "70vw"}}>
+        <Dialog closeOnEscape header="Support Profile" visible={show} modal onHide={() => onHide()} style={{width: "70vw"}}>
             <div className="user-info__ctn">
                 <div className="user-info__btn-action-wp">
                     <div className="user-info__btn-action">

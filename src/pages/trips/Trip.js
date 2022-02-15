@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './Trip.css';
-import NoData from '../../components/widgets/NoData';
 import SubNavbar from '../../components/subnavbar/index';
 import { useAuth } from '../../core/hooks/useAuth';
 import lib from './lib';
@@ -10,13 +9,13 @@ import { ContainerLoader } from '../../components/loading/Loading';
 import Tabs from "../../components/tabs/Tabs";
 import helpers from '../../core/func/Helpers';
 import TripDetail from './TripDetail';
+import Alert from '../../components/flash/Alert';
 
-import firebase from '../../firebase';
-import { getMessaging, getToken,  } from "firebase/messaging";
+import { getMessaging, getToken, } from "firebase/messaging";
 require('dotenv').config();
 
-const noDataTitle = "No Order yet.";
-const noDataParagraph = "All Orders made will appear here.";
+// const noDataTitle = "No Order yet.";
+// const noDataParagraph = "All Orders made will appear here.";
 
 const Trip = (props) => {
     const { set, user } = useAuth();
@@ -32,7 +31,7 @@ const Trip = (props) => {
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
-
+    const [noDataAlert, setNoDataAlert] = useState(false);
 
     // setup table data
     const perPage = getPageCount(10);
@@ -78,23 +77,67 @@ const Trip = (props) => {
     }, [user?.phone_number])
 
     useEffect(() => {
-        (async () => {
-            setLoader(true)
-            let reqData = await lib.get(page, null, user?.token);
-            if (reqData.status === "error") {
-                helpers.sessionHasExpired(set, reqData.msg)
-            }
-            if (reqData.status === 'ok') {
-                setData(fQeury(reqData.data));
-                setProcessedData(fQeury(reqData.data));
-            }
-            setLoader(false);
-        })()
-
-
+        fetchData('All');
     }, [page, set, user?.token])
 
 
+    const fetchData = async (val) => {
+        setLoader(true)
+        let reqData = await lib.get(page, null, user?.token);
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg)
+        }
+        if (reqData.status === 'ok') {
+            switch (val) {
+                case 'All':
+                    (reqData.data?.length === 0) ?
+                        setNoDataAlert(true)
+                        :
+                        setData(fQeury(reqData.data));
+                    setProcessedData(fQeury(reqData.data));
+                    break;
+                case 'pending':
+                    (reqData.data?.length === 0) ?
+                        setNoDataAlert(true)
+                        :
+                        setData(fQeury(reqData.data));
+                    setProcessedData(data.filter(e => {
+                        return e.order_status === val
+                    }));
+                    break;
+                case 'active':
+                    (reqData.data?.length === 0) ?
+                        setNoDataAlert(true)
+                        :
+                        setData(fQeury(reqData.data));
+                    setProcessedData(data.filter(e => {
+                        return e.order_status === val
+                    }));
+                    break;
+                case 'cancelled':
+                    (reqData.data?.length === 0) ?
+                        setNoDataAlert(true)
+                        :
+                        setData(fQeury(reqData.data));
+                    setProcessedData(data.filter(e => {
+                        return e.order_status === val
+                    }));
+                    break;
+                case 'fulfilled':
+                    (reqData.data?.length === 0) ?
+                        setNoDataAlert(true)
+                        :
+                        setData(fQeury(reqData.data));
+                    setProcessedData(data.filter(e => {
+                        return e.order_status === val
+                    }));
+                    break;
+                default:
+                    break
+            }
+        }
+        setLoader(false);
+    }
 
 
 
@@ -112,7 +155,7 @@ const Trip = (props) => {
         }
     }
 
-    
+
 
     const fetchMore = (page, key, set) => {
         onSetPage(page, key, set)
@@ -132,28 +175,33 @@ const Trip = (props) => {
     const changeTab = (val) => {
         switch (val) {
             case 'All':
+                fetchData('All');
                 setProcessedData(data)
                 setOrder(val);
                 break;
             case 'pending':
+                fetchData('pending');
                 setProcessedData(data.filter(e => {
                     return e.order_status === val
                 }));
                 setOrder(val)
                 break;
             case 'active':
+                fetchData('active');
                 setProcessedData(data.filter(e => {
                     return e.order_status === val
                 }));
                 setOrder(val)
                 break;
             case 'cancelled':
+                fetchData('cancelled');
                 setProcessedData(data.filter(e => {
                     return e.order_status === val
                 }));
                 setOrder(val)
                 break;
             case 'fulfilled':
+                fetchData('fulfilled');
                 setProcessedData(data.filter(e => {
                     return e.order_status === val
                 }));
@@ -184,6 +232,9 @@ const Trip = (props) => {
         <div className='main-content'>
             <main>
                 {loader ? <ContainerLoader /> : null}
+
+                <Alert onCancel={() => setNoDataAlert(false)} show={noDataAlert} title="Notification" message="You have no more data" />
+
                 <SubNavbar
                     showFilter
                     showSearch
@@ -203,9 +254,9 @@ const Trip = (props) => {
                 />
                 <div className="trip-table__container">
                     <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={["All", "pending", "active", "cancelled", "fulfilled"]} />
-                    {data.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
+
                         <>
-                            <TripDetail onDeleted={(id) => onDeleted(id)} data={selected} updateAllData={updateAllData}  show={openData} onHide={() => setOpenData(false)} />
+                            <TripDetail onDeleted={(id) => onDeleted(id)} data={selected} updateAllData={updateAllData} show={openData} onHide={() => setOpenData(false)} />
                             <Table
                                 onSelectData={onSelected}
                                 prev={() => fetchMore(page, 'prev', setPage)}
@@ -221,9 +272,6 @@ const Trip = (props) => {
                                 dataFields={['pharmacy.name', 'dispatcher.name', 'products.length', 'total', 'order_date', 'order_status']}
                             />
                         </>
-                    }
-
-
                 </div>
             </main>
         </div>

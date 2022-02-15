@@ -35,6 +35,7 @@ const Product = (props) => {
     const [category, setCategories] = useState(0);
     const [count, setCount] = useState(0);
     const [order, setOrder] = useState("Pharmacy");
+    const [noDataAlert, setNoDataAlert] = useState(false);
 
     const fQeury = (data) => {
         return data?.map(d => {
@@ -56,7 +57,10 @@ const Product = (props) => {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
-                setData(fQeury(reqData.data))
+                (reqData.data?.length === 0) ?
+                    setNoDataAlert(true)
+                    :
+                    setData(fQeury(reqData.data))
             }
             setLoader(false)
         })()
@@ -79,9 +83,9 @@ const Product = (props) => {
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data.length, perPage);
-    // const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
-    // const stop = start + perPage;
-    // const viewData = data.slice(start, stop);
+    const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
+    const stop = start + perPage;
+    const viewData = data.slice(start, stop);
 
 
     const onSearch = async () => {
@@ -179,6 +183,8 @@ const Product = (props) => {
         <div className='main-content'>
             <main>
                 {loader ? <ContainerLoader /> : null}
+                <Alert onCancel={() => setNoDataAlert(false)} show={noDataAlert} title="Notification" message="You have no more data" />
+
                 <Alert onCancel={() => setNotFound(false)} show={notFound} title="Notification" message="No match found" />
                 <SubNavbar
                     showFilter
@@ -202,57 +208,57 @@ const Product = (props) => {
                     <ProductSummary onDeleted={(id) => onDeleted(id)} data={pharmData} show={openData} onHide={() => setOpenData(false)} />
                     : null
                 }
-                {data?.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
-                    <div className="user-table__container">
 
-                        <div className="conatainer overflow-hidden">
-                            <div className="product-table__container">
-                                <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={(user?.user_type === 'superadmin') ? ["Pharmacy", "Analytics"] : ["Pharmacy"]} />
-                                {activeIndex === 0 ?
-                                    <>
-                                        {(data?.length === 0) ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
-                                            <>
-                                                <Table
-                                                    onSelectData={onSelected}
-                                                    prev={() => fetchMore(page, 'prev', setPage)}
-                                                    next={() => fetchMore(page, 'next', setPage)}
-                                                    goTo={(id) => goTo(id, setActivePages)}
-                                                    activePage={activePage}
-                                                    pages={paginate}
-                                                    data={data}
-                                                    perPage={perPage}
-                                                    route="" // {config.pages.user}
-                                                    tableTitle="Products summary"
-                                                    tableHeader={['#', 'Pharmacy', 'Email', 'City', 'Area',]}
-                                                    dataFields={['name', 'email', 'city', 'area',]}
-                                                />
-                                            </>
-                                        }
-                                    </>
-                                    :
-                                    <div className="product-summary__ctn mt-5">
-                                        <div className="row">
-                                            <div className="col-3">
-                                                <div className="card p-2 pl-3">
-                                                    <h5><span>All Products</span></h5>
-                                                    <h2 className="text-primary"><span>{count}</span></h2>
-                                                    <p className="small"><span>Listed products</span></p>
-                                                </div>
-                                            </div>
-                                            <div className="col-3">
-                                                <div className="card p-2 pl-3">
-                                                    <h5><span>All Categories</span></h5>
-                                                    <h2 className="text-warning"><span>{category}</span></h2>
-                                                    <p className="small"><span>Products categories</span></p>
-                                                </div>
+                <div className="user-table__container">
+
+                    <div className="conatainer overflow-hidden">
+                        <div className="product-table__container">
+                            <Tabs onChangeTab={(val) => changeTab(val)} activeTab={order} tabs={(user?.user_type === 'superadmin') ? ["Pharmacy", "Analytics"] : ["Pharmacy"]} />
+                            {activeIndex === 0 ?
+                                <>
+                                    {(data?.length === 0) ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
+                                        <>
+                                            <Table
+                                                onSelectData={onSelected}
+                                                prev={() => fetchMore(page, 'prev', setPage)}
+                                                next={() => fetchMore(page, 'next', setPage)}
+                                                goTo={(id) => goTo(id, setActivePages)}
+                                                activePage={activePage}
+                                                pages={paginate}
+                                                data={viewData}
+                                                perPage={perPage}
+                                                route="" // {config.pages.user}
+                                                tableTitle="Products summary"
+                                                tableHeader={['#', 'Pharmacy', 'Email', 'City', 'Area',]}
+                                                dataFields={['name', 'email', 'city', 'area',]}
+                                            />
+                                        </>
+                                    }
+                                </>
+                                :
+                                <div className="product-summary__ctn mt-5">
+                                    <div className="row">
+                                        <div className="col-3">
+                                            <div className="card p-2 pl-3">
+                                                <h5><span>All Products</span></h5>
+                                                <h2 className="text-primary"><span>{count}</span></h2>
+                                                <p className="small"><span>Listed products</span></p>
                                             </div>
                                         </div>
-
+                                        <div className="col-3">
+                                            <div className="card p-2 pl-3">
+                                                <h5><span>All Categories</span></h5>
+                                                <h2 className="text-warning"><span>{category}</span></h2>
+                                                <p className="small"><span>Products categories</span></p>
+                                            </div>
+                                        </div>
                                     </div>
-                                }
-                            </div>
+
+                                </div>
+                            }
                         </div>
                     </div>
+                </div>
                 }
             </main>
         </div>

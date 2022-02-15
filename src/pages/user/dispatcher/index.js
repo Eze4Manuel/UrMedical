@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './dispatcher.css';
-import NoData from '../../../components/widgets/NoData';
 import SubNavbar from '../../../components/subnavbar/index';
 import lib from './lib';
 import Table from '../../../components/table';
@@ -13,8 +12,8 @@ import { useNotifications } from '@mantine/notifications';
 import Alert from '../../../components/flash/Alert';
 import helpers from '../../../core/func/Helpers';
 
-const noDataTitle = "You haven't created any dispatcher yet.";
-const noDataParagraph = "You can create a dispatcher yourself by clicking on the button Add dispatcher.";
+// const noDataTitle = "You haven't created any dispatcher yet.";
+// const noDataParagraph = "You can create a dispatcher yourself by clicking on the button Add dispatcher.";
 
 
 const Dispatcher = (props) => {
@@ -30,6 +29,7 @@ const Dispatcher = (props) => {
     const [page, setPage] = useState(1);
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
+    const [noDataAlert, setNoDataAlert] = useState(false);
 
     // data 
     useEffect(() => {
@@ -40,7 +40,10 @@ const Dispatcher = (props) => {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
-                setData(reqData.data)
+                (reqData.data?.length === 0) ? 
+                setNoDataAlert(true)
+                :
+                setData(reqData.data);
             }
             setLoader(false)
 
@@ -121,6 +124,9 @@ const Dispatcher = (props) => {
         <div className='main-content'>
             <main>
                 {loader ? <ContainerLoader /> : null}
+
+                <Alert onCancel={() => setNoDataAlert(false)} show={noDataAlert} title="Notification" message="You have no more data" />
+
                 <Alert onCancel={() => setNotFound(false)} show={notFound} title="Notification" message="No match found" />
                 <NewDispatcherForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
                 <SubNavbar  
@@ -141,7 +147,7 @@ const Dispatcher = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                {viewData.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> : null}
+
                 <DispatcherUserData onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                 <div className="dispatcher-table__container">
                     {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './Transaction.css';
-import NoData from '../../components/widgets/NoData';
 import SubNavbar from '../../components/subnavbar/index';
 import lib from './lib';
 import Table from '../../components/table';
@@ -13,9 +12,10 @@ import { useNotifications } from '@mantine/notifications';
 
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
+import Alert from '../../components/flash/Alert';
 
-const noDataTitle = "No transaction have have been made yet.";
-const noDataParagraph = "You will see all transactions on this page.";
+// const noDataTitle = "No transaction have have been made yet.";
+// const noDataParagraph = "You will see all transactions on this page.";
 
 const fQeury = (data) => {
     return data?.map(d => {
@@ -43,24 +43,24 @@ const Transaction = (props) => {
     const [, setNotFound] = useState(false);
     const [editable, setEditable] = useState(true);
     const [dispatchFee, setDispatchFee] = useState('');
+    const [noDataAlert, setNoDataAlert] = useState(false);
 
-  
     const updateFee = async () => {
         setLoader(true)
         let reqData = await lib.updateDispatch(user?.token, dispatchFee);
-            if (reqData.status === "error") {
-                helpers.sessionHasExpired(set, reqData.msg);
-                helpers.alert({notifications: notify, icon: 'error', color:'red', message: reqData.msg})
-            }
-            if (reqData.status === 'ok') {
-                data?.forEach( e => {
-                    e.dispatch_fee = parseInt(dispatchFee);
-                });
-                helpers.alert({notifications: notify, icon: 'success', color:'green', message: "Dispatch Fee Updated"})
-            }
-            setLoader(false);
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg);
+            helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+        }
+        if (reqData.status === 'ok') {
+            data?.forEach(e => {
+                e.dispatch_fee = parseInt(dispatchFee);
+            });
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: "Dispatch Fee Updated" })
+        }
+        setLoader(false);
 
-    } 
+    }
     // data 
     useEffect(() => {
         (async () => {
@@ -70,7 +70,10 @@ const Transaction = (props) => {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
-                setData(fQeury(reqData.data))
+                (reqData.data?.length === 0) ?
+                    setNoDataAlert(true)
+                    :
+                    setData(fQeury(reqData.data))
             }
             setLoader(false);
         })()
@@ -89,7 +92,7 @@ const Transaction = (props) => {
         })()
     }, [user?.token, set])
 
-  
+
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data?.length, perPage);
@@ -97,7 +100,7 @@ const Transaction = (props) => {
     const stop = start + perPage;
     const viewData = data?.slice(start, stop);
 
-    
+
 
     const onSearch = async () => {
         setLoader(true)
@@ -116,7 +119,6 @@ const Transaction = (props) => {
 
     const fetchMore = (page, key, set) => {
         onSetPage(page, key, set)
-        // fetch the next page from the service and update the state
     }
 
     const onSelected = (value) => {
@@ -153,6 +155,9 @@ const Transaction = (props) => {
             <NavigationBar {...props} />
             <main>
                 {loader ? <ContainerLoader /> : null}
+
+                <Alert onCancel={() => setNoDataAlert(false)} show={noDataAlert} title="Notification" message="You have no more data" />
+
                 <SubNavbar
                     showFilter
                     showSearch
@@ -171,29 +176,29 @@ const Transaction = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-                {data?.length === 0 ? <NoData title={noDataTitle} paragraph={noDataParagraph} /> :
-                    <>
-                        <TransactionDetail onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
-                        <div className="transaction-table__container">  
-                            <Table
-                                onSelectData={onSelected}
-                                prev={() => fetchMore(page, 'prev', setPage)}
-                                next={() => fetchMore(page, 'next', setPage)}
-                                goTo={(id) => goTo(id, setActivePages)}
-                                activePage={activePage}
-                                pages={paginate}
-                                data={viewData}
-                                perPage={perPage}
-                                rightSide = {updateDispatchFee}
-                                sideTitle = 'Update Dispatch Fee'
-                                route="" // {config.pages.user}
-                                tableTitle="Transactions"
-                                tableHeader={['#', 'ID', 'Name', 'Email', 'Payment Method', 'Amount']}
-                                dataFields={['_id', 'name', 'email', 'payment_method', 'amount']}
-                            />
-                        </div>
-                    </>
-                }
+
+                <>
+                    <TransactionDetail onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                    <div className="transaction-table__container">
+                        <Table
+                            onSelectData={onSelected}
+                            prev={() => fetchMore(page, 'prev', setPage)}
+                            next={() => fetchMore(page, 'next', setPage)}
+                            goTo={(id) => goTo(id, setActivePages)}
+                            activePage={activePage}
+                            pages={paginate}
+                            data={viewData}
+                            perPage={perPage}
+                            rightSide={updateDispatchFee}
+                            sideTitle='Update Dispatch Fee'
+                            route="" // {config.pages.user}
+                            tableTitle="Transactions"
+                            tableHeader={['#', 'ID', 'Name', 'Email', 'Payment Method', 'Amount']}
+                            dataFields={['_id', 'name', 'email', 'payment_method', 'amount']}
+                        />
+                    </div>
+                </>
+                
             </main>
         </div>
     );
