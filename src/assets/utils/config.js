@@ -42,7 +42,8 @@ const config = {
         transactions: '/transactions',
         trips: '/trips',
         settings: '/settings',
-        location: '/location'
+        location: '/location',
+        pricing: '/pricing'
     },
     key: {
         user: '___@clsa_user',

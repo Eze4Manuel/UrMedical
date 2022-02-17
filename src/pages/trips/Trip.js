@@ -10,6 +10,7 @@ import Tabs from "../../components/tabs/Tabs";
 import helpers from '../../core/func/Helpers';
 import TripDetail from './TripDetail';
 import Alert from '../../components/flash/Alert';
+import firebase from '../../firebase';
 
 import { getMessaging, getToken, } from "firebase/messaging";
 require('dotenv').config();
@@ -217,7 +218,6 @@ const Trip = (props) => {
     }
 
 
-
     const onDeleted = (id) => {
         // remove from selected
         setSelected(null)
@@ -227,7 +227,6 @@ const Trip = (props) => {
         let d = data?.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
-
     return (
         <div className='main-content'>
             <main>
