@@ -81,8 +81,6 @@ const Pricing = (props) => {
     }
 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
-        console.log(values);
-
         setLoading(true)
         let reqData = await lib.create(values, user?.token)
         setLoading(false)
@@ -92,7 +90,6 @@ const Pricing = (props) => {
         if (reqData.status === "ok") {
             setValues(resetData)
             setOpenForm(false)
-            console.log(reqData.data);
             setData([reqData.data, ...data])
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Pricing created' })
         }
@@ -113,12 +110,13 @@ const Pricing = (props) => {
     }
 
     const onDeleted = async (id) => {
+        console.log(id);
         // remove from selected
         setSelected(null)
         // close modal
         setOpenData(false)
         // remove from data list
-        let d = data?.filter(val => (String(val?.id) !== String(id)))
+        let d = data?.filter(val => (String(val?._id) !== String(id)))
         setData(d)
         await reload()
     }
