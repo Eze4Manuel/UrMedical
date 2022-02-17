@@ -25,6 +25,7 @@ const config = {
                 {name: 'transactions', icon: 'las la-book', link: conf.pages.transactions},
                 {name: 'trips', icon: 'las la-map-signs', link: conf.pages.trips},
                 {name: 'location', icon: 'las la-map', link: conf.pages.location},
+                {name: 'pricing', icon: 'las la-money-bill', link: conf.pages.pricing},
 
             ]
         },

@@ -259,7 +259,6 @@ const Product = (props) => {
                         </div>
                     </div>
                 </div>
-                }
             </main>
         </div>
     );
