@@ -32,7 +32,8 @@ const PricingUserData = ({ data, show, onHide, onDeleted, onUpdate }) => {
         setError('')
         setDelWarning(false)
         setLoading(true)
-        let reqData = await lib.delete(values?._id, user?.token)
+        let reqData = await lib.delete(values?._id, user?.token);
+
         setLoading(false)
         // error
         if (reqData.status === 'error') {
@@ -40,9 +41,7 @@ const PricingUserData = ({ data, show, onHide, onDeleted, onUpdate }) => {
         }
         if (reqData.status === 'ok') {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Pricing deleted' })
-
-            console.log(reqData.data);
-            // onDeleted(reqData.data?._id)
+            onDeleted(values?._id)
             onHide()
         }
     }
