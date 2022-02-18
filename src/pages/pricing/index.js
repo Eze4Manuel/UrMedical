@@ -13,6 +13,8 @@ import helpers from '../../core/func/Helpers';
 import { useNotifications } from '@mantine/notifications';
 import Alert from '../../components/flash/Alert';
 
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
 // const noDataTitle = "You haven't created any pricing user yet.";
 // const noDataParagraph = "You can create a pricing yourself by clicking on the button Add pricing.";
 
@@ -30,7 +32,8 @@ const Pricing = (props) => {
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
     const [noDataAlert, setNoDataAlert] = useState(false);
-
+    const [editable, setEditable] = useState(true);
+    const [dispatchFee, setDispatchFee] = useState('');
     // data 
     useEffect(() => {
         (async () => {
@@ -41,6 +44,7 @@ const Pricing = (props) => {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
+                console.log(reqData.data);
                 (reqData.data?.length === 0) ? 
                 setNoDataAlert(true)
                 :
@@ -49,6 +53,19 @@ const Pricing = (props) => {
             setLoader(false);
         })()
     }, [user?.token, page, set])
+
+     // Get urmed Dispatch fee
+     useEffect(() => {
+        (async () => {
+            let reqData = await lib.getDispatchFee(user?.token);
+            if (reqData.status === "error") {
+                helpers.sessionHasExpired(set, reqData.msg)
+            }
+            if (reqData.status === 'ok') {
+                setDispatchFee(reqData.data?.amount);
+            }
+        })()
+    }, [user?.token, set])
 
     // setup table data
     const perPage = getPageCount(10);
@@ -94,7 +111,21 @@ const Pricing = (props) => {
             helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: 'Pricing created' })
         }
     }
-
+    const updateFee = async () => {
+        setLoader(true)
+        let reqData = await lib.updateDispatch(user?.token, dispatchFee);
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg);
+            helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
+        }
+        if (reqData.status === 'ok') {
+            data?.forEach(e => {
+                e.dispatch_fee = parseInt(dispatchFee);
+            });
+            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: "Dispatch Fee Updated" })
+        }
+        setLoader(false);
+    }
     const fetchMore = (page, key, set) => {
         onSetPage(page, key, set)
     }
@@ -108,7 +139,17 @@ const Pricing = (props) => {
         setLoader(false)
         setOpenData(true)
     }
-
+    const updateDispatchFee = (
+        <div className="p-grid p-fluid">
+            <div className="p-col-12">
+                <div className="p-inputgroup">
+                    <InputText placeholder={`${dispatchFee}`} id='dispatchFee' onChange={(e) => setDispatchFee(e.target.value)} value={dispatchFee} disabled={editable} />
+                    <Button icon="pi pi-pencil" onClick={() => setEditable(!editable)} className="p-button-primary p-button-edit" />
+                    <Button icon="pi pi-check" onClick={() => updateFee()} disabled={editable} className="p-button-success p-button-update" />
+                </div>
+            </div>
+        </div>
+    );
     const onDeleted = async (id) => {
         console.log(id);
         // remove from selected
@@ -171,11 +212,13 @@ const Pricing = (props) => {
                                     activePage={activePage}
                                     pages={paginate}
                                     data={viewData}
+                                    sideTitle='Update Base Dispatch Fee'
                                     perPage={perPage}
+                                    rightSide={updateDispatchFee}
                                     route="" // {config.pages.user}
                                     tableTitle="Pricing"
                                     tableHeader={['#', 'ID', 'Name', 'Pickup', 'Destination', 'Price']}
-                                    dataFields={['_id', 'name', 'pickup', 'destination', 'amount']}
+                                    dataFields={['_id', 'name', `${'pickup_data.name'}`, `${'destination_data.name'}`, 'amount']}
                                 />
                             )
                         }

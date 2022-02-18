@@ -54,13 +54,13 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false }) => {
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="name">Name *</label><br />
-                            <InputText required style={{ width: '100%' }} id="name" name="name" onChange={e => setValues(d => ({ ...d, name: e.target.value }))} autoFocus value={values.name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="name" />
+                            <InputText required style={{ width: '100%' }} id="name" name="name" onChange={e => setValues(d => ({ ...d, name: e.target.value }))} autoFocus value={values?.name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="name" />
                         </div>
                     </div>
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="amount">Amount *</label><br />
-                            <InputText required style={{ width: '100%' }} id="amount" name="amount" onChange={e => setValues(d => ({ ...d, amount: e.target.value }), onPickChange)} autoFocus value={values.amount} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="amount" />
+                            <InputText required style={{ width: '100%' }} id="amount" name="amount" onChange={e => setValues(d => ({ ...d, amount: e.target.value }), onPickChange)} autoFocus value={values?.amount} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="amount" />
                         </div>
                     </div>
                 </div>
