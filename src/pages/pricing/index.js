@@ -151,7 +151,6 @@ const Pricing = (props) => {
         </div>
     );
     const onDeleted = async (id) => {
-        console.log(id);
         // remove from selected
         setSelected(null)
         // close modal
