@@ -8,10 +8,7 @@ import { ContainerLoader } from '../../components/loading/Loading';
 import TransactionDetail from './TransactionDetail'
 import { useAuth } from '../../core/hooks/useAuth';
 import helpers from '../../core/func/Helpers';
-import { useNotifications } from '@mantine/notifications';
 
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
 import Alert from '../../components/flash/Alert';
 
 // const noDataTitle = "No transaction have have been made yet.";
@@ -30,7 +27,6 @@ const fQeury = (data) => {
 const Transaction = (props) => {
     const { set, user } = useAuth();
     const NavigationBar = props.NavigationBar;
-    const notify = useNotifications();
     const [searchInput, setSearchInput] = useState('');
     const [, setOpenForm] = useState(false);
     const [openData, setOpenData] = useState(false);
@@ -41,26 +37,10 @@ const Transaction = (props) => {
     const [activePage, setActivePages] = useState(1);
     const [loader, setLoader] = useState(false);
     const [, setNotFound] = useState(false);
-    const [editable, setEditable] = useState(true);
-    const [dispatchFee, setDispatchFee] = useState('');
     const [noDataAlert, setNoDataAlert] = useState(false);
 
-    const updateFee = async () => {
-        setLoader(true)
-        let reqData = await lib.updateDispatch(user?.token, dispatchFee);
-        if (reqData.status === "error") {
-            helpers.sessionHasExpired(set, reqData.msg);
-            helpers.alert({ notifications: notify, icon: 'error', color: 'red', message: reqData.msg })
-        }
-        if (reqData.status === 'ok') {
-            data?.forEach(e => {
-                e.dispatch_fee = parseInt(dispatchFee);
-            });
-            helpers.alert({ notifications: notify, icon: 'success', color: 'green', message: "Dispatch Fee Updated" })
-        }
-        setLoader(false);
+ 
 
-    }
     // data 
     useEffect(() => {
         (async () => {
@@ -77,21 +57,9 @@ const Transaction = (props) => {
             }
             setLoader(false);
         })()
-    }, [page, set, user?.token])
+    }, [page, set, user?.token]);
 
-    // Get urmed Dispatch fee
-    useEffect(() => {
-        (async () => {
-            let reqData = await lib.getDispatchFee(user?.token);
-            if (reqData.status === "error") {
-                helpers.sessionHasExpired(set, reqData.msg)
-            }
-            if (reqData.status === 'ok') {
-                setDispatchFee(reqData.data?.amount);
-            }
-        })()
-    }, [user?.token, set])
-
+   
 
     // setup table data
     const perPage = getPageCount(10);
@@ -99,8 +67,6 @@ const Transaction = (props) => {
     const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
     const stop = start + perPage;
     const viewData = data?.slice(start, stop);
-
-
 
     const onSearch = async () => {
         setLoader(true)
@@ -115,7 +81,6 @@ const Transaction = (props) => {
             }, 3000)
         }
     }
-
 
     const fetchMore = (page, key, set) => {
         onSetPage(page, key, set)
@@ -139,17 +104,7 @@ const Transaction = (props) => {
         let d = data?.filter(val => (String(val?.auth_id) !== String(id)) || (String(val?._id) !== String(id)))
         setData(s => (d))
     }
-    const updateDispatchFee = (
-        <div className="p-grid p-fluid">
-            <div className="p-col-12">
-                <div className="p-inputgroup">
-                    <InputText placeholder={`${dispatchFee}`} id='dispatchFee' onChange={(e) => setDispatchFee(e.target.value)} value={dispatchFee} disabled={editable} />
-                    <Button icon="pi pi-pencil" onClick={() => setEditable(!editable)} className="p-button-primary p-button-edit" />
-                    <Button icon="pi pi-check" onClick={() => updateFee()} disabled={editable} className="p-button-success p-button-update" />
-                </div>
-            </div>
-        </div>
-    );
+   
     return (
         <div className='main-content'>
             <NavigationBar {...props} />
@@ -189,8 +144,6 @@ const Transaction = (props) => {
                             pages={paginate}
                             data={viewData}
                             perPage={perPage}
-                            rightSide={updateDispatchFee}
-                            sideTitle='Update Dispatch Fee'
                             route="" // {config.pages.user}
                             tableTitle="Transactions"
                             tableHeader={['#', 'ID', 'Name', 'Email', 'Payment Method', 'Amount']}

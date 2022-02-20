@@ -69,7 +69,7 @@ const Table = (props = {
             <span className='table table-header-container'>
                 <h1>{props.tableTitle}</h1>
                 <div>
-                    <h6> {props.sideTitle}</h6>                    
+                    <h6> {props.sideTitle}</h6>
                     <span>{props.rightSide}</span>
                 </div>
             </span>

@@ -32,7 +32,7 @@ const config = {
         {
             divider: 'others',
             sub: [
-                {name: 'settings', icon: 'las la-user-cog', link: conf.pages.settings},
+                {name: 'reset-password', icon: 'las la-user-cog', link: conf.pages.settings},
                 {name: 'logout', icon: 'las la-sign-out-alt', link: conf.pages.login},
             ]
         }

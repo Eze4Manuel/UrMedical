@@ -107,7 +107,7 @@ const EditPricingForm = ({ data, show, onHide, onUpdate }) => {
                 <div className="col-lg-6">
                     <div className="p-field mb-2">
                         <label htmlFor="amount">Amount *</label><br />
-                        <InputText required style={{ width: '100%' }} id="amount" type='number' name="amount" onChange={e => setValues(d => ({ ...d, amount: e.target.value }))} autoFocus value={values?.amount} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="amount" />
+                        <InputText required style={{ width: '100%' }} id="amount" type='number' name="amount" onChange={e => setValues(d => ({ ...d, amount: e.target.value }))} autoFocus value={values?.amount} className="p-inputtext-sm p-d-block p-mb-2" placeholder="amount" />
                     </div>
                 </div>
             </div>
@@ -126,7 +126,7 @@ const EditPricingForm = ({ data, show, onHide, onUpdate }) => {
                 </div>
             </div>
             <div className="user-form__button-wp">
-                <Button onClick={onSubmit} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Create" />
+                <Button onClick={onSubmit} style={{ width: 100, height: 30 }} loading={loading} color="#fff" label="Update" />
             </div>
         </div>
     ) : null

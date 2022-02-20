@@ -5,21 +5,20 @@
     overflow: hidden;
     background: #fff;
 }
-.user-info__detail {
+.setting-info__detail {
     font-size: 13px;
     line-height: 10px;
     display: flex;
     justify-content: space-between;
 }
 
-.user-info__btn-action-wp {
+.setting-info__btn-action-wp {
     z-index: 99;
-    position: fixed;
-    width: 50%;
+    width: 80%;
 
 }
 
-.user-info__btn-action {
+.setting-info__btn-action {
     position: relative;
     display: flex;
     flex-direction: row;

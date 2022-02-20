@@ -70,4 +70,29 @@ lib.delete = async (id, token) => {
     }
 }
 
+lib.getDispatchFee = async (token) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        // uri = `/fees/urmed-dispatch-fee`;
+        uri = `/locations/get-base-dispatch-fee`;
+        return await (await request.get(uri, cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+lib.updateDispatch = async (token, amount) => {
+    let uri = '';
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        // uri = `/fees/urmed-dispatch-fee`;
+        uri = `/locations/dispatch-fee-settings`;
+        return await (await request.post(uri, { amount: amount } , cfg)).data
+    } catch (e) {
+        return { status: 'error', msg: e?.response?.data?.msg || e?.message }
+    }
+}
+
+
 export default lib;
