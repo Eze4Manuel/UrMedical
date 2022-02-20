@@ -81,7 +81,6 @@ const Trip = (props) => {
         fetchData('All');
     }, [page, set, user?.token])
 
-
     const fetchData = async (val) => {
         setLoader(true)
         let reqData = await lib.get(page, null, user?.token);
