@@ -11,7 +11,8 @@ import helpers from '../../core/func/Helpers';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { ListBox } from 'primereact/listbox';
-  
+import { OrderList } from 'primereact/orderlist';
+
 const Detail = ({ name, value }) => value ? (<p className="order-info__detail"><span>{name}</span> <span>{value}</span></p>) : null
 
 export const Details = ({ data, updateAllData }) => {
@@ -46,12 +47,17 @@ export const Details = ({ data, updateAllData }) => {
         setLoader(true);
         // Fetches all available dispatchers
         let reqData = await lib.getDispatchers(user?.token, 'dispatcher');
+        console.log(reqData);
         if (reqData.status === "error") {
             helpers.sessionHasExpired(set, reqData.msg)
         }
         if (reqData.status === 'ok') {
             if (reqData.data?.length > 0) {
-                setDispatchers(reqData.data);
+                let dispatchOrder = reqData.data?.map( elem => {
+                    elem.email = `${elem?.email} (${elem?.orders})`
+                    return elem;
+                });
+                setDispatchers(dispatchOrder);
                 setPosition('right');
                 setDisplayPosition(true)
             } else {
