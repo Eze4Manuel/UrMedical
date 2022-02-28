@@ -24,7 +24,8 @@ lib.getDispatchers = async (token, user_type) => {
     let uri = '';
     try {
         let cfg = helpers.getHeaderConfig(String(token).substr(7))
-        uri = `auth/admin?&user_type=${user_type}`;
+        // uri = `auth/admin?&user_type=${user_type}`;
+        uri = `auth/get-available-dispatchers`;
         return await (await request.get(uri, cfg)).data
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
@@ -71,16 +72,7 @@ lib.registerApp = async (token, phone_number) => {
     }
 }
 
-
-
-lib.create = async (values, setLoading, setError, setValues, valuesInitialState) => {
-    // check the form data
-
-    // send create request
-
-    // add to the list of user
-    // () => (values, setLoading, setError, setValues)
-}
+ 
 
 lib.delete = async (userID, setLoading, setError, onHide, onDeleted) => {
 

@@ -60,16 +60,12 @@ const Partner = (props) => {
         })();
     }, [user?.token, page, set])
 
-
-
     // setup table data
     const perPage = getPageCount(10);
     const paginate = getPages(data.length, perPage);
     const start = (activePage === 1) ? 0 : (activePage * perPage) - perPage;
     const stop = start + perPage;
     const viewData = data.slice(start, stop);
-
-
 
     const reload = async () => {
         setLoader(true)
@@ -99,6 +95,8 @@ const Partner = (props) => {
     }
 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
+        console.log(values);
+        return
         setLoading(true)
         let reqData = await lib.create(values, user?.token)
         setLoading(false)
@@ -143,7 +141,6 @@ const Partner = (props) => {
             <main>
                 {loader ? <ContainerLoader /> : null}
                 <Alert onCancel={() => setNoDataAlert(false)} show={noDataAlert} title="Notification" message="You have no more data" />
-
                 <Alert onCancel={() => setNotFound(false)} show={notFound} title="Notification" message="No match found" />
                 <NewPartnerForm show={openForm} onHide={() => setOpenForm(false)} onSubmit={onCreate} />
                 <SubNavbar
