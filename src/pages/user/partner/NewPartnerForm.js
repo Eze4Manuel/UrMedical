@@ -76,7 +76,7 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false }) =
     }
 
     return (
-        <Dialog header="Partner New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{ width: "45vw" }}>
+        <Dialog header="Partner New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{ width: "50vw" }}>
             <div>
                 <div className="mb-4"><h6>Partner Information</h6></div>
                 <div className="user-form__button-wp">

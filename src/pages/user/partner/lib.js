@@ -30,7 +30,7 @@ lib.getOne = async (id, token) => {
 }
 
 
-
+ 
 lib.getAreas = async (token) => {
     let uri = `locations/get-areas`;
     try {

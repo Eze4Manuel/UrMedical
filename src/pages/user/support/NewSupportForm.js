@@ -28,7 +28,7 @@ const UserForm = (props = { onSubmit: null, onHide: null, show: false}) => {
     );
 
     return (
-        <Dialog header="New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{width: "40vw"}}>
+        <Dialog header="New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{width: "50vw"}}>
             <div>
                 <div className="user-form__button-wp">
                     {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}

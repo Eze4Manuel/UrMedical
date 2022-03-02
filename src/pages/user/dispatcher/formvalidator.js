@@ -106,6 +106,15 @@ formValidator.validateDataUpdate = (values, data, builder, setError) => {
       builder.gender = values.gender
    }
    // check home address
+   if (values.home_area !== data.home_area) {
+      if (values.home_area) {
+          if (!/^[\w\s\-',]+$/i.test(values.home_area)) {
+              return setError("No special character allowed for home address")
+          }
+          builder.home_area = values.home_area
+      }
+  }
+   // check home address
    if (values.home_address !== data.home_address) {
       if (values.home_address) {
          if (!/^[\w\s\-',]+$/i.test(values.home_address)) {
