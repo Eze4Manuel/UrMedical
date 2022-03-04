@@ -35,7 +35,7 @@ const Dispatcher = (props) => {
     useEffect(() => {
         (async () => {
             setLoader(true)
-            let reqData = await lib.get(page, null, user?.token)
+            let reqData = await lib.get(page, null, user?.token);
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
             }

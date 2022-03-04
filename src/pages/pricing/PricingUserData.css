@@ -1,18 +1,18 @@
-.user-info__detail {
+.pricing-info__detail {
     font-size: 13px;
     line-height: 10px;
     display: flex;
     justify-content: space-between;
 }
 
-.user-info__btn-action-wp {
+.pricing-info__btn-action-wp {
     z-index: 99;
     position: fixed;
     width: 50%;
 
 }
 
-.user-info__btn-action {
+.pricing-info__btn-action {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -20,6 +20,7 @@
     padding-bottom: 1px;
     background-color: #fff;
     border-bottom: 1px solid grey;
+    width: 60%;
 }
 
 .btn__edit-ctn{

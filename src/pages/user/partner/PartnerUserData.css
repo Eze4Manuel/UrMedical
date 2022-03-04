@@ -1,17 +1,17 @@
-.user-info__detail {
+.partners-info__detail {
     font-size: 13px;
     line-height: 10px;
     display: flex;
     justify-content: space-between;
 }
 
-.user-info__btn-action-wp {
+.partners-info__btn-action-wp {
     z-index: 99;
     position: fixed;
     width: 60%;
 }
 
-.user-info__btn-action {
+.partners-info__btn-action {
     position: relative;
     display: flex;
     flex-direction: row;
@@ -19,6 +19,7 @@
     padding-bottom: 1px;
     background-color: #fff;
     border-bottom: 1px solid grey;
+    width: 75%;
 }
 
 .btn__edit-ctn{

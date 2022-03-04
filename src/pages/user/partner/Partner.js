@@ -95,8 +95,6 @@ const Partner = (props) => {
     }
 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
-        console.log(values);
-        return
         setLoading(true)
         let reqData = await lib.create(values, user?.token)
         setLoading(false)

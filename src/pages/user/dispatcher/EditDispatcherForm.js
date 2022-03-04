@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Divider } from 'primereact/divider';
@@ -15,6 +15,8 @@ import { useNotifications } from '@mantine/notifications';
 import lib from './lib';
 import helpers from '../../../core/func/Helpers';
 import formValidator from './formvalidator';
+import { Dropdown } from 'primereact/dropdown';
+import { Skeleton } from 'primereact/skeleton';
 
 export const EditLicense = ({ data, show, onHide, onUpdate }) => {
     const { set, user } = useAuth();
@@ -212,10 +214,41 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [lazyItems, setLazyItems] = useState([]);
+    const [lazyLoading, setLazyLoading] = useState(false);
+    const [selectedItem2, setSelectedItem2] = useState(null);
+
+    let loadLazyTimeout = useRef(null);
 
     useEffect(() => {
         setValues(data);
     }, [data])
+    
+    const onLazyItemChange = (e) => {
+        setSelectedItem2(e.value);
+        setValues({ ...values, home_area: e.value });
+    }
+
+    const onLazyLoad = (event) => {
+        setLazyLoading(true);
+
+        if (loadLazyTimeout) {
+            clearTimeout(loadLazyTimeout);
+        }
+        //imitate delay of a backend call
+        loadLazyTimeout = setTimeout(async () => {
+            const _lazyItems = [...lazyItems];
+            let reqData = await lib.getAreas(user?.token)
+            setLoading(false)
+            if (reqData.status === "ok") {
+                reqData.data.forEach((element, ind) => {
+                    _lazyItems[ind] = { label: `${element.name}`, value: `${element.name}` }
+                });
+            }
+            setLazyItems(_lazyItems);
+            setLazyLoading(false);
+        }, Math.random() * 1000 + 250);
+    }
 
     const onSubmit = async () => {
         // update
@@ -297,13 +330,28 @@ const EditDispatcherForm = ({ data, show, onHide, onUpdate }) => {
                         </span>
                     </div>
                 </div>
-              
+            </div>
+            <div className="row">
+                <div className="col-sm-12">
+                    <div className="p-field mb-2">
+                        <label htmlFor="home_area">Area</label><br />
+                        <Dropdown id="home_area" name="home_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                            lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
+                                return (
+                                    <div className="flex align-items-center p-2" style={{ height: '38px' }}>
+                                        <Skeleton width={options.even ? '60%' : '50%'} height="1rem" />
+                                    </div>
+                                )
+                            }
+                        }} placeholder={values?.home_area} />
+                    </div>
+                </div>
             </div>
             <div className="row">
                 <div className="col-lg-12">
                     <div className="p-field mb-1">
                         <label htmlFor="home_address">Home Address</label><br />
-                        <InputTextarea style={{ width: '100%', height: '100px' }} id="home_address" name="home_address" onChange={e => setValues(d => ({ ...d, home_address: e.target.value }))} value={values?.home_address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="Home address" />
+                        <InputTextarea style={{ width: '100%', height: '100px' }} id="home_address" name="home_address" onChange={e => setValues(d => ({ ...d, home_address: e.target.value }))} value={values?.home_address} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder={values?.home_address} />
                     </div>
                 </div>
             </div>

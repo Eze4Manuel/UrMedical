@@ -27,6 +27,15 @@ lib.getOne = async (id, token) => {
         return {status: 'error', msg: e?.response?.data?.msg || e?.message}
     }
 }
+lib.getAreas = async (token) => {
+    let uri = `locations/get-areas`;
+    try {
+        let cfg = helpers.getHeaderConfig(String(token).substr(7))
+        return await (await request.get(uri, cfg)).data 
+    } catch (e) {
+        return {status: 'error', msg: e?.response?.data?.msg || e?.message}
+    }
+}
 
 lib.create = async (values, token) => {
     try {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import './NewCustomerForm.css';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -10,12 +10,47 @@ import config from '../../../assets/utils/config';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import Spinner from 'react-loader-spinner';
 import formValidation from './formvalidation';
+import { Dropdown } from 'primereact/dropdown';
+import { Skeleton } from 'primereact/skeleton';
+import { useAuth } from '../../../core/hooks/useAuth';
+import lib from './lib';
 
 const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false}) => {
     const [values, setValues] = React.useState(config.userData);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [lazyItems, setLazyItems] = useState([]);
+    const [lazyLoading, setLazyLoading] = useState(false);
+    const { user } = useAuth();
+    const [selectedItem2, setSelectedItem2] = useState(null);
 
+    let loadLazyTimeout = useRef(null);
+
+    const onLazyItemChange = (e) => {
+        setSelectedItem2(e.value);
+        setValues({ ...values, home_area: e.value });
+    }
+
+    const onLazyLoad = (event) => {
+        setLazyLoading(true);
+
+        if (loadLazyTimeout) {
+            clearTimeout(loadLazyTimeout);
+        }
+        //imitate delay of a backend call
+        loadLazyTimeout =  setTimeout(async () => {
+            const _lazyItems = [...lazyItems];
+            let reqData = await lib.getAreas(user?.token)
+            setLoading(false)
+            if (reqData.status === "ok") {
+                reqData.data.forEach((element, ind) => {
+                    _lazyItems[ind] = { label: `${element.name}`, value: `${element.name}` } 
+                });
+            }
+            setLazyItems(_lazyItems);
+            setLazyLoading(false);
+        }, Math.random() * 1000 + 250);
+    }
     const footer = (
         <React.Fragment>
             <Divider />
@@ -40,7 +75,7 @@ const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false}) =
     }
 
     return (
-        <Dialog header="New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{width: "40vw"}}>
+        <Dialog header="New Acccount" visible={props.show} modal onHide={() => props.onHide()} style={{width: "50vw"}}>
             <div>
                 <div className="user-form__button-wp">
                     {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
@@ -50,7 +85,7 @@ const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false}) =
                     <div className="col-lg-6">
                         <div className="p-field mb-2">
                             <label htmlFor="first_name">First Name</label><br />
-                            <InputText style={{width: '100%'}} id="first_name" name="first_name" onChange={e => setValues(d => ({...d, first_name: e.target.value}))} autoFocus value={values.first_name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="fist name" />
+                            <InputText style={{width: '100%'}} id="first_name" name="first_name" onChange={e => setValues(d => ({...d, first_name: e.target.value}))} autoFocus value={values.first_name} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="first name" />
                         </div>
                     </div>
                     <div className="col-lg-6">
@@ -72,7 +107,15 @@ const NewCustomerForm = (props = { onSubmit: null, onHide: null, show: false}) =
                     <div className="col-sm-12">
                         <div className="p-field mb-2">
                             <label htmlFor="home_area">Home Area</label><br />
-                            <InputText style={{width: '100%'}} id="home_area" name="home_area" onChange={e => setValues(d => ({...d, home_area: e.target.value}))} value={values?.home_area} type="text" className="p-inputtext-sm p-d-block p-mb-2" placeholder="home area" />
+                            <Dropdown  id="home_area" name="home_area" style={{ width: '100%', height: '40px', lineHeight: '40px' }} value={selectedItem2} options={lazyItems} onChange={onLazyItemChange} virtualScrollerOptions={{
+                                lazy: true, onLazyLoad: onLazyLoad, itemSize: 38, showLoader: true, loading: lazyLoading, delay: 250, loadingTemplate: (options) => {
+                                    return (
+                                        <div className="flex align-items-center p-2" style={{ height: '38px' }}>
+                                            <Skeleton width={options.even ? '60%' : '50%'} height="1rem" />
+                                        </div>
+                                    )
+                                }
+                            }} placeholder="Select Home Area" />
                         </div>
                     </div>
                     </div> 

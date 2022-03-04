@@ -34,7 +34,8 @@ const Customer = (props) => {
     useEffect(() => {
         (async () => {
             setLoader(true)
-            let reqData = await lib.get(page, null, user?.token)
+            let reqData = await lib.get(page, null, user?.token);
+            console.log(reqData.data);
             if (reqData.status === "error") {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
@@ -101,7 +102,7 @@ const Customer = (props) => {
         setLoader(true)
         let reqData = await lib.getOne(value?.auth_id, user?.token)
         if (reqData.status === 'ok' && reqData?.data) {
-            setSelected(reqData.data)
+            setSelected(reqData.data);
         }
         setLoader(false)
         setOpenData(true)

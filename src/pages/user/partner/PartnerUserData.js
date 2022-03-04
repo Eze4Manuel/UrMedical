@@ -83,10 +83,10 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
     }
 
     return (
-        <Dialog closeOnEscape header="Partner - (Pharmacy) Profile" visible={show} modal onHide={() => onHide()} style={{width: "70vw"}}>
-            <div className="user-info__ctn">
-                <div className="user-info__btn-action-wp">
-                    <div className="user-info__btn-action">
+        <Dialog closeOnEscape header="Partner - (Pharmacy) Profile" visible={show} modal onHide={() => onHide()} style={{width: "80vw"}}>
+            <div className="partners-info__ctn">
+                <div className="partners-info__btn-action-wp">
+                    <div className="partners-info__btn-action">
                         <button onClick={() => onEditPassword()} className="btn btn__edit-ctn btn-action__green">Change password</button>
                         <button onClick={() => onEditPartner()} className="btn btn__edit-ctn btn-action__green">Update Partner Profile</button>
                         <button onClick={() => onEditProfile()} className="btn btn__edit-ctn btn-action__green">Update Contact Profile</button>
@@ -97,7 +97,7 @@ const PartnerUserData = ({ data, show, onHide, onDeleted, onUpdated}) => {
                     <div className="col-7 mt-5">
                         <Flash title="Warning!" show={delWarning} message={deleteWarning} onCancel={() => setDelWarning(false)} onProceed={() => deleteAccount()} />
                         {error ? <ErrorMessage message={error} /> : null}
-                        <div className="user-form__button-wp">
+                        <div className="partners-form__button-wp">
                             {loading ? <Spinner type="TailSpin" color="green" height={30} width={30} /> : null}
                         </div>
                         <PartnerUserDetail data={values} />
