@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const ENV = 'staging';
+const ENV = 'local';
 
 const getBaseURL = (env) => {
     if (env === 'local') {
