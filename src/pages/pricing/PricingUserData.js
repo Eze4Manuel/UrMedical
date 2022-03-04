@@ -48,9 +48,9 @@ const PricingUserData = ({ data, show, onHide, onDeleted, onUpdate }) => {
 
     return (
         <Dialog closeOnEscape header="Pricing Profile" visible={show} modal onHide={() => onHide()} style={{ width: "70vw" }}>
-            <div className="user-info__ctn">
-                <div className="user-info__btn-action-wp">
-                    <div className="user-info__btn-action">
+            <div className="pricing-info__ctn">
+                <div className="pricing-info__btn-action-wp">
+                    <div className="pricing-info__btn-action">
                         <button onClick={() => setDelWarning(true)} className="btn btn__edit-ctn btn-action__red">Delete</button>
                     </div>
                 </div>

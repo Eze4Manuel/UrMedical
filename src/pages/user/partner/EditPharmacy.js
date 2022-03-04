@@ -56,7 +56,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
             if (reqData.status === "ok") {
                 console.log(reqData);
                 reqData.data.forEach((element, ind) => {
-                    _lazyItems[ind] = { label: `${element.display_name}`, value: `${element.display_name}` } 
+                    _lazyItems[ind] = { label: `${element.area}`, value: `${element.area}` } 
                 });
             }
             setLazyItems(_lazyItems);
@@ -152,7 +152,7 @@ const EditPharmacy = ({ data, show, onUpdated }) => {
                                         </div>
                                     )
                                 }
-                            }} placeholder="Select Area" />
+                            }} placeholder={values?.area} />
                         </div>
                     </div>
                 </div> 

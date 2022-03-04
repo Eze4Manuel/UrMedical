@@ -46,7 +46,7 @@ const NewPartnerForm = (props = { onSubmit: null, onHide: null, show: false }) =
             if (reqData.status === "ok") {
                 console.log(reqData);
                 reqData.data.forEach((element, ind) => {
-                    _lazyItems[ind] = { label: `${element.display_name}`, value: `${element.display_name}` } 
+                    _lazyItems[ind] = { label: `${element.name}`, value: `${element.name}` } 
                 });
             }
             setLazyItems(_lazyItems);
