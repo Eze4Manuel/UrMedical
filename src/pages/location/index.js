@@ -13,9 +13,6 @@ import Alert from '../../components/flash/Alert';
 import LocationSummary from './LocationSummary'
 
 
-// const noDataTitle = "You haven't created any location user yet.";
-// const noDataParagraph = "You can create a location yourself by clicking on the button Add location.";
-
 const Location = (props) => {
     const { set, user } = useAuth();
     const notify = useNotifications();
@@ -35,19 +32,24 @@ const Location = (props) => {
     useEffect(() => {
         (async () => {
             setLoader(true)
-            let reqData = await lib.get(page, null, user?.token)
-            if (reqData.status === "error") {
-                helpers.sessionHasExpired(set, reqData.msg)
-            }
-            if (reqData.status === 'ok') {
-                (reqData.data?.length === 0) ?
-                    setNoDataAlert(true)
-                    :
-                    setData(reqData.data)
-            }
+            fetchData()
             setLoader(false)
         })()
     }, [user?.token, page, set])
+
+
+    const fetchData = async () => {
+        let reqData = await lib.get(page, null, user?.token)
+        if (reqData.status === "error") {
+            helpers.sessionHasExpired(set, reqData.msg)
+        }
+        if (reqData.status === 'ok') {
+            (reqData.data?.length === 0) ?
+                setNoDataAlert(true)
+                :
+                setData(reqData.data)
+        }
+    }
 
     // setup table data
     const perPage = getPageCount(10);
@@ -77,6 +79,10 @@ const Location = (props) => {
                 setNotFound(false)
             }, 3000)
         }
+    }
+    const onHide = () => {
+        fetchData();
+        setOpenData(false);
     }
 
     const onCreate = async (values, setLoading, setError, setValues, resetData) => {
@@ -141,7 +147,7 @@ const Location = (props) => {
                     onAddItem={() => setOpenForm(true)}
                 />
                 {openData ?
-                    <LocationSummary onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
+                    <LocationSummary onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={onHide} />
                     : null
                 }
 
