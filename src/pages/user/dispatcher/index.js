@@ -147,12 +147,15 @@ const Dispatcher = (props) => {
                     option={option}
                     onAddItem={() => setOpenForm(true)}
                 />
-
+                
                 <DispatcherUserData onDeleted={(id) => onDeleted(id)} data={selected} show={openData} onHide={() => setOpenData(false)} />
                 <div className="dispatcher-table__container">
                     {
+                        
                         viewData.length > 0
+                        
                         ? (
+                            
                             <Table
                                 onSelectData={onSelected}
                                 prev={() => fetchMore(page, 'prev', setPage)}
@@ -164,7 +167,7 @@ const Dispatcher = (props) => {
                                 perPage={perPage}
                                 route="" // {config.pages.user}
                                 tableTitle="Dispatcher" 
-                                tableHeader={['#','username', 'Gender', 'First Name','Last Name']}
+                                tableHeader={['#','Email', 'Phone Number', 'First Name','Last Name']}
                                 dataFields={['email', 'phone_number', 'first_name','last_name']}
                             />
                         )
