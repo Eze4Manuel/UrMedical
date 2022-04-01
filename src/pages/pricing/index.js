@@ -44,7 +44,6 @@ const Pricing = (props) => {
                 helpers.sessionHasExpired(set, reqData.msg)
             }
             if (reqData.status === 'ok') {
-                console.log(reqData.data);
                 (reqData.data?.length === 0) ? 
                 setNoDataAlert(true)
                 :
