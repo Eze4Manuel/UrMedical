@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const ENV = 'local';
+const ENV = 'live';
 
 const getBaseURL = (env) => {
     if (env === 'local') {
@@ -15,8 +15,8 @@ const getBaseURL = (env) => {
 }
 
 // const uri = 'http://localhost:9005/v1' // local
-const uri = 'https://camelogserve.appbuildtest.com/v1' // staging
-// const uri = 'https://api2.appbuiltest.com/api/v1' // live
+// const uri = 'https://camelogserve.appbuildtest.com/v1' // staging
+const uri = 'https://api.urmed.ng/' // live
 
 // const uri = getBaseURL(ENV)
 const Axios = axios.create({baseURL: uri});
