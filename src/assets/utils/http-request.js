@@ -6,7 +6,6 @@ const getBaseURL = (env) => {
     if (env === 'local') {
         return 'http://localhost:9005/v1'
     }
-
     if (env === 'staging') {
         return 'https://camelogserve.appbuildtest.com/v1'
     }
