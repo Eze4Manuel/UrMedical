@@ -80,7 +80,7 @@ lib.getDispatchFee = async (token) => {
     } catch (e) {
         return { status: 'error', msg: e?.response?.data?.msg || e?.message }
     }
-}
+} 
 
 lib.updateDispatch = async (token, amount) => {
     let uri = '';
